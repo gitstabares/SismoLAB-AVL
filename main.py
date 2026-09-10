@@ -1,10 +1,13 @@
+from pydoc import text
+
 import streamlit as st
 import src.model as m
 
-tree = m.Node(10)
-tree.add_nodes([5,15,1,23,7,5,9,5,4,8,6,2,13,45])
+tree = m.Node(6)
+tree.add_nodes([5,4,3,2,1])
 
-st.badge('Esto es una etiqueta',color='violet')
+st.title('Arbol sin balancear',text_alignment='center')
 st.graphviz_chart(tree.get_tree_graph())
-tree.get_node(10)._Node__rotate_left()
+tree.balance_tree()
+st.title('Arbol balanceado',text_alignment='center')
 st.graphviz_chart(tree.get_tree_graph())

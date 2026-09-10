@@ -77,6 +77,16 @@ class Node:
             return self.parent.get_deep()+1
         return 0;
 
+    def get_height(self):
+        if self.left_child and self.right_child:
+            return max(self.left_child.get_height(),self.right_child.get_height())+1 
+        elif self.left_child:
+            return self.left_child.get_height()+1
+        elif self.right_child:
+            return self.right_child.get_height()+1
+        else:
+            return 0
+
     def get_biggest(self):
         if self.right_child:
             return self.right_child.get_biggest()
@@ -119,50 +129,42 @@ class Node:
             self.value = value
 
     def preorder_traversal(self, lista = []):
-        lista.append(self.value)
+        lista.append(self)
         if self.left_child:
-            lista = self.left_child.recorrido_preorden(lista)
+            lista = self.left_child.preorder_traversal(lista)
         if self.right_child:
-            lista = self.right_child.recorrido_preorden(lista)
+            lista = self.right_child.preorder_traversal(lista)
         return lista
 
     def inorder_traversal(self, lista = []):
         if self.left_child:
-            lista = self.left_child.recorrido_inorden(lista)
-        lista.append(self.value)
+            lista = self.left_child.inorder_traversal(lista)
+        lista.append(self)
         if self.right_child:
-            lista = self.right_child.recorrido_inorden(lista)
+            lista = self.right_child.inorder_traversal(lista)
         return lista
 
     def postorder_traversal(self, lista = []):
         if self.left_child:
-            lista = self.left_child.recorrido_posorden(lista)
+            lista = self.left_child.postorder_traversal(lista)
         if self.right_child:
-            lista = self.right_child.recorrido_posorden(lista)
-        lista.append(self.value)
+            lista = self.right_child.postorder_traversal(lista)
+        lista.append(self)
         return lista
 
     def get_level_order_traversal(self):
-        lista = [self]
-        for i in lista:
-            if i.left_child:
-                lista.append(i.left_child)
-            if i.right_child:
-                lista.append(i.right_child)
-        return lista
-
-    def get_height(self):
-        if self.left_child and self.right_child:
-            return max(self.left_child.get_height(),self.right_child.get_height())+1 
-        elif self.left_child:
-            return self.left_child.get_height()+1
-        elif self.right_child:
-            return self.right_child.get_height()+1
-        else:
-            return 0
+        queue = [self]
+        for node in queue:
+            if node.left_child:
+                queue.append(node.left_child)
+            if node.right_child:
+                queue.append(node.right_child)
+        return queue
 
     def __get_balance_factor(self):
-        return self.left_child.get_height()-self.right_child.get_height()
+        left_height = self.left_child.get_height()+1 if self.left_child else 0
+        right_height = self.right_child.get_height()+1 if self.right_child else 0
+        return left_height - right_height
 
     def __rotate_left(self):
         if not self.right_child:
@@ -179,11 +181,31 @@ class Node:
         self.right_child = copy.deepcopy(self)
         self.right_child.parent = self
         self.right_child.left_child = self.left_child.right_child if self.left_child.right_child else None
-        self.value = self.right_child.value
-        self.right_child = self.right_child.right_child
+        self.value = self.left_child.value
+        self.left_child = self.left_child.left_child
 
     def __balance_node(self):
-        if self.__get_balance_factor() > 1:
+        while self.__get_balance_factor() > 1:
+            if self.left_child.__get_balance_factor() < 0:
+                self.left_child.__rotate_left()
             self.__rotate_right()
-        elif self.__get_balance_factor() < -1:
+        while self.__get_balance_factor() < -1:
+            if self.right_child.__get_balance_factor() > 0:
+                self.right_child.__rotate_right()
             self.__rotate_left()
+
+    def is_balanced(self):
+        for node in self.get_level_order_traversal():
+            if abs(node.__get_balance_factor()) > 1:
+                return False
+        return True
+
+    def balance_tree(self):
+        while not self.is_balanced():
+            for node in reversed(self.get_level_order_traversal()):
+                node.__balance_node()
+
+    def balance_branch(self):
+        self.__balance_node()
+        if self.parent:
+            self.parent.balance_branch()
