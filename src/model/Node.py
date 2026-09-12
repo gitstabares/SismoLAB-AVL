@@ -4,10 +4,44 @@ import copy
 class Node:
     # Constructor
     def __init__(self, key, parent = None):
-        self.key = key
-        self.parent = parent
-        self.left_child = None
-        self.right_child = None
+        self.__key = key
+        self.__parent = parent
+        self.__left_child = None
+        self.__right_child = None
+
+    # Getters
+    @property
+    def key(self):
+        return self.__key
+
+    @property
+    def parent(self):
+        return self.__parent
+
+    @property
+    def left_child(self):
+        return self.__left_child
+
+    @property
+    def right_child(self):
+        return self.__right_child
+
+    # Setters
+    @key.setter
+    def key(self,key):
+        self.__key = key
+
+    @parent.setter
+    def parent(self,parent):
+        self.__parent = parent
+
+    @left_child.setter
+    def left_child(self,left_child):
+        self.__left_child = left_child
+
+    @right_child.setter
+    def right_child(self,right_child):
+        self.__right_child = right_child
 
     # Dunder function to print the node's key
     def __repr__(self):
@@ -20,23 +54,35 @@ class Node:
         return self.parent.get_root()
 
     # Function to add a single node
-    def add_node(self, key):
-        if self.key > key:
+    def add_node(self, node):
+        if self.key > node.key:
             if self.left_child == None:
-                self.left_child = Node(key, self)
+                self.left_child = node
             else:
-                self.left_child.add_node(key)
-        elif self.key < key:
+                self.left_child.add_node(node)
+        elif self.key < node.key:
             if self.right_child == None:
-                self.right_child = Node(key, self)
+                self.right_child = node
             else:
-                self.right_child.add_node(key)
-        # The case of the node in the tree is not considered yet
+                self.right_child.add_node(node)
 
     # Function to add multiple nodes
     def add_nodes(self, keys):
         for key in keys:
             self.add_node(key)
+            
+    # Function to get the tree in JSON format
+    def to_dict(self):
+        result = {}
+        for key,value in self.__dict__.items():
+            key = key.split("__")[-1]
+            if key == 'parent':
+                continue
+            if isinstance(value,Node):
+                result[key] = value.to_dict()
+            else:
+                result[key] = value
+        return result
 
     # Construction of tree Dot object to graphviz
     def get_tree_graph(self):
@@ -63,8 +109,8 @@ class Node:
         elif key < self.key and self.left_child:
             return self.left_child.get_node(key)
 
-    # Copy function to avoid reference mistakes
-    def copy(self):
+    # Copy function avoiding reference mistakes
+    def copy_subtree(self):
         new_copy = self.__copy()
         new_copy.parent = None
         return new_copy
@@ -151,10 +197,15 @@ class Node:
                 self.__dict__.update(child.__dict__)
         # Using predecessor in case node has two children
         else:
+            left_child = self.left_child
+            right_child = self.right_child
+            parent = self.parent
             predecessor = self.left_child.get_biggest()
-            key = predecessor.key
+            self.__dict__.update(predecessor.__dict__)
+            self.left_child = left_child
+            self.right_child = right_child
+            self.parent = parent
             predecessor.__delete_self()
-            self.key = key
 
     # Traversals
     def preorder_traversal(self, lista = []):
@@ -198,19 +249,23 @@ class Node:
 
     # Simple rotation to left
     def __rotate_left(self):
-        self.left_child = copy.copy(self)
-        self.left_child.parent = self
-        self.left_child.right_child = self.right_child.left_child
-        self.key = self.right_child.key
-        self.right_child = self.right_child.right_child
+        left_child = copy.copy(self)
+        left_child.parent = self
+        left_child.right_child = self.right_child.left_child
+        parent = self.parent
+        self.__dict__.update(self.right_child.__dict__)
+        self.parent = parent
+        self.left_child = left_child
 
     # Simple rotation to right
     def __rotate_right(self):
-        self.right_child = copy.copy(self)
-        self.right_child.parent = self
-        self.right_child.left_child = self.left_child.right_child
-        self.key = self.left_child.key
-        self.left_child = self.left_child.left_child
+        right_child = copy.copy(self)
+        right_child.parent = self
+        right_child.left_child = self.left_child.right_child
+        parent = self.parent
+        self.__dict__.update(self.left_child.__dict__)
+        self.parent = parent
+        self.right_child = right_child
 
     # Balancing cases for a node
     def __balance_node(self):
