@@ -47,6 +47,14 @@ class Node:
             return self.get_parent().get_depth()+1
         return 0
 
+    def get_weight(self):
+        weight = 1
+        if self.__left:
+            weight += self.__left.get_weight()
+        if self.__right:
+            weight += self.__right.get_weight()
+        return weight
+
     def get_balance_factor(self):
         left_height = self.__left.get_height()+1 if self.__left else 0
         right_height = self.__right.get_height()+1 if self.__right else 0
