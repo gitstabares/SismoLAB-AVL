@@ -1,0 +1,246 @@
+import graphviz
+
+from .Node import Node
+
+class Tree:
+    def __init__(self, node_type=Node):
+        self.__root = None
+        self.__node_type = node_type
+
+    def get_root(self):
+        return self.__root
+
+    def set_root(self, node):
+        self.__root = node
+        if node:
+            node.set_parent(None)
+
+    def get_node(self, key):
+        def get(root):
+            if root:
+                if root.get_key() == key:
+                    return root
+                elif root.get_key() > key:
+                    return get(root.get_left())
+                elif root.get_key() < key:
+                    return get(root.get_right())
+        return get(self.__root)
+
+    def add_node(self, key, **kwargs):
+        new_node = self.__node_type(key, **kwargs)
+
+        if not self.__root:
+            self.__root = new_node
+            return
+
+        def __add_node(root):
+            if root.get_key() > key:
+                if not root.get_left():
+                    new_node.set_parent(root)
+                    root.set_left(new_node)
+                else:
+                    __add_node(root.get_left())
+            elif root.get_key() < key:
+                if not root.get_right():
+                    new_node.set_parent(root)
+                    root.set_right(new_node)
+                else:
+                    __add_node(root.get_right())
+
+        __add_node(self.__root)
+
+    def delete_node(self, key):
+        node = self.get_node(key)
+        if node is None:
+            return None
+        if not node.get_left():
+            self.__replace_node(node, node.get_right())
+        elif node.get_right() is None:
+            self.__replace_node(node, node.get_left())
+        else:
+            predecessor = self.__get_maximum(node.get_left())
+            self.__replace_node(predecessor,predecessor.get_left())
+            self.__replace_node(node, predecessor)
+            predecessor.set_left(node.get_left())
+            predecessor.set_right(node.get_right())
+            if predecessor.get_left():
+                predecessor.get_left().set_parent(predecessor)
+            if predecessor.get_right():
+                predecessor.get_right().set_parent(predecessor)
+
+    def __replace_node(self, old_node, new_node):
+        parent = old_node.get_parent()
+        if parent is None:
+            self.set_root(new_node)
+        elif parent.get_left() is old_node:
+            parent.set_left(new_node)
+        elif parent.get_right() is old_node:
+            parent.set_right(new_node)
+        if new_node:
+            new_node.set_parent(parent)
+
+    def __get_minimum(self,root):
+        if root.get_left():
+            return self.__get_minimum(root.get_left())
+        return root
+    
+    def get_minimum(self):
+        if self.__root is None:
+            return None
+        return self.get(self.__root)
+    
+    def __get_maximum(self,root):
+        if root.get_right():
+            return self.__get_maximum(root.get_right())
+        return root
+
+    def get_maximum(self):
+        if self.__root is None:
+            return None
+        return self.get(self.__root)
+
+    def get_height(self):
+        return self.__root.get_height() if self.__root else 0
+
+    def get_weight(self):
+        return self.__root.get_weight() if self.__root else 0
+
+    def rotate_left(self, node):
+        pivot = node.get_right()
+
+        if not node or not pivot:
+            return
+
+        child = pivot.get_left()
+
+        self.__replace_node(pivot,child)
+        self.__replace_node(node,pivot)
+        pivot.set_left(node)
+        node.set_parent(pivot)
+
+    def rotate_right(self, node):
+        pivot = node.get_left()
+
+        if not node or not pivot:
+            return
+        
+        child = pivot.get_right()
+
+        self.__replace_node(pivot,child)
+        self.__replace_node(node,pivot)
+        pivot.set_right(node)
+        node.set_parent(pivot)
+
+    def balance_node(self, node):
+        if node is None:
+            return None
+        balance_factor = node.get_balance_factor()
+
+        if balance_factor > 1:
+            left_child = node.get_left()
+            if left_child.get_balance_factor() < 0:
+                self.rotate_left(left_child)
+            self.rotate_right(node)
+
+        if balance_factor < -1:
+            right_child = node.get_right()
+            if right_child.get_balance_factor() > 0:
+                self.rotate_right(right_child)
+            return self.rotate_left(node)
+
+    def balance_branch(self, node):
+        self.balance_node(node)
+        if node.get_parent():
+            self.balance_branch(node.get_parent())
+
+    def balance_tree(self):
+        if self.__root is None:
+            return
+
+        while True:
+            old_root = self.__root
+            self.__balance_subtree(self.__root)
+
+            if old_root is self.__root:
+                break
+
+    def __balance_subtree(self, node):
+        if node is None:
+            return
+
+        left = node.get_left()
+        right = node.get_right()
+
+        self.__balance_subtree(left)
+        self.__balance_subtree(right)
+
+        self.balance_node(node)
+
+    def get_preorder_traverse(self):
+        result = []
+        def traverse(node):
+            if node is None:
+                return
+            result.append(node)
+            traverse(node.get_left())
+            traverse(node.get_right())
+        traverse(self.__root)
+        return result
+
+    def get_inorder_traverse(self):
+        result = []
+        def traverse(node):
+            if node is None:
+                return
+            traverse(node.get_left())
+            result.append(node)
+            traverse(node.get_right())
+        traverse(self.__root)
+        return result
+
+    def get_postorder_traverse(self):
+        result = []
+        def traverse(node):
+            if node is None:
+                return
+            traverse(node.get_left())
+            traverse(node.get_right())
+            result.append(node)
+        traverse(self.__root)
+        return result
+
+    def get_levelorder_traverse(self):
+        if not self.__root:
+            return []
+        queue = [self.__root]
+        for node in queue:
+            if node.get_left():
+                queue.append(node.get_left())
+            if node.get_right():
+                queue.append(node.get_right())
+        return queue
+
+    def clear(self):
+        self.__root = None
+
+    def is_empty(self):
+        return self.__root is None
+
+    def contains(self, key):
+        return self.get_node(key) is not None
+
+    def get_tree_graph(self):
+        graph = graphviz.Digraph()
+        if not self.__root:
+            return graph
+        # Recursive construction of tree
+        def __build_tree_graph(node):
+            graph.node(f"{node.get_key()}")
+            if node.get_left():
+                graph.edge(f"{node.get_key()}",f"{node.get_left().get_key()}",label="L")
+                __build_tree_graph(node.get_left())
+            if node.get_right():
+                graph.edge(f"{node.get_key()}",f"{node.get_right().get_key()}",label="R")
+                __build_tree_graph(node.get_right())
+        __build_tree_graph(self.__root)
+        return graph
