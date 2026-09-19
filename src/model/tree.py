@@ -1,11 +1,16 @@
-import graphviz
-
-from .Node import Node
+from .node import Node
 
 class Tree:
-    def __init__(self, node_type=Node):
+    def __init__(self, node_type=Node, name=''):
         self.__root = None
         self.__node_type = node_type
+        self.__name = name
+
+    def get_name(self):
+        return self.__name
+
+    def set_name(self, name):
+        self.__name = name
 
     def get_root(self):
         return self.__root
@@ -55,7 +60,7 @@ class Tree:
             return None
         if not node.get_left():
             self.__replace_node(node, node.get_right())
-        elif node.get_right() is None:
+        elif not node.get_right():
             self.__replace_node(node, node.get_left())
         else:
             predecessor = self.__get_maximum(node.get_left())
@@ -67,11 +72,12 @@ class Tree:
                 predecessor.get_left().set_parent(predecessor)
             if predecessor.get_right():
                 predecessor.get_right().set_parent(predecessor)
+        return node
 
     def __replace_node(self, old_node, new_node):
         parent = old_node.get_parent()
         if parent is None:
-            self.set_root(new_node)
+            self.__root = new_node
         elif parent.get_left() is old_node:
             parent.set_left(new_node)
         elif parent.get_right() is old_node:
@@ -87,7 +93,7 @@ class Tree:
     def get_minimum(self):
         if self.__root is None:
             return None
-        return self.get(self.__root)
+        return self.__get_minimum(self.__root)
     
     def __get_maximum(self,root):
         if root.get_right():
@@ -97,7 +103,7 @@ class Tree:
     def get_maximum(self):
         if self.__root is None:
             return None
-        return self.get(self.__root)
+        return self.__get_maximum(self.__root)
 
     def get_height(self):
         return self.__root.get_height() if self.__root else 0
@@ -146,7 +152,7 @@ class Tree:
             right_child = node.get_right()
             if right_child.get_balance_factor() > 0:
                 self.rotate_right(right_child)
-            return self.rotate_left(node)
+            self.rotate_left(node)
 
     def balance_branch(self, node):
         self.balance_node(node)
@@ -228,19 +234,3 @@ class Tree:
 
     def contains(self, key):
         return self.get_node(key) is not None
-
-    def get_tree_graph(self):
-        graph = graphviz.Digraph()
-        if not self.__root:
-            return graph
-        # Recursive construction of tree
-        def __build_tree_graph(node):
-            graph.node(f"{node.get_key()}")
-            if node.get_left():
-                graph.edge(f"{node.get_key()}",f"{node.get_left().get_key()}",label="L")
-                __build_tree_graph(node.get_left())
-            if node.get_right():
-                graph.edge(f"{node.get_key()}",f"{node.get_right().get_key()}",label="R")
-                __build_tree_graph(node.get_right())
-        __build_tree_graph(self.__root)
-        return graph

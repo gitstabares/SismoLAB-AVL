@@ -1,2 +1,3 @@
-from .Node import Node
-from .Tree import Tree
+from .node import *
+from .tree import *
+__all__=['Node','Tree']
