@@ -1,4 +1,3 @@
-from .tree import tree
 class Report:
     def __init__(self, magnitude, depth, epicenter, date, origin_station, review, id):
         self.id = id
