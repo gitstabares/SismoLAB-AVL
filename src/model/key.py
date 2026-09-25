@@ -1,7 +1,14 @@
 class Key:
 
-    def __init__(self, priority, magnitude, event_id):
-        self.__priority = priority
+    def __init__(self, magnitude, deepness, populated, event_id):
+
+        if magnitude >= 6.0 or (magnitude >= 4.5 and deepness <= 30 and populated):
+            self.__priority = 3
+        elif magnitude >= 4.5:
+            self.__priority = 2
+        else:
+            self.__priority = 1
+
         self.__magnitude = magnitude
         self.__id = event_id
 
