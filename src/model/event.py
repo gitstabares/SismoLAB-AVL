@@ -1,53 +1,88 @@
-from datetime import datetime
+from src.model.node import Node
 
 
-class Event:
+class Event(Node):
 
     def __init__(
         self,
+        key,
         event_id,
         magnitude,
-        depth,
-        x,
-        y,
-        timestamp,
-        revision,
-        stations,
-        attention
+        deepness,
+        epicenter,
+        date,
+        review,
+        origin_station,
+        revised,
+        costly_access,
+        aftershocks
     ):
-        self.__event_id = event_id
-        self.__magnitude = magnitude
-        self.__depth = depth
-        self.__x = x
-        self.__y = y
-        self.__timestamp = timestamp
-        self.__revision = revision
-        self.__stations = stations
-        self.__attention = attention
+        super().__init__(key)
 
-    def get_event_id(self):
-        return self.__event_id
+        self.__id = event_id
+        self.__magnitude = magnitude
+        self.__deepness = deepness
+        self.__epicenter = epicenter
+        self.__date = date
+        self.__review = review
+        self.__origin_station = origin_station
+        self.__revised = revised
+        self.__costly_access = costly_access
+        self.__aftershocks = aftershocks
+
+    def get_id(self):
+        return self.__id
 
     def get_magnitude(self):
         return self.__magnitude
 
-    def get_depth(self):
-        return self.__depth
+    def set_magnitude(self, magnitude):
+        self.__magnitude = magnitude
 
-    def get_x(self):
-        return self.__x
+    def get_deepness(self):
+        return self.__deepness
 
-    def get_y(self):
-        return self.__y
+    def set_deepness(self, deepness):
+        self.__deepness = deepness
 
-    def get_timestamp(self):
-        return self.__timestamp
+    def get_epicenter(self):
+        return self.__epicenter
 
-    def get_revision(self):
-        return self.__revision
+    def set_epicenter(self, epicenter):
+        self.__epicenter = epicenter
 
-    def get_stations(self):
-        return self.__stations
+    def get_date(self):
+        return self.__date
 
-    def get_attention(self):
-        return self.__attention
+    def set_date(self, date):
+        self.__date = date
+
+    def get_review(self):
+        return self.__review
+
+    def set_review(self, review):
+        self.__review = review
+
+    def get_origin_station(self):
+        return self.__origin_station
+
+    def set_origin_station(self, origin_station):
+        self.__origin_station = origin_station
+
+    def get_revised(self):
+        return self.__revised
+
+    def set_revised(self, revised):
+        self.__revised = revised
+
+    def get_costly_access(self):
+        return self.__costly_access
+
+    def set_costly_access(self, costly_access):
+        self.__costly_access = costly_access
+
+    def get_aftershocks(self):
+        return self.__aftershocks
+
+    def set_aftershocks(self, aftershocks):
+        self.__aftershocks = aftershocks
