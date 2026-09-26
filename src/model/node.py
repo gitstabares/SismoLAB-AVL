@@ -43,9 +43,7 @@ class Node:
             return 0
 
     def get_depth(self):
-        if self.get_parent():
-            return self.get_parent().get_depth()+1
-        return 0
+        return self.__parent.get_depth()+1 if self.__parent else 0
 
     def get_weight(self):
         weight = 1
@@ -59,3 +57,6 @@ class Node:
         left_height = self.__left.get_height()+1 if self.__left else 0
         right_height = self.__right.get_height()+1 if self.__right else 0
         return left_height - right_height
+
+    def get_root(self):
+        return self if not self.__parent else self.__parent.get_root()

@@ -1,12 +1,11 @@
-from src.model.node import Node
-
+from src.model import Key
+from src.model import Node
 
 class Event(Node):
 
     def __init__(
         self,
-        key,
-        event_id,
+        id,
         magnitude,
         deepness,
         epicenter,
@@ -14,12 +13,10 @@ class Event(Node):
         review,
         origin_station,
         revised,
-        costly_access,
-        aftershocks
+        is_populated
     ):
-        super().__init__(key)
-
-        self.__id = event_id
+        super().__init__(Key(magnitude, deepness, is_populated, id))
+        self.__id = id
         self.__magnitude = magnitude
         self.__deepness = deepness
         self.__epicenter = epicenter
@@ -27,8 +24,9 @@ class Event(Node):
         self.__review = review
         self.__origin_station = origin_station
         self.__revised = revised
-        self.__costly_access = costly_access
-        self.__aftershocks = aftershocks
+        self.__is_populated = is_populated
+        self.__aftershocks = []
+        self.__costly_access = False
 
     def get_id(self):
         return self.__id
@@ -61,7 +59,7 @@ class Event(Node):
         return self.__review
 
     def set_review(self, review):
-        self.__review = review
+        self.__review = int(review)
 
     def get_origin_station(self):
         return self.__origin_station
@@ -78,11 +76,21 @@ class Event(Node):
     def get_costly_access(self):
         return self.__costly_access
 
-    def set_costly_access(self, costly_access):
-        self.__costly_access = costly_access
-
     def get_aftershocks(self):
         return self.__aftershocks
 
-    def set_aftershocks(self, aftershocks):
-        self.__aftershocks = aftershocks
+    def update_aftershocks(self, W = 48, R = 40):
+        def add_aftershock(root):
+            if not root:
+                return
+            if root.get_magnitude() < self.__magnitude and 0 < (root.get_date() - self.__date).days < W/24 and (root.get_epicenter() - self.__epicenter).get_length() < R:
+                self.__aftershocks.append(root)
+            root.get_left().update_aftershocks()
+            root.get_right().update_aftershocks()
+        add_aftershock(self.get_root())
+
+    def update_costly_access(self, L = 3):
+        self.__costly_access = self.__key.get_priority() == 3 and self.get_depth() > L
+
+    def update_key(self):
+        self.__key = Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id)
