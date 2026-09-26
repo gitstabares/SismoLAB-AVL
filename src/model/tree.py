@@ -1,24 +1,11 @@
 from .node import Node
 
 class Tree:
-    def __init__(self, node_type=Node, name=''):
-        self.__root = None
-        self.__node_type = node_type
-        self.__name = name
-
-    def get_name(self):
-        return self.__name
-
-    def set_name(self, name):
-        self.__name = name
+    def __init__(self, root = None):
+        self.__root = root
 
     def get_root(self):
         return self.__root
-
-    def set_root(self, node):
-        self.__root = node
-        if node:
-            node.set_parent(None)
 
     def get_node(self, key):
         def get(root):
@@ -31,21 +18,20 @@ class Tree:
                     return get(root.get_right())
         return get(self.__root)
 
-    def add_node(self, key, **kwargs):
-        new_node = self.__node_type(key, **kwargs)
+    def add_node(self, new_node):
 
         if not self.__root:
             self.__root = new_node
             return
 
         def __add_node(root):
-            if root.get_key() > key:
+            if root.get_key() > new_node.get_key():
                 if not root.get_left():
                     new_node.set_parent(root)
                     root.set_left(new_node)
                 else:
                     __add_node(root.get_left())
-            elif root.get_key() < key:
+            elif root.get_key() < new_node.get_key():
                 if not root.get_right():
                     new_node.set_parent(root)
                     root.set_right(new_node)
@@ -54,7 +40,7 @@ class Tree:
 
         __add_node(self.__root)
 
-    def delete_node(self, key):
+    def pop_node(self, key):
         node = self.get_node(key)
         if node is None:
             return None
@@ -111,7 +97,7 @@ class Tree:
     def get_weight(self):
         return self.__root.get_weight() if self.__root else 0
 
-    def rotate_left(self, node):
+    def __rotate_left(self, node):
         pivot = node.get_right()
 
         if not node or not pivot:
@@ -124,7 +110,7 @@ class Tree:
         pivot.set_left(node)
         node.set_parent(pivot)
 
-    def rotate_right(self, node):
+    def __rotate_right(self, node):
         pivot = node.get_left()
 
         if not node or not pivot:
@@ -137,25 +123,25 @@ class Tree:
         pivot.set_right(node)
         node.set_parent(pivot)
 
-    def balance_node(self, node):
+    def __balance_node(self, node):
         if node is None:
             return None
         balance_factor = node.get_balance_factor()
 
-        if balance_factor > 1:
+        while balance_factor > 1:
             left_child = node.get_left()
             if left_child.get_balance_factor() < 0:
-                self.rotate_left(left_child)
-            self.rotate_right(node)
+                self.__rotate_left(left_child)
+            self.__rotate_right(node)
 
-        if balance_factor < -1:
+        while balance_factor < -1:
             right_child = node.get_right()
             if right_child.get_balance_factor() > 0:
-                self.rotate_right(right_child)
-            self.rotate_left(node)
+                self.__rotate_right(right_child)
+            self.__rotate_left(node)
 
     def balance_branch(self, node):
-        self.balance_node(node)
+        self.__balance_node(node)
         if node.get_parent():
             self.balance_branch(node.get_parent())
 
@@ -180,7 +166,7 @@ class Tree:
         self.__balance_subtree(left)
         self.__balance_subtree(right)
 
-        self.balance_node(node)
+        self.__balance_node(node)
 
     def get_preorder_traverse(self):
         result = []
@@ -225,12 +211,6 @@ class Tree:
             if node.get_right():
                 queue.append(node.get_right())
         return queue
-
-    def clear(self):
-        self.__root = None
-
-    def is_empty(self):
-        return self.__root is None
 
     def contains(self, key):
         return self.get_node(key) is not None
