@@ -1,20 +1,13 @@
-import math
 class Point:
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
+        self.x = max(0, min(1000, x))
+        self.y = max(0, min(1000, y))
         
     def __add__(self,other):
-        new_x = self.x + other.x
-        new_y = self.y + other.y
-        
-        return Point(new_x,new_y)
+        return Point(self.x + other.x,self.y + other.y)
     
     def __sub__(self,other):
-        new_x = self.x - other.x
-        new_y = self.y - other.y
-            
-        return Point(new_x,new_y)
+        return Point(self.x - other.x,self.y - other.y)
         
     def get_length(self):
-        return math.sqrt(self.x**2 + self.y**2)
+        return (self.x**2 + self.y**2)**(1/2)
