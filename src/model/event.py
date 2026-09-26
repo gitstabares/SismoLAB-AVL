@@ -76,21 +76,11 @@ class Event(Node):
     def get_costly_access(self):
         return self.__costly_access
 
+    def set_costly_access(self, costly_access):
+        self.__costly_access = costly_access
+
     def get_aftershocks(self):
         return self.__aftershocks
-
-    def update_aftershocks(self, W = 48, R = 40):
-        def add_aftershock(root):
-            if not root:
-                return
-            if root.get_magnitude() < self.__magnitude and 0 < (root.get_date() - self.__date).days < W/24 and (root.get_epicenter() - self.__epicenter).get_length() < R:
-                self.__aftershocks.append(root)
-            add_aftershock(root.get_left())
-            add_aftershock(root.get_right())
-        add_aftershock(self.get_root())
-
-    def update_costly_access(self, L = 3):
-        self.__costly_access = self.__key.get_priority() == 3 and self.get_depth() > L
 
     def update_key(self):
         self.__key = Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id)
