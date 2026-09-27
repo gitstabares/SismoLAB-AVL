@@ -46,10 +46,10 @@ class EventTree(Tree):
             for aftershock in self.get_levelorder_traverse():
                 # An aftershock must be smaller, later within W hours, and
                 # closer than R to the originating event.
-                if seism.get_magnitude() > aftershock.get_magnitude() and 0 < (aftershock.get_date() - seism.get_date()).days < W/24 and (aftershock.get_epicenter() - seism.get_epicenter()).get_length() < R:
+                if seism.get_magnitude() > aftershock.get_magnitude() and 0 < (aftershock.get_date() - seism.get_date()).days < self.__W/24 and (aftershock.get_epicenter() - seism.get_epicenter()).get_length() < self.__R:
                     seism.get_aftershocks().append(aftershock)
 
     def update_costly_access(self):
         """Update each event's costly-access flag from its priority and depth."""
         for seism in self.get_levelorder_traverse():
-            seism.set_costly_access(seism.get_key().get_priority() == 3 and seism.get_depth() > L)
+            seism.set_costly_access(seism.get_key().get_priority() == 3 and seism.get_depth() > self.__L)
