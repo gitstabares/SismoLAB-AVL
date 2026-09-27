@@ -93,3 +93,74 @@ class Serializer:
             }
 
         return convert(obj)
+
+    def deserialize(self, data):
+        memo = {}
+
+        def rebuild(element):
+
+            # Primitive types
+            if not isinstance(element, dict):
+                return element
+
+            # Reference to an existing object
+            if "$ref" in element:
+                return memo[element["$ref"]]
+
+            type = element["$type"]
+
+            # Dates
+            if type == "datetime":
+                return datetime.fromisoformat(
+                    element["value"]
+                )
+
+            # Lists and queues
+            if type in ("list", "deque"):
+                obj = [] if type == "list" else deque()
+
+                memo[element["$id"]] = obj
+
+                for item in element["items"]:
+                    obj.append(rebuild(item))
+
+                return obj
+
+            # Dictionaries
+            if type == "dict":
+                obj = {}
+                memo[element["$id"]] = obj
+
+                for key, value in element["items"]:
+                    obj[rebuild(key)] = (
+                        rebuild(value)
+                    )
+
+                return obj
+
+            # Personalized objects
+            if type == "object":
+                classes = self.classes[element["class"]]
+
+                # Create the empty instance
+                obj = object.__new__(classes)
+
+                # Register it before building its attributes
+                memo[element["$id"]] = obj
+
+                for name, value in (
+                    element["attributes"].items()
+                ):
+                    setattr(
+                        obj,
+                        name,
+                        rebuild(value)
+                    )
+
+                return obj
+
+            raise ValueError(
+                f"Unknown type: {type}"
+            )
+
+        return rebuild(data)
