@@ -164,3 +164,23 @@ class Serializer:
             )
 
         return rebuild(data)
+    
+    def save(self, scenario, path):
+
+        data = self.serializar(scenario)
+
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(
+                data,
+                f,
+                indent=4,
+                ensure_ascii=False,
+                allow_nan=False
+            )
+
+    def load(self, path):
+
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        return self.deserializar(data)
