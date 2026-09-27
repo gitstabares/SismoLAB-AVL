@@ -17,30 +17,30 @@ class Serializer:
 
         def convert(obj):
 
-            # 1. Tipos primitivos
+            # Primitive types
             if obj is None or type(obj) in (
                 int, str, float, bool
             ):
                 return obj
 
-            # 2. Fechas
+            # Dates
             if isinstance(obj, datetime):
                 return {
                     "$type": "datetime",
                     "value": obj.isoformat()
                 }
 
-            # 3. Comprobar referencias anteriores
+            # Check previous references
             identity = id(obj)
 
             if identity in memo:
                 return {"$ref": memo[identity]}
 
-            # 4. Asignar identificador interno
+            # Assign internal id
             reference = f"obj{len(memo) + 1}"
             memo[identity] = reference
 
-            # 5. Listas
+            # Lists
             if isinstance(obj, list):
                 return {
                     "$id": reference,
@@ -50,7 +50,7 @@ class Serializer:
                     ]
                 }
 
-            # 6. Colas
+            # Queues
             if isinstance(obj, deque):
                 return {
                     "$id": reference,
@@ -60,7 +60,7 @@ class Serializer:
                     ]
                 }
 
-            # 7. Diccionarios
+            # Dictionaries
             if isinstance(obj, dict):
                 return {
                     "$id": reference,
@@ -71,7 +71,7 @@ class Serializer:
                     ]
                 }
 
-            # 8. Objetos personalizados
+            # Personalized objects
             classes = type(obj)
             name = (
                 classes.__module__ + "." + classes.__qualname__
