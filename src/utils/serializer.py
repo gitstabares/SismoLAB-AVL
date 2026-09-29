@@ -24,7 +24,7 @@ class Serializer:
         Args:
             classes (type): The class type to register.
         """
-        name = classes.__module__ + "." + classes.__qualname__
+        name = classes.__module__ + "." + classes.__name__
         self.classes[name] = classes
 
     def serialize(self, obj):
@@ -37,7 +37,7 @@ class Serializer:
         Returns:
             dict or primitive: The serialized representation of the object.
         """
-        memo = {}
+        memo = set()
 
         def convert(obj):
             """
@@ -60,26 +60,35 @@ class Serializer:
             identity = id(obj)
 
             if identity in memo:
-                return {"$ref": memo[identity]}
+                return {"$ref": identity}
 
             # Assign internal id for the object
-            reference = f"obj{len(memo) + 1}"
-            memo[identity] = reference
+            memo.add(identity)
 
+            # Tuples
+            if isinstance(obj, tuple):
+                return {
+                    "$id": identity,
+                    "$type": "tuple",
+                    "items": [
+                        convert(x) for x in obj
+                    ]
+                }
+            
             # Lists
             if isinstance(obj, list):
                 return {
-                    "$id": reference,
+                    "$id": identity,
                     "$type": "list",
                     "items": [
                         convert(x) for x in obj
                     ]
                 }
 
-            # Queues (deques)
+            # Queues
             if isinstance(obj, deque):
                 return {
-                    "$id": reference,
+                    "$id": identity,
                     "$type": "deque",
                     "items": [
                         convert(x) for x in obj
@@ -89,7 +98,7 @@ class Serializer:
             # Dictionaries
             if isinstance(obj, dict):
                 return {
-                    "$id": reference,
+                    "$id": identity,
                     "$type": "dict",
                     "items": [
                         [convert(k), convert(v)]
@@ -100,7 +109,7 @@ class Serializer:
             # Personalized (custom) objects
             classes = type(obj)
             name = (
-                classes.__module__ + "." + classes.__qualname__
+                classes.__module__ + "." + classes.__name__
             )
 
             if self.classes.get(name) is not classes:
@@ -109,7 +118,7 @@ class Serializer:
                 )
 
             return {
-                "$id": reference,
+                "$id": identity,
                 "$type": "object",
                 "class": name,
                 "attributes": {
@@ -152,27 +161,27 @@ class Serializer:
                     element["value"]
                 )
 
-            # Lists and queues
-            if type in ("list", "deque"):
-                obj = [] if type == "list" else deque()
-
+            if type == "tuple":
+                obj = (rebuild(item) for item in element["items"])
                 memo[element["$id"]] = obj
-
-                for item in element["items"]:
-                    obj.append(rebuild(item))
-
                 return obj
 
+            # Lists
+            if type == "list":
+                obj = [rebuild(item) for item in element["items"]]
+                memo[element["$id"]] = obj
+                return obj
+
+            # Queues
+            if type is "deque":
+                obj = deque([rebuild(item) for item in element["items"]])
+                memo[element["$id"]] = obj
+                return obj
+            
             # Dictionaries
             if type == "dict":
-                obj = {}
+                obj = {rebuild(key):rebuild(value) for key,value in element["items"]}
                 memo[element["$id"]] = obj
-
-                for key, value in element["items"]:
-                    obj[rebuild(key)] = (
-                        rebuild(value)
-                    )
-
                 return obj
 
             # Personalized (custom) objects
@@ -235,4 +244,3 @@ class Serializer:
             data = json.load(f)
 
         return self.deserialize(data)
-        return self.deserializar(data)

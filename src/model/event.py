@@ -48,13 +48,9 @@ class Event(Node):
         self.__aftershocks = []
         self.__costly_access = False
 
-    def get_key(self):
-        """Return the event key used to compare or index this node."""
-        return self.__key
-
     def update_key(self):
         """Refresh the key after any attribute affecting the key changes."""
-        self.__key = Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id)
+        self.set_key(Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id))
 
     def get_id(self):
         """Return the event identifier."""

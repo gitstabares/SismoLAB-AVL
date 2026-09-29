@@ -1,6 +1,3 @@
-"""Define a node used to build a binary tree."""
-
-
 class Node:
     """Store a key and links to the node's children and parent."""
 

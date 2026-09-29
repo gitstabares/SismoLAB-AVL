@@ -1,6 +1,3 @@
-from .node import Node
-
-
 class Tree:
     """Binary search tree that stores nodes ordered by their keys."""
 

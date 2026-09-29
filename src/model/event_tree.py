@@ -1,6 +1,5 @@
-"""Tree specialization for seismic events and their relationships."""
+from .tree import Tree
 
-from model.tree import Tree
 
 class EventTree(Tree):
     """Store seismic events and thresholds for their classification."""
