@@ -2,13 +2,18 @@ from .node import Node
 
 
 class Tree:
+    """Binary search tree that stores nodes ordered by their keys."""
+
     def __init__(self, root = None):
+        """Create a tree with an optional root node."""
         self.__root = root
 
     def get_root(self):
+        """Return the root node, or ``None`` when the tree is empty."""
         return self.__root
 
     def get_node(self, key):
+        """Find and return the node with ``key`` using binary search."""
         def get(root):
             if root:
                 if root.get_key() == key:
@@ -20,7 +25,10 @@ class Tree:
         return get(self.__root)
 
     def add_node(self, new_node):
+        """Insert ``new_node`` according to its key.
 
+        Nodes with keys already present in the tree are ignored.
+        """
         if not self.__root:
             self.__root = new_node
             return
@@ -42,6 +50,11 @@ class Tree:
         __add_node(self.__root)
 
     def pop_node(self, key):
+        """Remove and return the node with ``key``.
+
+        When a node has two children, its in-order predecessor replaces it.
+        Return ``None`` if the key is not present.
+        """
         node = self.get_node(key)
         if node is None:
             return None
@@ -62,6 +75,7 @@ class Tree:
         return node
 
     def __replace_node(self, old_node, new_node):
+        """Replace a node in its parent link and update the new parent."""
         parent = old_node.get_parent()
         if parent is None:
             self.__root = new_node
@@ -73,32 +87,39 @@ class Tree:
             new_node.set_parent(parent)
 
     def __get_minimum(self,root):
+        """Return the smallest node in the subtree rooted at ``root``."""
         if root.get_left():
             return self.__get_minimum(root.get_left())
         return root
     
     def get_minimum(self):
+        """Return the smallest node in the tree, or ``None`` if empty."""
         if self.__root is None:
             return None
         return self.__get_minimum(self.__root)
     
     def __get_maximum(self,root):
+        """Return the largest node in the subtree rooted at ``root``."""
         if root.get_right():
             return self.__get_maximum(root.get_right())
         return root
 
     def get_maximum(self):
+        """Return the largest node in the tree, or ``None`` if empty."""
         if self.__root is None:
             return None
         return self.__get_maximum(self.__root)
 
     def get_height(self):
+        """Return the height reported by the root node."""
         return self.__root.get_height() if self.__root else 0
 
     def get_weight(self):
+        """Return the number of nodes reported by the root node."""
         return self.__root.get_weight() if self.__root else 0
 
     def __rotate_left(self, node):
+        """Perform a left rotation around ``node``."""
         pivot = node.get_right()
 
         if not node or not pivot:
@@ -112,6 +133,7 @@ class Tree:
         node.set_parent(pivot)
 
     def __rotate_right(self, node):
+        """Perform a right rotation around ``node``."""
         pivot = node.get_left()
 
         if not node or not pivot:
@@ -125,6 +147,7 @@ class Tree:
         node.set_parent(pivot)
 
     def __balance_node(self, node):
+        """Rotate ``node`` until its balance factor is within range."""
         if node is None:
             return None
         balance_factor = node.get_balance_factor()
@@ -142,11 +165,13 @@ class Tree:
             self.__rotate_left(node)
 
     def balance_branch(self, node):
+        """Balance ``node`` and each of its ancestors."""
         self.__balance_node(node)
         if node.get_parent():
             self.balance_branch(node.get_parent())
 
     def balance_tree(self):
+        """Balance every subtree until the root remains unchanged."""
         if self.__root is None:
             return
 
@@ -158,6 +183,7 @@ class Tree:
                 break
 
     def __balance_subtree(self, node):
+        """Recursively balance children before balancing ``node``."""
         if node is None:
             return
 
@@ -170,6 +196,7 @@ class Tree:
         self.__balance_node(node)
 
     def get_preorder_traverse(self):
+        """Return nodes in root-left-right order."""
         result = []
         def traverse(node):
             if node is None:
@@ -181,6 +208,7 @@ class Tree:
         return result
 
     def get_inorder_traverse(self):
+        """Return nodes in left-root-right order (sorted by key)."""
         result = []
         def traverse(node):
             if node is None:
@@ -192,6 +220,7 @@ class Tree:
         return result
 
     def get_postorder_traverse(self):
+        """Return nodes in left-right-root order."""
         result = []
         def traverse(node):
             if node is None:
@@ -203,6 +232,7 @@ class Tree:
         return result
 
     def get_levelorder_traverse(self):
+        """Return nodes level by level from the root downward."""
         if not self.__root:
             return []
         queue = [self.__root]
@@ -214,4 +244,5 @@ class Tree:
         return queue
 
     def contains(self, key):
+        """Return whether a node with ``key`` exists in the tree."""
         return self.get_node(key) is not None

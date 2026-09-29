@@ -1,7 +1,14 @@
 from .key import Key
 from .node import Node
 
+
 class Event(Node):
+    """Represents a seismic event with its metadata and impact information.
+
+    The object inherits from Node and uses a Key generated from the event's
+    magnitude, deepness, population flag, and identifier to support ordered
+    storage or lookup in the data structure.
+    """
 
     def __init__(
         self,
@@ -15,6 +22,19 @@ class Event(Node):
         revised,
         is_populated
     ):
+        """Initialize an event with the given seismic data.
+
+        Args:
+            id: Unique identifier of the event.
+            magnitude: Earthquake magnitude value.
+            deepness: Depth of the earthquake source.
+            epicenter: Geographic epicenter name or location.
+            date: Date of occurrence.
+            review: Evaluation score or review metric.
+            origin_station: Station that originated the report.
+            revised: Whether the report has been revised.
+            is_populated: Indicates if the event occurred in a populated area.
+        """
         super().__init__(Key(magnitude, deepness, is_populated, id))
         self.__id = id
         self.__magnitude = magnitude
@@ -28,69 +48,87 @@ class Event(Node):
         self.__aftershocks = []
         self.__costly_access = False
 
+    def get_key(self):
+        """Return the event key used to compare or index this node."""
+        return self.__key
+
+    def update_key(self):
+        """Refresh the key after any attribute affecting the key changes."""
+        self.__key = Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id)
+
     def get_id(self):
+        """Return the event identifier."""
         return self.__id
 
     def get_magnitude(self):
+        """Return the earthquake magnitude."""
         return self.__magnitude
 
     def set_magnitude(self, magnitude):
+        """Set a new magnitude and update the related key."""
         self.__magnitude = magnitude
 
     def get_deepness(self):
+        """Return the earthquake depth."""
         return self.__deepness
 
     def set_deepness(self, deepness):
+        """Set a new deepness value."""
         self.__deepness = deepness
 
     def get_epicenter(self):
+        """Return the epicenter location."""
         return self.__epicenter
 
     def set_epicenter(self, epicenter):
+        """Set a new epicenter value."""
         self.__epicenter = epicenter
 
     def get_date(self):
+        """Return the date of the event."""
         return self.__date
 
     def set_date(self, date):
+        """Set the event date."""
         self.__date = date
 
     def get_review(self):
+        """Return the review score associated with the event."""
         return self.__review
 
     def set_review(self, review):
+        """Set the review value, coercing it to an integer."""
         self.__review = int(review)
 
     def get_origin_station(self):
+        """Return the station that reported the event."""
         return self.__origin_station
 
     def set_origin_station(self, origin_station):
+        """Set the origin station for the event."""
         self.__origin_station = origin_station
 
     def get_revised(self):
+        """Return whether the event has been revised."""
         return self.__revised
 
     def set_revised(self, revised):
+        """Set the revised status."""
         self.__revised = revised
 
     def get_costly_access(self):
+        """Return whether access to this event is considered costly."""
         return self.__costly_access
 
+    def set_costly_access(self, costly_access):
+        """Set the costly-access flag."""
+        self.__costly_access = costly_access
+
     def get_aftershocks(self):
+        """Return the list of aftershocks associated with this event."""
         return self.__aftershocks
 
-    def update_aftershocks(self, W = 48, R = 40):
-        def add_aftershock(root):
-            if not root:
-                return
-            if root.get_magnitude() < self.__magnitude and 0 < (root.get_date() - self.__date).days < W/24 and (root.get_epicenter() - self.__epicenter).get_length() < R:
-                self.__aftershocks.append(root)
-            add_aftershock(root.get_left())
-            add_aftershock(root.get_right())
-        add_aftershock(self.get_root())
-
-    def update_costly_access(self, L = 3):
-        self.__costly_access = self.__key.get_priority() == 3 and self.get_depth() > L
-
-    def update_key(self):
-        self.__key = Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id)
+    # Notes:
+    # - The class intentionally stores all attributes as private fields.
+    # - Aftershock data is kept as a list and can be extended by other modules.
+    # - A review is converted to int to normalize the data type for storage.
