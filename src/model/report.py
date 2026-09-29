@@ -1,4 +1,4 @@
-from src.model import Point
+from .point import Point
 from datetime import datetime as dt
 
 class Report:

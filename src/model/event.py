@@ -1,5 +1,5 @@
-from src.model import Key
-from src.model import Node
+from .key import Key
+from .node import Node
 
 class Event(Node):
 
