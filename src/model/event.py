@@ -1,11 +1,5 @@
-"""Model representation of a seismic event.
-
-This module defines the Event class, which stores the data for an earthquake
-record and exposes the accessors used by the rest of the application.
-"""
-
-from src.model import Key
-from src.model import Node
+from .key import Key
+from .node import Node
 
 
 class Event(Node):
@@ -54,13 +48,9 @@ class Event(Node):
         self.__aftershocks = []
         self.__costly_access = False
 
-    def get_key(self):
-        """Return the event key used to compare or index this node."""
-        return self.__key
-
     def update_key(self):
         """Refresh the key after any attribute affecting the key changes."""
-        self.__key = Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id)
+        self.set_key(Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id))
 
     def get_id(self):
         """Return the event identifier."""

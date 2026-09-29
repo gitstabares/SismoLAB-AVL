@@ -1,11 +1,4 @@
-"""Model for seismic report data.
-
-This module defines the Report entity used to store and validate information
-about a seismic event, including its identifier, magnitude, depth, epicenter,
-date, review status, and the station from which the report originated.
-"""
-
-from src.model import Point
+from .point import Point
 from datetime import datetime as dt
 
 
