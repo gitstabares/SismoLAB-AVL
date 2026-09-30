@@ -9,7 +9,7 @@ class Report:
     normalized form suitable for further processing or persistence.
     """
 
-    def __init__(self, id, magnitude, deepness, x, y, date, review, origin_station):
+    def __init__(self, id, magnitude, deepness, x, y, date, origin_station, review = 1):
         """Initialize a report with the provided seismic information.
 
         Args:

@@ -1,13 +1,22 @@
 class Tree:
     """Binary search tree that stores nodes ordered by their keys."""
 
-    def __init__(self, root = None):
-        """Create a tree with an optional root node."""
+    def __init__(self, root = None, autobalance = False):
+        """Create a tree with an optional root node and optional autobalance."""
+        self.__autobalance = bool(autobalance)
         self.__root = root
 
     def get_root(self):
         """Return the root node, or ``None`` when the tree is empty."""
         return self.__root
+
+    def get_autobalance(self):
+        """Return whether automatic balancing is enabled."""
+        return self.__autobalance
+
+    def set_autobalance(self, value):
+        """Set whether automatic balancing is enabled."""
+        self.__autobalance = value
 
     def get_node(self, key):
         """Find and return the node with ``key`` using binary search."""
@@ -45,6 +54,8 @@ class Tree:
                     __add_node(root.get_right())
 
         __add_node(self.__root)
+        if self.__autobalance:
+            self.balance_branch(new_node)
 
     def pop_node(self, key):
         """Remove and return the node with ``key``.
@@ -69,6 +80,8 @@ class Tree:
                 predecessor.get_left().set_parent(predecessor)
             if predecessor.get_right():
                 predecessor.get_right().set_parent(predecessor)
+        if self.__autobalance:
+            self.balance_tree()
         return node
 
     def __replace_node(self, old_node, new_node):
