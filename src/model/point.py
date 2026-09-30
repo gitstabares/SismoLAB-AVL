@@ -5,7 +5,7 @@ class Point(tuple):
         """Create a Point object, validating bounds."""
         if not (0 <= x <= 1000) or not (0 <= y <= 1000):
             raise ValueError(f"both coordinates must be between 0 and 1000. Got: ({x},{y})")
-        return super().__new__(cls, round(x,1),round(y,1))
+        return super().__new__(cls, [round(x,1),round(y,1)])
 
     @property
     def x(self):
