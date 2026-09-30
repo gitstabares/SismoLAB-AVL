@@ -1,6 +1,3 @@
-from .point import Point
-
-
 class PopulatedZones(set):
 
     def __init__(self, distance):
@@ -11,18 +8,17 @@ class PopulatedZones(set):
 
     def set_distance(self, distance):
         self.__distance = distance
+        new_values = {
+            element - element % self.__distance
+            for element in self
+        }
+
+        self.clear()
+        self.update(new_values)
 
     def add(self, element):
-        if not isinstance(element, Point): raise TypeError("must be Point")
         point = element - element % self.__distance
         super().add(point)
-
-    def add_many(self, iterable):
-        if isinstance(iterable,Point):
-            super().add(iterable)
-            return
-        for element in iterable:
-            self.add(element)
 
     def __contains__(self, element):
         point = element - element % self.__distance
