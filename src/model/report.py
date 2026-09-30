@@ -22,12 +22,12 @@ class Report:
             review: Review score or level associated with the report.
             origin_station: Station that generated or reported the event.
         """
-        self.__id = self.__set_id(id)
-        self.__magnitude = self.__set_magnitude(magnitude)
-        self.__deepness = self.__set_deepness(deepness)
-        self.__epicenter = self.__set_epicenter(x, y)
-        self.__date = self.__set_date(date)
-        self.__review = self.__set_review(review)
+        self.__set_id(id)
+        self.__set_magnitude(magnitude)
+        self.__set_deepness(deepness)
+        self.__set_epicenter(x, y)
+        self.__set_date(date)
+        self.__set_review(review)
         self.__origin_station = origin_station
 
     def get_id(self):
@@ -35,31 +35,40 @@ class Report:
         return self.__id
 
     def __set_id(self, id):
-        """Validate and clamp the report identifier."""
-        self.__id = max(1, min(999999, int(id)))
+        """Validate the report identifier."""
+        val = int(id)
+        if not (1 <= val <= 999999):
+            raise ValueError(f"id must be between 1 and 999999. Got: {val}")
+        self.__id = val
 
     def get_magnitude(self):
         """Return the earthquake magnitude."""
         return self.__magnitude
 
     def __set_magnitude(self, magnitude):
-        """Normalize the magnitude to a valid range and one decimal place."""
-        self.__magnitude = max(-2, min(10, round(magnitude, 1)))
+        """Validate the magnitude range and one decimal place."""
+        val = round(magnitude, 1)
+        if not (-2 <= val <= 10):
+            raise ValueError(f"magnitude must be between -2 and 10. Got: {val}")
+        self.__magnitude = val
 
     def get_deepness(self):
         """Return the earthquake depth in kilometers."""
         return self.__deepness
 
     def __set_deepness(self, deepness):
-        """Normalize the depth to a valid range and one decimal place."""
-        self.__deepness = max(0, min(700, round(deepness, 1)))
+        """Validate the depth range and one decimal place."""
+        val = round(deepness, 1)
+        if not (0 <= val <= 700):
+            raise ValueError(f"deepness must be between 0 and 700. Got: {val}")
+        self.__deepness = val
 
     def get_epicenter(self):
         """Return the epicenter point."""
         return self.__epicenter
 
     def __set_epicenter(self, x, y):
-        """Create a Point object for the epicenter coordinates."""
+        """Create a Point object for the epicenter coordinates"""
         self.__epicenter = Point(x, y)
 
     def get_date(self):
@@ -76,11 +85,11 @@ class Report:
 
     def __set_review(self, review):
         """Validate the review value and ensure it is not negative."""
-        self.__review = max(0, int(review))
+        val = int(review)
+        if val < 0:
+            raise ValueError(f"review must be non-negative. Got: {val}")
+        self.__review = val
 
     def get_origin_station(self):
         """Return the station that originated the report."""
         return self.__origin_station
-    
-
-
