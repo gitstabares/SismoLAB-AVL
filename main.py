@@ -1,6 +1,5 @@
-import time
-
 from nicegui import ui
+from src.model import *
 
 with ui.input('Fecha').props('readonly') as inp:
     with inp.add_slot('append'):
@@ -19,4 +18,13 @@ with ui.input('Fecha').props('readonly') as inp:
                 time_input.set_visibility(False)
                 ui.button(icon='done', on_click=show_date).props('round')
             menu.on('hide', lambda e:inp.set_value(f"{date_input.value}T{time_input.value}"))
+mapa = ui.leaflet(
+    center=(5.0675, 500.71),
+    zoom=1,
+        options={
+        'maxBounds': [[-85.051129, -180], [85.051129, 180]],
+        'maxBoundsViscosity': 1.0,
+    }).style('width: 800px; height: 500px;')
+mapa.marker(latlng=Point(5.0675, 500.71))
+
 ui.run()
