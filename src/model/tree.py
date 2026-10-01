@@ -17,6 +17,8 @@ class Tree:
     def set_autobalance(self, value):
         """Set whether automatic balancing is enabled."""
         self.__autobalance = value
+        if value:
+            self.balance_tree()
 
     def get_node(self, key):
         """Find and return the node with ``key`` using binary search."""
@@ -253,6 +255,6 @@ class Tree:
                 queue.append(node.get_right())
         return queue
 
-    def contains(self, key):
+    def __contains__(self, key):
         """Return whether a node with ``key`` exists in the tree."""
         return self.get_node(key) is not None

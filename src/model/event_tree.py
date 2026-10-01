@@ -14,7 +14,6 @@ class EventTree(Tree):
         self.__W = W
         self.__R = R
         self.__L = L
-        self.__id_list = set()
 
     def get_W(self):
         """Return the aftershock time-window threshold in hours."""
@@ -23,6 +22,7 @@ class EventTree(Tree):
     def set_W(self, W):
         """Set the aftershock time-window threshold in hours."""
         self.__W = W
+        self.update_aftershocks()
 
     def get_R(self):
         """Return the maximum distance for aftershock association."""
@@ -31,6 +31,7 @@ class EventTree(Tree):
     def set_R(self, R):
         """Set the maximum distance for aftershock association."""
         self.__R = R
+        self.update_aftershocks()
 
     def get_L(self):
         """Return the depth threshold for costly access."""
@@ -39,19 +40,7 @@ class EventTree(Tree):
     def set_L(self, L):
         """Set the depth threshold for costly access."""
         self.__L = L
-
-    def add_node(self, new_node):
-        self.__id_list.add(new_node.get_id())        
-        return super().add_node(new_node)
-    
-    def pop_node(self, key):
-        node = self.get_node(key)
-        if node:
-            self.__id_list.discard(node.get_id())
-        return super().pop_node(key)
-
-    def __contains__(self, key):
-        return key in self.__id_list
+        self.update_costly_access()
 
     def update_aftershocks(self):
         """Append events that meet the aftershock association criteria."""
@@ -67,7 +56,8 @@ class EventTree(Tree):
         for seism in self.get_levelorder_traverse():
             seism.set_costly_access(seism.get_key().get_priority() == 3 and seism.get_depth() > self.__L)
 
-    def archive(self, node):
+    def archive(self, key):
+        node = self.get_node(key)
         self.__replace_node(node, None)
         if self.__autobalance:
             self.balance_tree()

@@ -10,11 +10,7 @@ class Event(Node):
     storage or lookup in the data structure.
     """
 
-    def __init__(
-        self,
-        report,
-        is_populated
-    ):
+    def __init__(self, report, is_populated):
         """Initialize an event with the given seismic data.
 
         Args:
@@ -41,12 +37,31 @@ class Event(Node):
         self.__aftershocks = []
         self.__costly_access = False
 
-    def __eq__(self, other):
-        return super().__eq__(other)
+    def set_all(self, event):
+        self.set_magnitude(event.get_magnitude())
+        self.set_deepness(event.get_deepness())
+        self.set_epicenter(event.get_epicenter())
+        self.set_date(event.get_date())
+        self.set_review(event.get_review())
+        self.set_origin_station(event.get_origin_station())
+        self.set_is_populated(event.get_is_populated())
+        self.update_key()
+
+    def get_all(self):
+        return (
+        self.__id,
+        self.__magnitude,
+        self.__deepness,
+        self.__epicenter,
+        self.__date,
+        self.__review,
+        self.__origin_station,
+        self.__is_populated
+        )
 
     def update_key(self):
         """Refresh the key after any attribute affecting the key changes."""
-        self.set_key(Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id))            
+        self.__key = Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id)
 
     def get_id(self):
         """Return the event identifier."""

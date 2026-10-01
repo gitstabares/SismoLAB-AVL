@@ -26,6 +26,9 @@ class Key:
         self.__magnitude = magnitude
         self.__id = id
 
+    def get_tuple(self):
+        return (self.__priority, self.__magnitude, self.__id)
+    
     def get_priority(self):
         """
         Gets the priority of the seismic event.
@@ -100,4 +103,4 @@ class Key:
         Returns:
             str: A string in the format "(priority, magnitude, id)".
         """
-        return f"({self.__priority}, {self.__magnitude}, {self.__id})"
+        return f"({self.__priority}, {self.__magnitude}, SIS-{self.__id:06d})"

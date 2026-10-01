@@ -27,4 +27,5 @@ mapa = ui.leaflet(
     }).style('width: 800px; height: 500px;')
 mapa.marker(latlng=Point(5.0675, 500.71))
 
+arbol = ui.tree()
 ui.run()

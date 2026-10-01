@@ -38,7 +38,7 @@ class Report:
         """Validate the report identifier."""
         val = int(id)
         if not (1 <= val <= 999999):
-            raise ValueError(f"id must be between 1 and 999999. Got: {val}")
+            raise ValueError(f"Id must be between 1 and 999999. Got: {val}")
         self.__id = val
 
     def get_magnitude(self):
@@ -49,7 +49,7 @@ class Report:
         """Validate the magnitude range and one decimal place."""
         val = round(magnitude, 1)
         if not (-2 <= val <= 10):
-            raise ValueError(f"magnitude must be between -2 and 10. Got: {val}")
+            raise ValueError(f"Magnitude must be between -2 and 10. Got: {val}")
         self.__magnitude = val
 
     def get_deepness(self):
@@ -60,7 +60,7 @@ class Report:
         """Validate the depth range and one decimal place."""
         val = round(deepness, 1)
         if not (0 <= val <= 700):
-            raise ValueError(f"deepness must be between 0 and 700. Got: {val}")
+            raise ValueError(f"Deepness must be between 0 and 700. Got: {val}")
         self.__deepness = val
 
     def get_epicenter(self):
@@ -87,7 +87,7 @@ class Report:
         """Validate the review value and ensure it is not negative."""
         val = int(review)
         if val < 0:
-            raise ValueError(f"review must be non-negative. Got: {val}")
+            raise ValueError(f"Review must be non-negative. Got: {val}")
         self.__review = val
 
     def get_origin_station(self):
