@@ -1,20 +1,20 @@
+from typing import Any
+
 class Key:
-    """
-    Represents a key used for prioritizing and ordering seismic events.
+    """Represents a key used for prioritizing and ordering seismic events.
 
     The priority is determined by the magnitude, deepness, and whether the area is populated.
     Higher priority indicates a more critical event.
     """
 
-    def __init__(self, magnitude, deepness, is_populated, id):
-        """
-        Initializes a Key instance.
+    def __init__(self, magnitude: float, deepness: float, is_populated: bool, id: Any) -> None:
+        """Initializes a Key instance.
 
         Args:
             magnitude (float): The magnitude of the seismic event.
             deepness (float): The depth of the seismic event in kilometers.
-            is_populated (bool): True if the event occurred in a populated area, False otherwise.
-            id (int/str): A unique identifier for the event.
+            is_populated (bool): True if the event occurred in a populated area.
+            id (Any): A unique identifier for the event.
         """
         if magnitude >= 4.5:
             if magnitude >= 6.0 or (deepness <= 30 and is_populated):
@@ -26,33 +26,37 @@ class Key:
         self.__magnitude = magnitude
         self.__id = id
 
-    def get_tuple(self):
+    def get_tuple(self) -> tuple:
+        """Returns a tuple representation of the key's sorting criteria.
+
+        Returns:
+            tuple: A tuple containing (priority, magnitude, id).
+        """
         return (self.__priority, self.__magnitude, self.__id)
     
-    def get_priority(self):
-        """
-        Gets the priority of the seismic event.
+    def get_priority(self) -> int:
+        """Gets the priority of the seismic event.
 
         Returns:
             int: The priority level (1, 2, or 3, where 3 is the highest).
         """
         return self.__priority
 
-    def __eq__(self, other):
-        """
-        Checks if two Key instances are equal based on their ID.
+    def __eq__(self, other: Any) -> bool:
+        """Checks if two Key instances are equal based on their ID.
 
         Args:
-            other (Key): The other Key instance to compare with.
+            other (Any): The other Key instance to compare with.
 
         Returns:
             bool: True if the IDs are equal, False otherwise.
         """
+        if not isinstance(other, Key):
+            return NotImplemented
         return self.__id == other.__id
 
-    def __lt__(self, other):
-        """
-        Determines if this Key is less than another Key.
+    def __lt__(self, other: Any) -> bool:
+        """Determines if this Key is less than another Key.
 
         Comparison is done in the following order:
         1. Priority
@@ -60,11 +64,13 @@ class Key:
         3. ID
 
         Args:
-            other (Key): The other Key instance to compare with.
+            other (Any): The other Key instance to compare with.
 
         Returns:
             bool: True if this Key is strictly less than the other Key.
         """
+        if not isinstance(other, Key):
+            return NotImplemented
         if self.__priority != other.__priority:
             return self.__priority < other.__priority
 
@@ -73,9 +79,8 @@ class Key:
 
         return self.__id < other.__id
 
-    def __gt__(self, other):
-        """
-        Determines if this Key is greater than another Key.
+    def __gt__(self, other: Any) -> bool:
+        """Determines if this Key is greater than another Key.
 
         Comparison is done in the following order:
         1. Priority
@@ -83,11 +88,13 @@ class Key:
         3. ID
 
         Args:
-            other (Key): The other Key instance to compare with.
+            other (Any): The other Key instance to compare with.
 
         Returns:
             bool: True if this Key is strictly greater than the other Key.
         """
+        if not isinstance(other, Key):
+            return NotImplemented
         if self.__priority != other.__priority:
             return self.__priority > other.__priority
 
@@ -96,11 +103,10 @@ class Key:
 
         return self.__id > other.__id
 
-    def __repr__(self):
-        """
-        Returns a string representation of the Key.
+    def __repr__(self) -> str:
+        """Returns a string representation of the Key.
 
         Returns:
-            str: A string in the format "(priority, magnitude, id)".
+            str: A string in the format "(priority, magnitude, SIS-id)".
         """
         return f"({self.__priority}, {self.__magnitude}, SIS-{self.__id:06d})"
