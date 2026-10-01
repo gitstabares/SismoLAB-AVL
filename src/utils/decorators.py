@@ -1,4 +1,4 @@
-def event(function):
+def EventTrigger(function):
     """Decorate a function so it notifies registered subscribers when called.
 
     The wrapped function runs first. If it completes successfully, each
@@ -16,7 +16,7 @@ def event(function):
     wrapper.subscribers = subscribers
     return wrapper
 
-def subscribe(event):
+def OnEvent(event):
     """Return a decorator that registers a function for the given event.
 
     The decorated function is returned unchanged, so registration does not

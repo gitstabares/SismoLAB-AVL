@@ -12,6 +12,9 @@ class Node:
         """Return the string representation of this node's key."""
         return str(self.__key)
 
+    def __eq__(self, other):
+        return self.__key == other.get_key()
+
     def get_key(self):
         """Return this node's key."""
         return self.__key

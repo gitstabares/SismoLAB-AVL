@@ -10,18 +10,7 @@ class Event(Node):
     storage or lookup in the data structure.
     """
 
-    def __init__(
-        self,
-        id,
-        magnitude,
-        deepness,
-        epicenter,
-        date,
-        review,
-        origin_station,
-        revised,
-        is_populated
-    ):
+    def __init__(self, report, is_populated):
         """Initialize an event with the given seismic data.
 
         Args:
@@ -35,22 +24,44 @@ class Event(Node):
             revised: Whether the report has been revised.
             is_populated: Indicates if the event occurred in a populated area.
         """
-        super().__init__(Key(magnitude, deepness, is_populated, id))
-        self.__id = id
-        self.__magnitude = magnitude
-        self.__deepness = deepness
-        self.__epicenter = epicenter
-        self.__date = date
-        self.__review = review
-        self.__origin_station = origin_station
-        self.__revised = revised
+        super().__init__(Key(report.get_magnitude(), report.get_deepness(), is_populated, report.get_id()))
+        self.__id = report.get_id()
+        self.__magnitude = report.get_magnitude()
+        self.__deepness = report.get_deepness()
+        self.__epicenter = report.get_epicenter()
+        self.__date = report.get_date()
+        self.__review = report.get_review()
+        self.__origin_station = report.get_origin_station()
         self.__is_populated = is_populated
+        self.__revised = False
         self.__aftershocks = []
         self.__costly_access = False
 
+    def set_all(self, event):
+        self.set_magnitude(event.get_magnitude())
+        self.set_deepness(event.get_deepness())
+        self.set_epicenter(event.get_epicenter())
+        self.set_date(event.get_date())
+        self.set_review(event.get_review())
+        self.set_origin_station(event.get_origin_station())
+        self.set_is_populated(event.get_is_populated())
+        self.update_key()
+
+    def get_all(self):
+        return (
+        self.__id,
+        self.__magnitude,
+        self.__deepness,
+        self.__epicenter,
+        self.__date,
+        self.__review,
+        self.__origin_station,
+        self.__is_populated
+        )
+
     def update_key(self):
         """Refresh the key after any attribute affecting the key changes."""
-        self.set_key(Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id))
+        self.__key = Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id)
 
     def get_id(self):
         """Return the event identifier."""
@@ -63,6 +74,7 @@ class Event(Node):
     def set_magnitude(self, magnitude):
         """Set a new magnitude and update the related key."""
         self.__magnitude = magnitude
+        self.update_key()
 
     def get_deepness(self):
         """Return the earthquake depth."""
@@ -71,6 +83,7 @@ class Event(Node):
     def set_deepness(self, deepness):
         """Set a new deepness value."""
         self.__deepness = deepness
+        self.update_key()
 
     def get_epicenter(self):
         """Return the epicenter location."""
@@ -104,6 +117,13 @@ class Event(Node):
         """Set the origin station for the event."""
         self.__origin_station = origin_station
 
+    def get_is_populated(self):
+        return self.__is_populated
+
+    def set_is_populated(self, value):
+        self.__is_populated = value
+        self.update_key()
+
     def get_revised(self):
         """Return whether the event has been revised."""
         return self.__revised
@@ -123,8 +143,3 @@ class Event(Node):
     def get_aftershocks(self):
         """Return the list of aftershocks associated with this event."""
         return self.__aftershocks
-
-    # Notes:
-    # - The class intentionally stores all attributes as private fields.
-    # - Aftershock data is kept as a list and can be extended by other modules.
-    # - A review is converted to int to normalize the data type for storage.
