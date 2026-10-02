@@ -8,7 +8,7 @@ class Report:
     normalized form suitable for further processing or persistence.
     """
 
-    def __init__(self, id, magnitude, deepness, x, y, date, origin_station, review = 1):
+    def __init__(self, identifier, magnitude, deepness, x, y, date, station, review = 1):
         """Initialize a report with the provided seismic information.
 
         Args:
@@ -21,13 +21,13 @@ class Report:
             origin_station (str): Station that generated or reported the event.
             review (int, optional): Review score or level associated with the report. Defaults to 1.
         """
-        self.__set_id(id)
+        self.__set_id(identifier)
         self.__set_magnitude(magnitude)
         self.__set_deepness(deepness)
         self.__set_epicenter(x, y)
         self.__set_date(date)
         self.__set_review(review)
-        self.__origin_station = origin_station
+        self.__origin_station = station
 
     def get_id(self):
         """Return the report identifier.

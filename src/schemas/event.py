@@ -1,5 +1,4 @@
-from .key import Key
-from .node import Node
+from src.core import *
 
 
 class Event(Node):

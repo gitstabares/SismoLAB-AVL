@@ -1,6 +1,6 @@
 from .populated_zones import PopulatedZones
 from .event_tree import EventTree
-from .event import Event
+from ..schemas.event import Event
 
 
 class Scenario:

@@ -38,13 +38,9 @@ class Tree:
         Returns:
             Any: The node if found, else None.
         """
-        def get(root):
-            if root:
-                for node in self.get_levelorder_traverse():
-                    if node.get_key() == root.get_key():
-                        return node
-            return None
-        return get(self.__root)
+        for node in self.get_levelorder_traverse():
+            if node.get_key() == key:
+                return node
 
     def add_node(self, new_node):
         """Insert new_node according to its key.
