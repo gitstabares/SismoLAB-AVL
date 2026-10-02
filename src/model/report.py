@@ -1,6 +1,5 @@
 from .point import Point
 from datetime import datetime as dt
-from typing import Any
 
 class Report:
     """Represents a seismic report entry.
@@ -9,7 +8,7 @@ class Report:
     normalized form suitable for further processing or persistence.
     """
 
-    def __init__(self, id: int, magnitude: float, deepness: float, x: float, y: float, date: str, origin_station: str, review: int = 1) -> None:
+    def __init__(self, id, magnitude, deepness, x, y, date, origin_station, review = 1):
         """Initialize a report with the provided seismic information.
 
         Args:
@@ -30,7 +29,7 @@ class Report:
         self.__set_review(review)
         self.__origin_station = origin_station
 
-    def get_id(self) -> int:
+    def get_id(self):
         """Return the report identifier.
 
         Returns:
@@ -38,7 +37,7 @@ class Report:
         """
         return self.__id
 
-    def __set_id(self, id: Any) -> None:
+    def __set_id(self, id):
         """Validate and set the report identifier.
 
         Args:
@@ -52,7 +51,7 @@ class Report:
             raise ValueError(f"Id must be between 1 and 999999. Got: {val}")
         self.__id = val
 
-    def get_magnitude(self) -> float:
+    def get_magnitude(self):
         """Return the earthquake magnitude.
 
         Returns:
@@ -60,7 +59,7 @@ class Report:
         """
         return self.__magnitude
 
-    def __set_magnitude(self, magnitude: float) -> None:
+    def __set_magnitude(self, magnitude):
         """Validate and set the magnitude range and one decimal place.
 
         Args:
@@ -74,7 +73,7 @@ class Report:
             raise ValueError(f"Magnitude must be between -2 and 10. Got: {val}")
         self.__magnitude = val
 
-    def get_deepness(self) -> float:
+    def get_deepness(self):
         """Return the earthquake depth in kilometers.
 
         Returns:
@@ -82,7 +81,7 @@ class Report:
         """
         return self.__deepness
 
-    def __set_deepness(self, deepness: float) -> None:
+    def __set_deepness(self, deepness):
         """Validate and set the depth range and one decimal place.
 
         Args:
@@ -96,7 +95,7 @@ class Report:
             raise ValueError(f"Deepness must be between 0 and 700. Got: {val}")
         self.__deepness = val
 
-    def get_epicenter(self) -> Point:
+    def get_epicenter(self):
         """Return the epicenter point.
 
         Returns:
@@ -104,7 +103,7 @@ class Report:
         """
         return self.__epicenter
 
-    def __set_epicenter(self, x: float, y: float) -> None:
+    def __set_epicenter(self, x, y):
         """Create and set a Point object for the epicenter coordinates.
 
         Args:
@@ -113,7 +112,7 @@ class Report:
         """
         self.__epicenter = Point(x, y)
 
-    def get_date(self) -> dt:
+    def get_date(self):
         """Return the event date as a datetime object.
 
         Returns:
@@ -121,7 +120,7 @@ class Report:
         """
         return self.__date
 
-    def __set_date(self, date: str) -> None:
+    def __set_date(self, date):
         """Parse and set the ISO date string into a datetime object.
 
         Args:
@@ -129,7 +128,7 @@ class Report:
         """
         self.__date = dt.fromisoformat(date)
 
-    def get_review(self) -> int:
+    def get_review(self):
         """Return the review value associated with the report.
 
         Returns:
@@ -137,7 +136,7 @@ class Report:
         """
         return self.__review
 
-    def __set_review(self, review: Any) -> None:
+    def __set_review(self, review):
         """Validate and set the review value and ensure it is not negative.
 
         Args:
@@ -151,7 +150,7 @@ class Report:
             raise ValueError(f"Review must be non-negative. Got: {val}")
         self.__review = val
 
-    def get_origin_station(self) -> str:
+    def get_origin_station(self):
         """Return the station that originated the report.
 
         Returns:

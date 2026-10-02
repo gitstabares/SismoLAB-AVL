@@ -1,7 +1,6 @@
 import json
 from collections import deque
 from datetime import datetime
-from typing import Any, Dict, Type
 
 
 class Serializer:
@@ -12,13 +11,13 @@ class Serializer:
     It handles circular references by using a memoization strategy.
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         """
         Initializes the Serializer with an empty registry for custom classes.
         """
-        self.classes: Dict[str, Type] = {}
+        self.classes = {}
 
-    def register(self, classes: Type) -> None:
+    def register(self, classes):
         """
         Registers a custom class so that the serializer knows how to serialize
         and deserialize its instances.
@@ -29,7 +28,7 @@ class Serializer:
         name = classes.__module__ + "." + classes.__name__
         self.classes[name] = classes
 
-    def serialize(self, obj: Any) -> Any:
+    def serialize(self, obj):
         """
         Serializes an object into a JSON-compatible dictionary format.
 
@@ -41,7 +40,7 @@ class Serializer:
         """
         memo: set[int] = set()
 
-        def convert(obj: Any) -> Any:
+        def convert(obj):
             """
             Recursive helper function to convert an object into its serialized form.
 
@@ -119,7 +118,7 @@ class Serializer:
 
         return convert(obj)
 
-    def deserialize(self, data: Any) -> Any:
+    def deserialize(self, data):
         """
         Deserializes a JSON-compatible dictionary format back into a Python object.
 
@@ -132,9 +131,9 @@ class Serializer:
         Raises:
             ValueError: If an unknown type is encountered.
         """
-        memo: Dict[int, Any] = {}
+        memo = {}
 
-        def rebuild(element: Any) -> Any:
+        def rebuild(element):
             """
             Recursive helper function to rebuild an object from its serialized form.
 
@@ -200,7 +199,7 @@ class Serializer:
 
         return rebuild(data)
     
-    def save(self, scenario: Any, path: str) -> None:
+    def save(self, scenario, path):
         """
         Serializes an object and saves it to a JSON file.
 
@@ -219,7 +218,7 @@ class Serializer:
                 allow_nan=False
             )
 
-    def load(self, path: str) -> Any:
+    def load(self, path):
         """
         Loads JSON data from a file and deserializes it back into a Python object.
 

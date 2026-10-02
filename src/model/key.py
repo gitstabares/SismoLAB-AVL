@@ -1,5 +1,3 @@
-from typing import Any
-
 class Key:
     """Represents a key used for prioritizing and ordering seismic events.
 
@@ -7,7 +5,7 @@ class Key:
     Higher priority indicates a more critical event.
     """
 
-    def __init__(self, magnitude: float, deepness: float, is_populated: bool, id: Any) -> None:
+    def __init__(self, magnitude, deepness, is_populated, id):
         """Initializes a Key instance.
 
         Args:
@@ -26,7 +24,7 @@ class Key:
         self.__magnitude = magnitude
         self.__id = id
 
-    def get_tuple(self) -> tuple:
+    def get_tuple(self):
         """Returns a tuple representation of the key's sorting criteria.
 
         Returns:
@@ -34,7 +32,7 @@ class Key:
         """
         return (self.__priority, self.__magnitude, self.__id)
     
-    def get_priority(self) -> int:
+    def get_priority(self):
         """Gets the priority of the seismic event.
 
         Returns:
@@ -42,7 +40,7 @@ class Key:
         """
         return self.__priority
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other):
         """Checks if two Key instances are equal based on their ID.
 
         Args:
@@ -55,7 +53,7 @@ class Key:
             return NotImplemented
         return self.__id == other.__id
 
-    def __lt__(self, other: Any) -> bool:
+    def __lt__(self, other):
         """Determines if this Key is less than another Key.
 
         Comparison is done in the following order:
@@ -79,7 +77,7 @@ class Key:
 
         return self.__id < other.__id
 
-    def __gt__(self, other: Any) -> bool:
+    def __gt__(self, other):
         """Determines if this Key is greater than another Key.
 
         Comparison is done in the following order:
@@ -103,7 +101,7 @@ class Key:
 
         return self.__id > other.__id
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         """Returns a string representation of the Key.
 
         Returns:
