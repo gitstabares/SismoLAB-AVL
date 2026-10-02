@@ -1,9 +1,7 @@
-from typing import Any
-
 class Point(tuple):
     """A two-dimensional point with coordinates clamped to the 0-1000 range."""
 
-    def __new__(cls, x: float, y: float) -> 'Point':
+    def __new__(cls, x, y):
         """Create a Point object, validating bounds.
 
         Args:
@@ -21,16 +19,16 @@ class Point(tuple):
         return super().__new__(cls, [round(x, 1), round(y, 1)])
 
     @property
-    def x(self) -> float:
+    def x(self):
         """float: The x-coordinate of the point."""
         return self[0]
 
     @property
-    def y(self) -> float:
+    def y(self):
         """float: The y-coordinate of the point."""
         return self[1]
     
-    def __add__(self, other: Any) -> 'Point':
+    def __add__(self, other):
         """Return the coordinate-wise sum as a new point.
 
         Args:
@@ -46,7 +44,7 @@ class Point(tuple):
             raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
         return Point(self.x + other.x, self.y + other.y)
     
-    def __sub__(self, other: Any) -> 'Point':
+    def __sub__(self, other):
         """Return the coordinate-wise difference as a new point.
 
         Args:
@@ -62,7 +60,7 @@ class Point(tuple):
             raise TypeError(f"unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
         return Point(self.x - other.x, self.y - other.y)
 
-    def __mod__(self, divisor: float) -> 'Point':
+    def __mod__(self, divisor):
         """Return the coordinate-wise modulus using the given divisor.
 
         Args:
@@ -73,7 +71,7 @@ class Point(tuple):
         """
         return Point(self.x % divisor, self.y % divisor)
         
-    def get_length(self) -> float:
+    def get_length(self):
         """Return the Euclidean distance from the origin.
 
         Returns:

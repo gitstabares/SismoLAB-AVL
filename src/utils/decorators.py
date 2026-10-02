@@ -1,6 +1,4 @@
-from typing import Any, Callable
-
-def EventTrigger(function: Callable[..., Any]) -> Callable[..., Any]:
+def EventTrigger(function):
     """
     Decorates a function so it notifies registered subscribers when called.
 
@@ -13,9 +11,9 @@ def EventTrigger(function: Callable[..., Any]) -> Callable[..., Any]:
     Returns:
         Callable[..., Any]: The wrapped function with event triggering capabilities.
     """
-    subscribers: list[Callable[[], Any]] = []
+    subscribers = []
 
-    def wrapper(*args: Any, **kwargs: Any) -> Any:
+    def wrapper(*args, **kwargs):
         """
         Runs the event function and then invokes its subscribers.
 
@@ -36,7 +34,7 @@ def EventTrigger(function: Callable[..., Any]) -> Callable[..., Any]:
     wrapper.subscribers = subscribers
     return wrapper
 
-def OnEvent(event: Callable[..., Any]) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
+def OnEvent(event):
     """
     Returns a decorator that registers a function for the given event.
 
@@ -49,7 +47,7 @@ def OnEvent(event: Callable[..., Any]) -> Callable[[Callable[..., Any]], Callabl
     Returns:
         Callable[[Callable[..., Any]], Callable[..., Any]]: A decorator that registers the function.
     """
-    def wrapper(function: Callable[..., Any]) -> Callable[..., Any]:
+    def wrapper(function):
         """
         Appends the function to the event's subscriber list.
 

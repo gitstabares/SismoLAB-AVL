@@ -1,8 +1,4 @@
-from typing import Any, Dict, TypeVar
-
-T = TypeVar('T')
-
-def copy(obj: T) -> T:
+def copy(obj):
     """
     Creates a deep copy of an object, handling primitive types, iterables, and custom objects.
 
@@ -15,9 +11,9 @@ def copy(obj: T) -> T:
         T: A new deep copy of the original object.
     """
     # memo contains the objects already copied, to avoid circular references
-    memo: Dict[int, Any] = {}
+    memo = {}
     
-    def __copy(__obj: Any) -> Any:
+    def __copy(__obj):
         """
         Recursive helper function to perform the actual deep copying.
         

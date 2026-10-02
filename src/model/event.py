@@ -1,4 +1,3 @@
-from typing import Any, Tuple, List
 from .key import Key
 from .node import Node
 
@@ -11,7 +10,7 @@ class Event(Node):
     storage or lookup in the data structure.
     """
 
-    def __init__(self, report: Any, is_populated: bool) -> None:
+    def __init__(self, report, is_populated):
         """Initialize an event with the given seismic data.
 
         Args:
@@ -28,10 +27,10 @@ class Event(Node):
         self.__origin_station = report.get_origin_station()
         self.__is_populated = is_populated
         self.__revised = False
-        self.__aftershocks: List[Any] = []
+        self.__aftershocks = []
         self.__costly_access = False
 
-    def set_all(self, event: Any) -> None:
+    def set_all(self, event):
         """Set all event attributes from another event object.
 
         Args:
@@ -46,7 +45,7 @@ class Event(Node):
         self.set_is_populated(event.get_is_populated())
         self.update_key()
 
-    def get_all(self) -> Tuple[Any, float, float, Any, Any, int, Any, bool]:
+    def get_all(self):
         """Return all attributes of the event as a tuple.
 
         Returns:
@@ -64,11 +63,11 @@ class Event(Node):
             self.__is_populated
         )
 
-    def update_key(self) -> None:
+    def update_key(self):
         """Refresh the key after any attribute affecting the key changes."""
         self.set_key(Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id))
 
-    def get_id(self) -> Any:
+    def get_id(self):
         """Return the event identifier.
 
         Returns:
@@ -76,7 +75,7 @@ class Event(Node):
         """
         return self.__id
 
-    def get_magnitude(self) -> float:
+    def get_magnitude(self):
         """Return the earthquake magnitude.
 
         Returns:
@@ -84,7 +83,7 @@ class Event(Node):
         """
         return self.__magnitude
 
-    def set_magnitude(self, magnitude: float) -> None:
+    def set_magnitude(self, magnitude):
         """Set a new magnitude and update the related key.
 
         Args:
@@ -93,7 +92,7 @@ class Event(Node):
         self.__magnitude = magnitude
         self.update_key()
 
-    def get_deepness(self) -> float:
+    def get_deepness(self):
         """Return the earthquake depth.
 
         Returns:
@@ -101,7 +100,7 @@ class Event(Node):
         """
         return self.__deepness
 
-    def set_deepness(self, deepness: float) -> None:
+    def set_deepness(self, deepness):
         """Set a new deepness value.
 
         Args:
@@ -110,7 +109,7 @@ class Event(Node):
         self.__deepness = deepness
         self.update_key()
 
-    def get_epicenter(self) -> Any:
+    def get_epicenter(self):
         """Return the epicenter location.
 
         Returns:
@@ -118,7 +117,7 @@ class Event(Node):
         """
         return self.__epicenter
 
-    def set_epicenter(self, epicenter: Any) -> None:
+    def set_epicenter(self, epicenter):
         """Set a new epicenter value.
 
         Args:
@@ -126,7 +125,7 @@ class Event(Node):
         """
         self.__epicenter = epicenter
 
-    def get_date(self) -> Any:
+    def get_date(self):
         """Return the date of the event.
 
         Returns:
@@ -134,7 +133,7 @@ class Event(Node):
         """
         return self.__date
 
-    def set_date(self, date: Any) -> None:
+    def set_date(self, date):
         """Set the event date.
 
         Args:
@@ -142,7 +141,7 @@ class Event(Node):
         """
         self.__date = date
 
-    def get_review(self) -> int:
+    def get_review(self):
         """Return the review score associated with the event.
 
         Returns:
@@ -150,7 +149,7 @@ class Event(Node):
         """
         return self.__review
 
-    def set_review(self, review: Any) -> None:
+    def set_review(self, review):
         """Set the review value, coercing it to an integer.
 
         Args:
@@ -158,7 +157,7 @@ class Event(Node):
         """
         self.__review = int(review)
 
-    def get_origin_station(self) -> Any:
+    def get_origin_station(self):
         """Return the station that reported the event.
 
         Returns:
@@ -166,7 +165,7 @@ class Event(Node):
         """
         return self.__origin_station
 
-    def set_origin_station(self, origin_station: Any) -> None:
+    def set_origin_station(self, origin_station):
         """Set the origin station for the event.
 
         Args:
@@ -174,7 +173,7 @@ class Event(Node):
         """
         self.__origin_station = origin_station
 
-    def get_is_populated(self) -> bool:
+    def get_is_populated(self):
         """Return whether the event occurred in a populated area.
 
         Returns:
@@ -182,7 +181,7 @@ class Event(Node):
         """
         return self.__is_populated
 
-    def set_is_populated(self, value: bool) -> None:
+    def set_is_populated(self, value):
         """Set whether the event occurred in a populated area.
 
         Args:
@@ -191,7 +190,7 @@ class Event(Node):
         self.__is_populated = value
         self.update_key()
 
-    def get_revised(self) -> bool:
+    def get_revised(self):
         """Return whether the event has been revised.
 
         Returns:
@@ -199,7 +198,7 @@ class Event(Node):
         """
         return self.__revised
 
-    def set_revised(self, revised: bool) -> None:
+    def set_revised(self, revised):
         """Set the revised status.
 
         Args:
@@ -207,7 +206,7 @@ class Event(Node):
         """
         self.__revised = revised
 
-    def get_costly_access(self) -> bool:
+    def get_costly_access(self):
         """Return whether access to this event is considered costly.
 
         Returns:
@@ -215,7 +214,7 @@ class Event(Node):
         """
         return self.__costly_access
 
-    def set_costly_access(self, costly_access: bool) -> None:
+    def set_costly_access(self, costly_access):
         """Set the costly-access flag.
 
         Args:
@@ -223,10 +222,18 @@ class Event(Node):
         """
         self.__costly_access = costly_access
 
-    def get_aftershocks(self) -> List[Any]:
+    def get_aftershocks(self):
         """Return the list of aftershocks associated with this event.
 
         Returns:
             List[Any]: A list of aftershock events.
         """
         return self.__aftershocks
+
+    def set_aftershocks(self, value):
+        """Return the list of aftershocks associated with this event.
+
+        Returns:
+            List[Any]: A list of aftershock events.
+        """
+        self.__aftershocks = value

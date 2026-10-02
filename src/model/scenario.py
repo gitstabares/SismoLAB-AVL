@@ -1,8 +1,7 @@
-from typing import Any, Optional
 from .populated_zones import PopulatedZones
 from .event_tree import EventTree
 from .event import Event
-from .report import Report
+
 
 class Scenario:
     """Manages seismic event trees and populated zones within a given tile size.
@@ -10,7 +9,7 @@ class Scenario:
     Maintains AVL and BST trees for event tracking and processes incoming reports.
     """
 
-    def __init__(self, tile_size: float) -> None:
+    def __init__(self, tile_size):
         """Initialize the Scenario with a specified tile size.
 
         Args:
@@ -23,7 +22,7 @@ class Scenario:
         self.__archived_BST_trees = set()
         self.__eliminated_nodes = set()
 
-    def archive_event(self, key: Any) -> None:
+    def archive_event(self, key):
         """Archive events from the trees by a given key.
 
         Args:
@@ -32,7 +31,7 @@ class Scenario:
         self.__archived_AVL_trees.add(self.__AVL.archive(key))
         self.__archived_BST_trees.add(self.__BST.archive(key))
 
-    def insert_report(self, report: Report) -> None:
+    def insert_report(self, report):
         """Insert or update a report in the scenario's event trees.
 
         Args:
@@ -48,7 +47,7 @@ class Scenario:
         
         new_event = Event(report, report.get_epicenter() in self.__populated_zones)
         
-        if new_event.get_key() not in self.__AVL:
+        if new_event not in self.__AVL:
             self.__AVL.add_node(new_event)
             self.__BST.add_node(new_event)
         else:
@@ -79,7 +78,7 @@ class Scenario:
             else:
                 raise Exception("Report's information too old. There's newer information in the tree.")
 
-    def delete_event(self, identifier: Any) -> None:
+    def delete_event(self, identifier):
         """Delete an event by its identifier.
 
         Args:
@@ -89,7 +88,13 @@ class Scenario:
         self.__BST.pop_node(identifier)
         self.__eliminated_nodes.add(identifier)
 
-    def get_event_AVL(self, identifier: Any) -> Any:
+    def get_AVL_JSON(self):
+        return self.__AVL.get_echart_dict()
+
+    def get_BST_JSON(self):
+        return self.__BST.get_echart_dict()
+
+    def get_event_AVL(self, identifier):
         """Retrieve an event from the AVL tree.
 
         Args:
@@ -100,7 +105,7 @@ class Scenario:
         """
         return self.__AVL.get_node(identifier)
 
-    def get_event_BST(self, identifier: Any) -> Any:
+    def get_event_BST(self, identifier):
         """Retrieve an event from the BST tree.
 
         Args:
@@ -111,7 +116,7 @@ class Scenario:
         """
         return self.__BST.get_node(identifier)
 
-    def set_stress_mode(self, value: bool) -> None:
+    def set_stress_mode(self, value):
         """Set the autobalance mode for the AVL tree.
 
         Args:
@@ -119,7 +124,7 @@ class Scenario:
         """
         self.__AVL.set_autobalance(value)
 
-    def set_W(self, W: Any) -> None:
+    def set_W(self, W):
         """Set the W threshold for both trees.
 
         Args:
@@ -128,7 +133,7 @@ class Scenario:
         self.__AVL.set_W(W)
         self.__BST.set_W(W)
 
-    def set_R(self, R: Any) -> None:
+    def set_R(self, R):
         """Set the R radius for both trees.
 
         Args:
@@ -137,7 +142,7 @@ class Scenario:
         self.__AVL.set_R(R)
         self.__BST.set_R(R)
 
-    def set_L(self, L: Any) -> None:
+    def set_L(self, L):
         """Set the L threshold for both trees.
 
         Args:

@@ -1,9 +1,7 @@
-from typing import Any, Optional
-
 class Node:
     """Store a key and links to the node's children and parent."""
 
-    def __init__(self, key: Any, parent: Optional['Node'] = None) -> None:
+    def __init__(self, key, parent = None):
         """Create a node with ``key`` and an optional parent.
 
         Args:
@@ -11,11 +9,11 @@ class Node:
             parent (Optional[Node]): The parent node, if any.
         """
         self.__key = key
-        self.__left: Optional['Node'] = None
-        self.__right: Optional['Node'] = None
-        self.__parent: Optional['Node'] = parent
+        self.__left = None
+        self.__right = None
+        self.__parent = parent
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         """Return the string representation of this node's key.
 
         Returns:
@@ -23,7 +21,7 @@ class Node:
         """
         return str(self.__key)
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other):
         """Check if this node equals another based on key equality.
 
         Args:
@@ -36,7 +34,7 @@ class Node:
             return NotImplemented
         return self.__key == other.get_key()
 
-    def get_key(self) -> Any:
+    def get_key(self):
         """Return this node's key.
 
         Returns:
@@ -44,7 +42,7 @@ class Node:
         """
         return self.__key
 
-    def set_key(self, key: Any) -> None:
+    def set_key(self, key):
         """Replace this node's key with ``key``.
 
         Args:
@@ -52,7 +50,7 @@ class Node:
         """
         self.__key = key
 
-    def get_left(self) -> Optional['Node']:
+    def get_left(self):
         """Return the left child, or ``None`` if absent.
 
         Returns:
@@ -60,7 +58,7 @@ class Node:
         """
         return self.__left
 
-    def set_left(self, node: Optional['Node']) -> None:
+    def set_left(self, node):
         """Set the left child to ``node``.
 
         Args:
@@ -68,7 +66,7 @@ class Node:
         """
         self.__left = node
 
-    def get_right(self) -> Optional['Node']:
+    def get_right(self):
         """Return the right child, or ``None`` if absent.
 
         Returns:
@@ -76,7 +74,7 @@ class Node:
         """
         return self.__right
 
-    def set_right(self, node: Optional['Node']) -> None:
+    def set_right(self, node):
         """Set the right child to ``node``.
 
         Args:
@@ -84,7 +82,7 @@ class Node:
         """
         self.__right = node
 
-    def get_parent(self) -> Optional['Node']:
+    def get_parent(self):
         """Return the parent, or ``None`` if this is a root node.
 
         Returns:
@@ -92,7 +90,7 @@ class Node:
         """
         return self.__parent
 
-    def set_parent(self, node: Optional['Node']) -> None:
+    def set_parent(self, node):
         """Set the parent node to ``node``.
 
         Args:
@@ -100,7 +98,7 @@ class Node:
         """
         self.__parent = node
 
-    def get_height(self) -> int:
+    def get_height(self):
         """Return the height of this subtree (a leaf has height zero).
 
         Returns:
@@ -115,7 +113,7 @@ class Node:
         else:
             return 0
 
-    def get_depth(self) -> int:
+    def get_depth(self):
         """Return the number of parent links between this node and the root.
 
         Returns:
@@ -123,7 +121,7 @@ class Node:
         """
         return self.__parent.get_depth() + 1 if self.__parent else 0
 
-    def get_weight(self) -> int:
+    def get_weight(self):
         """Return the number of nodes in this subtree, including this node.
 
         Returns:
@@ -136,7 +134,7 @@ class Node:
             weight += self.__right.get_weight()
         return weight
 
-    def get_balance_factor(self) -> int:
+    def get_balance_factor(self):
         """Return left-subtree height minus right-subtree height.
 
         Returns:
@@ -146,7 +144,7 @@ class Node:
         right_height = self.__right.get_height() + 1 if self.__right else 0
         return left_height - right_height
 
-    def get_root(self) -> 'Node':
+    def get_root(self):
         """Return the root node of the tree containing this node.
 
         Returns:
