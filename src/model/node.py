@@ -13,6 +13,27 @@ class Node:
         self._right = None
         self._parent = None
 
+    def __repr__(self):
+        """Return the string representation of this node's key.
+
+        Returns:
+            str: The string representation of the key.
+        """
+        return str(self.get_key())
+
+    def __eq__(self, other: Node):
+        """Check if this node equals another based on key equality.
+
+        Args:
+            other (Any): Another node.
+
+        Returns:
+            bool: True if keys are equal, False otherwise.
+        """
+        if not isinstance(other, Node):
+            return False
+        return self.get_key() == other.get_key()
+    
     def get_key(self):
         return self._key
 
@@ -36,27 +57,6 @@ class Node:
 
     def set_parent(self, value: Node):
         self._parent = value
-
-    def __repr__(self):
-        """Return the string representation of this node's key.
-
-        Returns:
-            str: The string representation of the key.
-        """
-        return str(self.get_key())
-
-    def __eq__(self, other: Node):
-        """Check if this node equals another based on key equality.
-
-        Args:
-            other (Any): Another node.
-
-        Returns:
-            bool: True if keys are equal, False otherwise.
-        """
-        if not isinstance(other, Node):
-            return False
-        return self.get_key() == other.get_key()
 
     def get_height(self) -> int:
         """Return the height of this subtree (a leaf has height zero).

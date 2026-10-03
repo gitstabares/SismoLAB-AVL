@@ -1,4 +1,5 @@
 from .point import Point
+from .key import Key
 from datetime import datetime as dt
 
 
@@ -42,6 +43,13 @@ class Report:
         self.set_station(station)
         self.set_is_populated(is_populated)
         self.set_review(review)
+        self.set_key(Key(self.get_magnitude(),
+                        self.get_deepness(),
+                        self.get_is_populated(),
+                        self.get_identifier()))
+
+    def __repr__(self):
+        return f"{self.get_identifier()}"
 
     def get_identifier(self) -> int:
         """Return the report identifier.
@@ -143,6 +151,28 @@ class Report:
         """
         self._date = dt.fromisoformat(date)
 
+    def get_station(self) -> str:
+        """Return the station that originated the report.
+
+        Returns:
+            str: The origin station string.
+        """
+        return self._station
+
+    def set_station(self, station:str):
+        """Set the station name.
+
+        Args:
+            station (str): The station name.
+        """
+        self._station = station
+
+    def get_is_populated(self) -> bool:
+        return self._is_populated
+
+    def set_is_populated(self, is_populated:bool):
+        self._is_populated = is_populated
+
     def get_review(self) -> int:
         """Return the review value associated with the report.
 
@@ -165,24 +195,8 @@ class Report:
             raise ValueError(f"Review must be non-negative. Got: {val}")
         self._review = val
 
-    def get_station(self) -> str:
-        """Return the station that originated the report.
+    def get_key(self) -> Key:
+        return self._key
 
-        Returns:
-            str: The origin station string.
-        """
-        return self._station
-
-    def set_station(self, station:str):
-        """Set the station name.
-
-        Args:
-            station (str): The station name.
-        """
-        self._station = station
-
-    def get_is_populated(self) -> bool:
-        return self._is_populated
-
-    def set_is_populated(self, is_populated:bool):
-        self._is_populated = is_populated
+    def set_key(self, key:Key):
+        self._key = key

@@ -50,7 +50,7 @@ class EventTree(Tree):
     def set_L(self, L):
         self._L = L
         self.update_costly_access()
-
+            
     def add_node(self, new_node:Event) -> Event:
         result = super().add_node(new_node)
         self.update_aftershocks()
@@ -156,7 +156,7 @@ class EventTree(Tree):
                         "color": "black",    # Text color
                         "fontSize": 14
                     },
-                    "symbol": "circle",
+                    "symbol": "rectangle",
                     "itemStyle": {
                         "color": "#3b82f6",  # Node color (blue)
                         "borderColor": "#1d4ed8"

@@ -1,32 +1,58 @@
 from nicegui import ui
 from src.model import *
-from src.app.state import global_state
 import datetime as dt
 
-r = Report(1,5.6,98,50,100,"2026-10-06T14:35:20Z","Tolu",1)
-a = Report(2,7.9,98,50,100,"2026-10-06T14:35:20Z","Tolu",1)
+reports = [
+    Report(1001, 4.5, 15.0, 120.5, 340.2, "2026-10-01T08:30:00", "Station-Alpha", True, 2),
+    Report(1002, 5.2, 30.5, 450.0, 512.1, "2026-10-01T14:15:00", "Station-Beta", False, 2),
+    Report(1003, 3.1, 10.2, 890.1, 120.4, "2026-10-02T01:05:00", "Station-Gamma", True, 1),
+    Report(1004, 6.8, 110.0, 320.4, 780.9, "2026-10-02T09:45:00", "Station-Delta", True, 3),
+    Report(1005, 2.4, 5.0, 50.0, 50.0, "2026-10-02T16:20:00", "Station-Alpha", False, 1),
+    Report(1006, 4.9, 45.3, 670.2, 300.8, "2026-10-03T03:10:00", "Station-Epsilon", True, 2),
+    Report(1007, 7.1, 220.5, 910.0, 920.0, "2026-10-03T06:50:00", "Station-Beta", False, 4),
+    Report(1008, 3.5, 18.2, 150.3, 430.6, "2026-10-03T09:12:00", "Station-Gamma", True, 1),
+    Report(1009, 5.6, 85.4, 540.8, 620.1, "2026-10-03T10:30:00", "Station-Delta", True, 2),
+    Report(1010, 1.8, 2.1, 200.0, 200.0, "2026-10-03T11:00:00", "Station-Epsilon", False, 1),
+    Report(1001, 4.5, 15.0, 120.5, 340.2, "2026-10-01T08:30:00", "Station-Tolu", True, 3),
+]
 
-global_state.insert_report(r)
-global_state.insert_report(a)
+global_state = Scenario()
+
+for r in reports:
+    global_state.insert_report(r)
 
 ui.add_head_html('''
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap" rel="stylesheet">
 ''')
 ui.add_css('''
     body {
         background-color: #0c1017;
         color: #94a3b8;
-        font-family: "Google Sans Flex", sans-serif;
+        font-family: "Bitcount Ink", system-ui;
         font-optical-sizing: auto;
-        font-weight: 400;
+        font-weight: <weight>;
         font-style: normal;
         font-variation-settings:
             "slnt" 0,
-            "wdth" 100,
-            "GRAD" 0,
-            "ROND" 0;
+            "CRSV" 0.5,
+            "ELSH" 0,
+            "ELXP" 0,
+            "SZP1" 0,
+            "SZP2" 0,
+            "XPN1" 0,
+            "XPN2" 0,
+            "YPN1" 0,
+            "YPN2" 0;
+    }
+    .title {
+        font-family: "Fraunces", serif;
+        font-optical-sizing: auto;
+        font-style: normal;
+        font-variation-settings:
+            "SOFT" 0,
+            "WONK" 0;
     }
     .dashboard-card {
         background-color: #111827;
@@ -54,20 +80,19 @@ ui.add_css('''
 ''')
 
 def main():
-    with ui.column().classes('w-full min-h-screen bg-[#0b0f17] p-3 text-slate-300 select-none'):
+    with ui.column():
         
         # TOP NAVIGATION & STATUS BAR
-        with ui.row().classes('w-full items-center justify-between dashboard-card p-2 px-4 mb-3'):
-            with ui.row().classes('items-center gap-4'):
-                with ui.row().classes('items-center gap-2'):
-                    ui.icon('hub', color='cyan').classes('text-2xl')
-                    ui.label('SismoLab AVL').classes('text-lg font-bold text-white tracking-wider')
-                ui.label('AVL · OBSERVATORIO TELEMÉTRICO').classes('text-xs text-slate-400 border-l border-slate-700 pl-3')
+        with ui.row(wrap=False).classes('w-full items-center justify-between dashboard-card p-3'):
+            with ui.row(wrap=False).classes('items-center'):
+                with ui.row(wrap=False).classes('items-center'):
+                    ui.image('assets/icon.svg').classes('w-10 h-auto')
+                    ui.label('SismoLab AVL').classes('text-white title font-semibold text-3xl')
+                ui.separator().props('vertical')
                 with ui.row().classes('items-center gap-2 bg-[#172033] px-3 py-1 rounded border border-slate-700'):
-                    ui.icon('schedule', size='xs').classes('text-cyan-400')
-                    ui.label('UTC SINCRONIZADO').classes('text-[10px] text-cyan-400 font-semibold')
                     clock_label = ui.label('2026-10-02 01:41:09').classes('text-xs font-mono text-white')
-            
+                    ui.button(icon='calendar_month')
+
             # Center time controls & metrics chips
             with ui.row().classes('items-center gap-3'):
                 with ui.row().classes('bg-[#131b2e] p-1 rounded border border-slate-800 gap-1'):
@@ -350,7 +375,6 @@ def main():
                         with ui.row().classes('w-full justify-between items-center mt-1 pt-1 border-t border-slate-800'):
                             ui.label('stack depth 18 / 64 · persistencia cada 5 uvs').classes('text-[9px] text-slate-500')
                             ui.button('ROLLBACK SEGURO', icon='history', on_click=lambda: ui.notify('Secure rollback executed')).classes('bg-emerald-950 text-emerald-400 text-[10px] border border-emerald-800 px-2 py-1')
-
 main()
 
 ui.run(title='SismoLab AVL', dark=True)

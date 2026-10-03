@@ -91,12 +91,12 @@ class Scenario:
             self.get_AVL().add_node(Event(report))
             self.get_BST().add_node(Event(report))
         else:
-            actual_AVL = self.get_AVL().get_node(report.get_identifier())
-            actual_BST = self.get_BST().get_node(report.get_identifier())
+            actual_AVL = self.get_AVL().get_node(report.get_key())
+            actual_BST = self.get_BST().get_node(report.get_key())
             if new_event.get_review() > actual_AVL.get_review():
                 if new_event.get_key() != actual_AVL.get_key():
-                    self.get_AVL().pop_node(report.get_identifier())
-                    self.get_BST().pop_node(report.get_identifier())
+                    self.get_AVL().pop_node(report.get_key())
+                    self.get_BST().pop_node(report.get_key())
                     self.get_AVL().add_node(Event(report))
                     self.get_BST().add_node(Event(report))
                 else:
