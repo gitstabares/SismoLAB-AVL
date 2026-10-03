@@ -23,16 +23,13 @@ class Key(tuple):
             priority = 1  
         return super().__new__(cls, [priority, magnitude, identifier])
 
-    @property
-    def priority(self) -> int:
+    def get_priority(self) -> int:
         return self[0]
 
-    @property
-    def magnitude(self) -> float:
+    def get_magnitude(self) -> float:
         return self[1]
 
-    @property
-    def identifier(self) -> float:
+    def get_identifier(self) -> float:
         return self[2]
 
     def __eq__(self, other:Key):
@@ -44,12 +41,12 @@ class Key(tuple):
         Returns:
             bool: True if the identifiers are equal, False otherwise.
         """
-        return self.identifier == other.identifier
+        return self.get_identifier() == other.get_identifier()
 
     def __ne__(self, other:Key):
-        return (self.priority != other.priority 
-                or self.magnitude != other.magnitude 
-                or self.identifier != other.identifier)
+        return (self.get_priority() != other.get_priority() 
+                or self.get_magnitude() != other.get_magnitude() 
+                or self.get_identifier() != other.get_identifier())
 
     def __lt__(self, other:Key):
         """Determines if this Key is less than another Key.
@@ -65,13 +62,13 @@ class Key(tuple):
         Returns:
             bool: True if this Key is strictly less than the other Key.
         """
-        if self.priority != other.priority:
-            return self.priority < other.priority
+        if self.get_priority() != other.get_priority():
+            return self.get_priority() < other.get_priority()
 
-        if self.magnitude != other.magnitude:
-            return self.magnitude < other.magnitude
+        if self.get_magnitude() != other.get_magnitude():
+            return self.get_magnitude() < other.get_magnitude()
 
-        return self.identifier < other.identifier
+        return self.get_identifier() < other.get_identifier()
 
     def __gt__(self, other:Key):
         """Determines if this Key is greater than another Key.
@@ -87,13 +84,13 @@ class Key(tuple):
         Returns:
             bool: True if this Key is strictly greater than the other Key.
         """
-        if self.priority != other.priority:
-            return self.priority > other.priority
+        if self.get_priority() != other.get_priority():
+            return self.get_priority() > other.get_priority()
 
-        if self.magnitude != other.magnitude:
-            return self.magnitude > other.magnitude
+        if self.get_magnitude() != other.get_magnitude():
+            return self.get_magnitude() > other.get_magnitude()
 
-        return self.identifier > other.identifier
+        return self.get_identifier() > other.get_identifier()
 
     def __repr__(self):
         """Returns a string representation of the Key.
@@ -101,4 +98,4 @@ class Key(tuple):
         Returns:
             str: A string in the format "(priority, magnitude, SIS-identifier)".
         """
-        return f"({self.priority}, {self.magnitude}, SIS-{self.identifier:06d})"
+        return f"({self.get_priority()}, {self.get_magnitude()}, SIS-{self.get_identifier():06d})"

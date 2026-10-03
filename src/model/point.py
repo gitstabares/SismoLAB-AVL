@@ -16,24 +16,21 @@ class Point(tuple):
         """
         return super().__new__(cls, [round(x, 1), round(y, 1)])
 
-    @property
-    def x(self) -> float:
+    def get_x(self) -> float:
         """float: The x-coordinate of the point."""
         return self[0]
 
-    @property
-    def y(self) -> float:
+    def get_y(self) -> float:
         """float: The y-coordinate of the point."""
         return self[1]
 
-    @property
-    def length(self) -> float:
+    def get_length(self) -> float:
         """Return the Euclidean distance from the origin.
 
         Returns:
             float: The distance from the origin (0, 0).
         """
-        return (self.x**2 + self.y**2)**(1/2)
+        return (self.get_x()**2 + self.get_y()**2)**(1/2)
     
     def __add__(self, other:Point):
         """Return the coordinate-wise sum as a new point.
@@ -47,7 +44,7 @@ class Point(tuple):
         Raises:
             TypeError: If the other operand is not a Point.
         """
-        return Point(self.x + other.x, self.y + other.y)
+        return Point(self.get_x() + other.get_x(), self.get_y() + other.get_y())
     
     def __sub__(self, other:Point):
         """Return the coordinate-wise difference as a new point.
@@ -61,9 +58,9 @@ class Point(tuple):
         Raises:
             TypeError: If the other operand is not a Point.
         """
-        return Point(self.x - other.x, self.y - other.y)
+        return Point(self.get_x() - other.get_x(), self.get_y() - other.get_y())
 
-    def __mod__(self, divisor:float|int):
+    def __mod__(self, divisor:float):
         """Return the coordinate-wise modulus using the given divisor.
 
         Args:
@@ -72,4 +69,4 @@ class Point(tuple):
         Returns:
             Point: A new point resulting from the modulo operation.
         """
-        return Point(self.x % divisor, self.y % divisor)
+        return Point(self.get_x() % divisor, self.get_y() % divisor)

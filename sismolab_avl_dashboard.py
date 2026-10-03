@@ -4,7 +4,11 @@ from src.app.state import global_state
 import datetime as dt
 
 r = Report(1,5.6,98,50,100,"2026-10-06T14:35:20Z","Tolu",1)
+a = Report(2,7.9,98,50,100,"2026-10-06T14:35:20Z","Tolu",1)
+
 global_state.insert_report(r)
+global_state.insert_report(a)
+
 ui.add_head_html('''
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

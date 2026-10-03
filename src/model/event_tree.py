@@ -17,65 +17,57 @@ class EventTree(Tree):
             autobalance (bool): Whether the tree should autobalance.
         """
         super().__init__()
-        self.autobalance = bool(autobalance)
-        self.W = W
-        self.R = R
-        self.L = L
+        self._autobalance = autobalance
+        self._W = W
+        self._R = R
+        self._L = L
 
-    @property
-    def autobalance(self) -> bool:
-        return self.__autobalance
+    def get_autobalance(self) -> bool:
+        return self._autobalance
 
-    @autobalance.setter
-    def autobalance(self, value:bool):
-        self.__autobalance = value
-        if value:
+    def set_autobalance(self, value:bool):
+        self._autobalance = bool(value)
+        if self._autobalance:
             self.balance_tree()
 
-    @property
-    def W(self) -> float:
-        return self.__W
+    def get_W(self) -> float:
+        return self._W
 
-    @W.setter
-    def W(self,W):
-        self.__W = W
+    def set_W(self, W):
+        self._W = W
         self.update_aftershocks()
 
-    @property
-    def R(self) -> float:
-        return self.__R
+    def get_R(self) -> float:
+        return self._R
 
-    @R.setter
-    def R(self,R):
-        self.__R = R
+    def set_R(self, R):
+        self._R = R
         self.update_aftershocks()
 
-    @property
-    def L(self) -> float:
-        return self.__L
+    def get_L(self) -> float:
+        return self._L
 
-    @L.setter
-    def L(self,L):
-        self.__L = L
+    def set_L(self, L):
+        self._L = L
         self.update_costly_access()
 
     def add_node(self, new_node:Event) -> Event:
         result = super().add_node(new_node)
         self.update_aftershocks()
         self.update_costly_access()
-        if self.__autobalance:
+        if self._autobalance:
             self.balance_branch(new_node)
         return result
 
-    def pop_node(self, key) -> Event:
+    def pop_node(self, key:Key) -> Event:
         result = super().pop_node(key)
         self.update_aftershocks()
         self.update_costly_access()
-        if self.__autobalance:
+        if self._autobalance:
             self.balance_tree()
         return result
 
-    def balance_branch(self, node):
+    def balance_branch(self, node:Event):
         result = super().balance_branch(node)
         self.update_costly_access()
         return result
@@ -88,19 +80,19 @@ class EventTree(Tree):
     def update_aftershocks(self):
         """Append events that meet the aftershock association criteria."""
         for seism in self.get_levelorder_traverse():
-            seism.aftershocks = []
+            seism.set_aftershocks([])
             for aftershock in self.get_levelorder_traverse():
                 # An aftershock must be smaller, later within W hours, and
                 # closer than R to the originating event.
-                if (seism.magnitude > aftershock.magnitude and
-                    0 < (aftershock.date - seism.date).days < self.W / 24 and
-                    (aftershock.epicenter - seism.epicenter).length < self.R):
-                    seism.aftershocks.append(aftershock)
+                if (seism.get_magnitude() > aftershock.get_magnitude() and
+                    0 < (aftershock.get_date() - seism.get_date()).days < self.get_W() / 24 and
+                    (aftershock.get_epicenter() - seism.get_epicenter()).get_length() < self.get_R()):
+                    seism.get_aftershocks().append(aftershock)
 
     def update_costly_access(self):
         """Update each event's costly-access flag from its priority and depth."""
         for seism in self.get_levelorder_traverse():
-            seism.costly_access = seism.key.priority == 3 and seism.depth > self.L
+            seism.set_costly_access(seism.get_key().get_priority() == 3 and seism.get_depth() > self.get_L())
 
     def get_echart_dict(self):
         """
@@ -117,7 +109,7 @@ class EventTree(Tree):
             Dict[str, Any]: A dictionary containing the ECharts configuration and tree data.
         """
         
-        def __get_data(node):
+        def _get_data(node):
             """
             Recursively extracts data from a tree node to format it for ECharts.
 
@@ -139,8 +131,8 @@ class EventTree(Tree):
             return {
                 'name': str(node),
                 'children': [
-                    __get_data(node.get_left()), 
-                    __get_data(node.get_right())
+                    _get_data(node.get_left()), 
+                    _get_data(node.get_right())
                 ]
             }
             
@@ -152,7 +144,7 @@ class EventTree(Tree):
             "series": [
                 {
                     "type": "tree",
-                    "data": [__get_data(self.get_root())],
+                    "data": [_get_data(self.get_root())],
                     "orient": "TB",          # Top to Bottom
                     "roam": True,            # Enables zooming and dragging
                     "symbolSize": 40,        # Node size

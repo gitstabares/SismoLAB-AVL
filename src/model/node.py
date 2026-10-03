@@ -8,42 +8,34 @@ class Node:
             key (Any): The key for the node.
             parent (Optional[Node]): The parent node, if any.
         """
-        self.key = key
-        self.left = None
-        self.right = None
-        self.parent = None
+        self._key = key
+        self._left = None
+        self._right = None
+        self._parent = None
 
-    @property
-    def key(self):
-        return self.__key
+    def get_key(self):
+        return self._key
 
-    @key.setter
-    def key(self, value):
-        self.__key = value
+    def set_key(self, value):
+        self._key = value
 
-    @property
-    def left(self) -> Node:
-        return self.__left
+    def get_left(self) -> Node:
+        return self._left
 
-    @left.setter
-    def left(self, value:Node):
-        self.__left = value
+    def set_left(self, value: Node):
+        self._left = value
 
-    @property
-    def right(self) -> Node:
-        return self.__right
+    def get_right(self) -> Node:
+        return self._right
 
-    @right.setter
-    def right(self, value:Node):
-        self.__right = value
+    def set_right(self, value: Node):
+        self._right = value
 
-    @property
-    def parent(self) -> Node:
-        return self.__parent
+    def get_parent(self) -> Node:
+        return self._parent
 
-    @parent.setter
-    def parent(self, value:Node):
-        self.__parent = value
+    def set_parent(self, value: Node):
+        self._parent = value
 
     def __repr__(self):
         """Return the string representation of this node's key.
@@ -51,9 +43,9 @@ class Node:
         Returns:
             str: The string representation of the key.
         """
-        return str(self.__key)
+        return str(self.get_key())
 
-    def __eq__(self, other:Node):
+    def __eq__(self, other: Node):
         """Check if this node equals another based on key equality.
 
         Args:
@@ -62,63 +54,68 @@ class Node:
         Returns:
             bool: True if keys are equal, False otherwise.
         """
-        return self.__key == other.key
+        if not isinstance(other, Node):
+            return False
+        return self.get_key() == other.get_key()
 
-    @property
-    def height(self) -> int:
+    def get_height(self) -> int:
         """Return the height of this subtree (a leaf has height zero).
 
         Returns:
             int: The height of the subtree.
         """
-        if self.left and self.right:
-            return max(self.left.height, self.right.height) + 1 
-        elif self.left:
-            return self.left.height + 1
-        elif self.right:
-            return self.right.height + 1
+        left = self.get_left()
+        right = self.get_right()
+        if left and right:
+            return max(left.get_height(), right.get_height()) + 1
+        elif left:
+            return left.get_height() + 1
+        elif right:
+            return right.get_height() + 1
         else:
             return 0
 
-    @property
-    def depth(self) -> int:
+    def get_depth(self) -> int:
         """Return the number of parent links between this node and the root.
 
         Returns:
             int: The depth of the node.
         """
-        return self.parent.depth + 1 if self.parent else 0
+        parent = self.get_parent()
+        return parent.get_depth() + 1 if parent else 0
 
-    @property
-    def weight(self) -> int:
+    def get_weight(self) -> int:
         """Return the number of nodes in this subtree, including this node.
 
         Returns:
             int: The weight (number of nodes).
         """
         weight = 1
-        if self.left:
-            weight += self.left.weight
-        if self.right:
-            weight += self.right.weight
+        left = self.get_left()
+        right = self.get_right()
+        if left:
+            weight += left.get_weight()
+        if right:
+            weight += right.get_weight()
         return weight
 
-    @property
-    def balance_factor(self) -> int:
+    def get_balance_factor(self) -> int:
         """Return left-subtree height minus right-subtree height.
 
         Returns:
             int: The balance factor.
         """
-        left_height = self.left.height + 1 if self.left else 0
-        right_height = self.right.height + 1 if self.right else 0
+        left = self.get_left()
+        right = self.get_right()
+        left_height = left.get_height() + 1 if left else 0
+        right_height = right.get_height() + 1 if right else 0
         return left_height - right_height
 
-    @property
-    def root(self) -> Node:
+    def get_root(self) -> Node:
         """Return the root node of the tree containing this node.
 
         Returns:
             Node: The root node.
         """
-        return self if not self.parent else self.parent.root
+        parent = self.get_parent()
+        return self if not parent else parent.get_root()

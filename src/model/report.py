@@ -8,6 +8,7 @@ class Report:
     The class validates the incoming values and keeps the report data in a
     normalized form suitable for further processing or persistence.
     """
+
     def __init__(
             self,
             identifier:int,
@@ -19,7 +20,7 @@ class Report:
             station:str = "",
             is_populated:bool = False,
             review:int = 1):
-        
+
         """Initialize a report with the provided seismic information.
 
         Args:
@@ -32,27 +33,25 @@ class Report:
             station (str): Station that generated or reported the event.
             review (int, optional): Review score or level associated with the report. Defaults to 1.
         """
-        
-        self.identifier = identifier
-        self.magnitude = magnitude
-        self.deepness = deepness
-        self.epicenter = Point(x,y)
-        self.date = date
-        self.station = station
-        self.is_populated = is_populated
-        self.review = review
 
-    @property
-    def identifier(self) -> int:
+        self.set_identifier(identifier)
+        self.set_magnitude(magnitude)
+        self.set_deepness(deepness)
+        self.set_epicenter(x,y)
+        self.set_date(date)
+        self.set_station(station)
+        self.set_is_populated(is_populated)
+        self.set_review(review)
+
+    def get_identifier(self) -> int:
         """Return the report identifier.
 
         Returns:
             int: The unique report ID.
         """
-        return self.__identifier
+        return self._identifier
 
-    @identifier.setter
-    def identifier(self, identifier:int):
+    def set_identifier(self, identifier:int):
         """Validate and set the report identifier.
 
         Args:
@@ -61,23 +60,20 @@ class Report:
         Raises:
             ValueError: If the ID is not between 1 and 999999.
         """
-
         val = int(identifier)
         if not (1 <= val <= 999999):
             raise ValueError(f"Id must be an integer between 1 and 999999. Got: {val}")
-        self.__identifier = val
+        self._identifier = val
 
-    @property
-    def magnitude(self) -> float:
+    def get_magnitude(self) -> float:
         """Return the earthquake magnitude.
 
         Returns:
             float: The magnitude.
         """
-        return self.__magnitude
+        return self._magnitude
 
-    @magnitude.setter
-    def magnitude(self, magnitude:float):
+    def set_magnitude(self, magnitude:float):
         """Validate and set the magnitude range and one decimal place.
 
         Args:
@@ -89,19 +85,17 @@ class Report:
         val = round(magnitude, 1)
         if not (-2 <= val <= 10):
             raise ValueError(f"Magnitude must be between -2 and 10. Got: {val}")
-        self.__magnitude = val
+        self._magnitude = val
 
-    @property
-    def deepness(self) -> float:
+    def get_deepness(self) -> float:
         """Return the earthquake depth in kilometers.
 
         Returns:
             float: The depth.
         """
-        return self.__deepness
+        return self._deepness
 
-    @deepness.setter
-    def deepness(self, deepness:float):
+    def set_deepness(self, deepness:float):
         """Validate and set the depth range and one decimal place.
 
         Args:
@@ -113,58 +107,51 @@ class Report:
         val = round(deepness, 1)
         if not (0 <= val <= 700):
             raise ValueError(f"Deepness must be between 0 and 700. Got: {val}")
-        self.__deepness = val
+        self._deepness = val
 
-    @property
-    def epicenter(self) -> Point:
+    def get_epicenter(self) -> Point:
         """Return the epicenter point.
 
         Returns:
             Point: The epicenter coordinates.
         """
-        return self.__epicenter
+        return self._epicenter
 
-    @epicenter.setter
-    def epicenter(self, point:Point):
+    def set_epicenter(self, x:float, y:float):
         """Create and set a Point object for the epicenter coordinates.
 
         Args:
-            x (float): The X coordinate.
-            y (float): The Y coordinate.
+            point (Point): The point representing the epicenter.
         """
-        if not (0 <= point.x <= 1000) or not (0 <= point.y <= 1000):
-            raise ValueError(f"Deepness must be between 0 and 700. Got: {point}")
-        self.__epicenter = point
+        if not (0 <= x <= 1000) or not (0 <= y <= 1000):
+            raise ValueError(f"Deepness must be between 0 and 700. Got: ({x},{y})")
+        self._epicenter = Point(x,y)
 
-    @property
-    def date(self) -> dt:
+    def get_date(self) -> dt:
         """Return the event date as a datetime object.
 
         Returns:
             dt: The event date.
         """
-        return self.__date
+        return self._date
 
-    @date.setter
-    def date(self, date:str):
+    def set_date(self, date:str):
         """Parse and set the ISO date string into a datetime object.
 
         Args:
             date (str): The ISO format date string.
         """
-        self.__date = dt.fromisoformat(date)
+        self._date = dt.fromisoformat(date)
 
-    @property
-    def review(self) -> int:
+    def get_review(self) -> int:
         """Return the review value associated with the report.
 
         Returns:
             int: The review value.
         """
-        return self.__review
+        return self._review
 
-    @review.setter
-    def review(self, review:int):
+    def set_review(self, review:int):
         """Validate and set the review value and ensure it is not negative.
 
         Args:
@@ -176,30 +163,26 @@ class Report:
         val = int(review)
         if val < 0:
             raise ValueError(f"Review must be non-negative. Got: {val}")
-        self.__review = val
+        self._review = val
 
-    @property
-    def station(self) -> str:
+    def get_station(self) -> str:
         """Return the station that originated the report.
 
         Returns:
             str: The origin station string.
         """
-        return self.__station
+        return self._station
 
-    @station.setter
-    def station(self, station:str):
+    def set_station(self, station:str):
         """Set the station name.
 
         Args:
             station (str): The station name.
         """
-        self.__station = station
+        self._station = station
 
-    @property
-    def is_populated(self) -> bool:
-        return self.__is_populated
+    def get_is_populated(self) -> bool:
+        return self._is_populated
 
-    @is_populated.setter
-    def is_populated(self, is_populated:bool):
-        self.__is_populated = is_populated
+    def set_is_populated(self, is_populated:bool):
+        self._is_populated = is_populated

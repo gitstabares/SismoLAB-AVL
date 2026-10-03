@@ -18,58 +18,47 @@ class Event(Node, Report):
             report (Any): The report object containing seismic data.
         """
 
-        Report.__init__(self,
-                        report.identifier,
-                        report.magnitude,
-                        report.deepness,
-                        report.epicenter.x,
-                        report.epicenter.y,
-                        report.date,
-                        report.station,
-                        report.is_populated,
-                        report.review)
-        Node.__init__(self, Key(self.magnitude, self.deepness, self.is_populated, self.identifier))
-        self.revised = False
-        self.aftershocks = []
-        self.costly_access = False
+        self._identifier = report.get_identifier()
+        self._magnitude = report.get_magnitude()
+        self._deepness = report.get_deepness()
+        self._epicenter = report.get_epicenter()
+        self._date = report.get_date()
+        self._station = report.get_station()
+        self._is_populated = report.get_is_populated()
+        self._review = report.get_review()
+        Node.__init__(self, Key(report.get_magnitude(), report.get_deepness(), report.get_is_populated(), self.get_identifier()))
+        self.set_revised(False)
+        self.set_aftershocks([])
+        self.set_costly_access(False)
 
-    @property
-    def revised(self) -> bool:
-        return self.__revised
+    def get_revised(self) -> bool:
+        return self._revised
 
-    @revised.setter
-    def revised(self, revised:bool):
-        self.__revised = revised
+    def set_revised(self, revised: bool):
+        self._revised = revised
 
-    @property
-    def aftershocks(self) -> list:
-        return self.__aftershocks
+    def get_aftershocks(self) -> list:
+        return self._aftershocks
 
-    @aftershocks.setter
-    def aftershocks(self, aftershocks:list):
-        self.__aftershocks = aftershocks
+    def set_aftershocks(self, aftershocks: list):
+        self._aftershocks = aftershocks
 
-    @property
-    def costly_access(self) -> bool:
-        return self.__costly_access
+    def get_costly_access(self) -> bool:
+        return self._costly_access
 
-    @costly_access.setter
-    def costly_access(self, costly_access:bool):
-        self.__costly_access = costly_access
+    def set_costly_access(self, costly_access: bool):
+        self._costly_access = costly_access
 
-    @Report.magnitude.setter
-    def magnitude(self, magnitude):
-        Report.magnitude.fset(self, magnitude)
+    def set_magnitude(self, magnitude):
+        Report.set_magnitude(self,magnitude)
         self.update_key()
 
-    @Report.deepness.setter
-    def deepness(self, deepness):
-        Report.deepness.fset(self, deepness)
+    def set_deepness(self, deepness):
+        Report.set_deepness(self,deepness)
         self.update_key()
 
-    @Report.is_populated.setter
-    def is_populated(self, is_populated):
-        Report.is_populated.fset(self, is_populated)
+    def set_is_populated(self, is_populated):
+        Report.set_is_populated(self,is_populated)
         self.update_key()
 
     def set_data(self, report:Report):
@@ -82,8 +71,8 @@ class Event(Node, Report):
         self.update_key()
 
     def get_data(self) -> dict:
-        notatr = ('_Event__key','_Event__revised','_Event__aftershocks','_Event__costly_access','__dict__')
+        notatr = ('_Event_key','_Event_revised','_Event_aftershocks','_Event_costly_access')
         return {k: v for k, v in self.__dict__.items() if k not in notatr}
 
     def update_key(self):
-        self.key = Key(self.magnitude, self.deepness, self.is_populated, self.identifier)
+        self.set_key(Key(self.get_magnitude(), self.get_deepness(), self.get_is_populated(), self.get_identifier()))
