@@ -1,8 +1,9 @@
-from .key import Key
 from .node import Node
+from .report import Report
+from .key import Key
 
 
-class Event(Node):
+class Event(Node, Report):
     """Represents a seismic event with its metadata and impact information.
 
     The object inherits from Node and uses a Key generated from the event's
@@ -10,230 +11,68 @@ class Event(Node):
     storage or lookup in the data structure.
     """
 
-    def __init__(self, report, is_populated):
+    def __init__(self, report:Report):
         """Initialize an event with the given seismic data.
 
         Args:
             report (Any): The report object containing seismic data.
-            is_populated (bool): Indicates if the event occurred in a populated area.
         """
-        super().__init__(Key(report.get_magnitude(), report.get_deepness(), is_populated, report.get_id()))
-        self.__id = report.get_id()
-        self.__magnitude = report.get_magnitude()
-        self.__deepness = report.get_deepness()
-        self.__epicenter = report.get_epicenter()
-        self.__date = report.get_date()
-        self.__review = report.get_review()
-        self.__origin_station = report.get_origin_station()
-        self.__is_populated = is_populated
-        self.__revised = False
-        self.__aftershocks = []
-        self.__costly_access = False
 
-    def set_all(self, event):
-        """Set all event attributes from another event object.
+        self._identifier = report.get_identifier()
+        self._magnitude = report.get_magnitude()
+        self._deepness = report.get_deepness()
+        self._epicenter = report.get_epicenter()
+        self._date = report.get_date()
+        self._station = report.get_station()
+        self._is_populated = report.get_is_populated()
+        self._review = report.get_review()
+        Node.__init__(self, Key(report.get_magnitude(), report.get_deepness(), report.get_is_populated(), self.get_identifier()))
+        self.set_revised(False)
+        self.set_aftershocks([])
+        self.set_costly_access(False)
 
-        Args:
-            event (Any): Another event object to copy data from.
-        """
-        self.set_magnitude(event.get_magnitude())
-        self.set_deepness(event.get_deepness())
-        self.set_epicenter(event.get_epicenter())
-        self.set_date(event.get_date())
-        self.set_review(event.get_review())
-        self.set_origin_station(event.get_origin_station())
-        self.set_is_populated(event.get_is_populated())
-        self.update_key()
+    def get_revised(self) -> bool:
+        return self._revised
 
-    def get_all(self):
-        """Return all attributes of the event as a tuple.
+    def set_revised(self, revised: bool):
+        self._revised = revised
 
-        Returns:
-            Tuple[Any, float, float, Any, Any, int, Any, bool]: A tuple containing
-                id, magnitude, deepness, epicenter, date, review, origin_station, and is_populated.
-        """
-        return (
-            self.__id,
-            self.__magnitude,
-            self.__deepness,
-            self.__epicenter,
-            self.__date,
-            self.__review,
-            self.__origin_station,
-            self.__is_populated
-        )
+    def get_aftershocks(self) -> list:
+        return self._aftershocks
 
-    def update_key(self):
-        """Refresh the key after any attribute affecting the key changes."""
-        self.set_key(Key(self.__magnitude, self.__deepness, self.__is_populated, self.__id))
+    def set_aftershocks(self, aftershocks: list):
+        self._aftershocks = aftershocks
 
-    def get_id(self):
-        """Return the event identifier.
+    def get_costly_access(self) -> bool:
+        return self._costly_access
 
-        Returns:
-            Any: The identifier of the event.
-        """
-        return self.__id
-
-    def get_magnitude(self):
-        """Return the earthquake magnitude.
-
-        Returns:
-            float: The magnitude of the event.
-        """
-        return self.__magnitude
+    def set_costly_access(self, costly_access: bool):
+        self._costly_access = costly_access
 
     def set_magnitude(self, magnitude):
-        """Set a new magnitude and update the related key.
-
-        Args:
-            magnitude (float): The new magnitude value.
-        """
-        self.__magnitude = magnitude
+        Report.set_magnitude(self,magnitude)
         self.update_key()
-
-    def get_deepness(self):
-        """Return the earthquake depth.
-
-        Returns:
-            float: The deepness of the event.
-        """
-        return self.__deepness
 
     def set_deepness(self, deepness):
-        """Set a new deepness value.
-
-        Args:
-            deepness (float): The new deepness value.
-        """
-        self.__deepness = deepness
+        Report.set_deepness(self,deepness)
         self.update_key()
 
-    def get_epicenter(self):
-        """Return the epicenter location.
-
-        Returns:
-            Any: The epicenter of the event.
-        """
-        return self.__epicenter
-
-    def set_epicenter(self, epicenter):
-        """Set a new epicenter value.
-
-        Args:
-            epicenter (Any): The new epicenter value.
-        """
-        self.__epicenter = epicenter
-
-    def get_date(self):
-        """Return the date of the event.
-
-        Returns:
-            Any: The date of the event.
-        """
-        return self.__date
-
-    def set_date(self, date):
-        """Set the event date.
-
-        Args:
-            date (Any): The new date value.
-        """
-        self.__date = date
-
-    def get_review(self):
-        """Return the review score associated with the event.
-
-        Returns:
-            int: The review score.
-        """
-        return self.__review
-
-    def set_review(self, review):
-        """Set the review value, coercing it to an integer.
-
-        Args:
-            review (Any): The review value to set.
-        """
-        self.__review = int(review)
-
-    def get_origin_station(self):
-        """Return the station that reported the event.
-
-        Returns:
-            Any: The origin station.
-        """
-        return self.__origin_station
-
-    def set_origin_station(self, origin_station):
-        """Set the origin station for the event.
-
-        Args:
-            origin_station (Any): The new origin station.
-        """
-        self.__origin_station = origin_station
-
-    def get_is_populated(self):
-        """Return whether the event occurred in a populated area.
-
-        Returns:
-            bool: True if populated, False otherwise.
-        """
-        return self.__is_populated
-
-    def set_is_populated(self, value):
-        """Set whether the event occurred in a populated area.
-
-        Args:
-            value (bool): The new population status.
-        """
-        self.__is_populated = value
+    def set_is_populated(self, is_populated):
+        Report.set_is_populated(self,is_populated)
         self.update_key()
 
-    def get_revised(self):
-        """Return whether the event has been revised.
-
-        Returns:
-            bool: True if revised, False otherwise.
-        """
-        return self.__revised
-
-    def set_revised(self, revised):
-        """Set the revised status.
+    def set_data(self, report:Report):
+        """Set all event attributes from a report object.
 
         Args:
-            revised (bool): The new revised status.
+            report (Any): A report object to get data from.
         """
-        self.__revised = revised
+        self.__dict__.update(report.__dict__)
+        self.update_key()
 
-    def get_costly_access(self):
-        """Return whether access to this event is considered costly.
+    def get_data(self) -> dict:
+        notatr = ('_Event_key','_Event_revised','_Event_aftershocks','_Event_costly_access')
+        return {k: v for k, v in self.__dict__.items() if k not in notatr}
 
-        Returns:
-            bool: True if costly access, False otherwise.
-        """
-        return self.__costly_access
-
-    def set_costly_access(self, costly_access):
-        """Set the costly-access flag.
-
-        Args:
-            costly_access (bool): The new costly-access status.
-        """
-        self.__costly_access = costly_access
-
-    def get_aftershocks(self):
-        """Return the list of aftershocks associated with this event.
-
-        Returns:
-            List[Any]: A list of aftershock events.
-        """
-        return self.__aftershocks
-
-    def set_aftershocks(self, value):
-        """Return the list of aftershocks associated with this event.
-
-        Returns:
-            List[Any]: A list of aftershock events.
-        """
-        self.__aftershocks = value
+    def update_key(self):
+        self.set_key(Key(self.get_magnitude(), self.get_deepness(), self.get_is_populated(), self.get_identifier()))
