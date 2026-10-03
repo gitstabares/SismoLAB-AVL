@@ -8,10 +8,10 @@ class Node:
             key (Any): The key for the node.
             parent (Optional[Node]): The parent node, if any.
         """
-        self.__key = key
-        self.__left = None
-        self.__right = None
-        self.__parent = None
+        self.key = key
+        self.left = None
+        self.right = None
+        self.parent = None
 
     @property
     def key(self):
@@ -22,27 +22,27 @@ class Node:
         self.__key = value
 
     @property
-    def left(self):
+    def left(self) -> Node:
         return self.__left
 
     @left.setter
-    def left(self, value: Node):
+    def left(self, value:Node):
         self.__left = value
 
     @property
-    def right(self):
+    def right(self) -> Node:
         return self.__right
 
     @right.setter
-    def right(self, value: Node):
+    def right(self, value:Node):
         self.__right = value
 
     @property
-    def parent(self):
+    def parent(self) -> Node:
         return self.__parent
 
     @parent.setter
-    def parent(self, value: Node):
+    def parent(self, value:Node):
         self.__parent = value
 
     def __repr__(self):
@@ -65,7 +65,7 @@ class Node:
         return self.__key == other.key
 
     @property
-    def height(self):
+    def height(self) -> int:
         """Return the height of this subtree (a leaf has height zero).
 
         Returns:
@@ -81,7 +81,7 @@ class Node:
             return 0
 
     @property
-    def depth(self):
+    def depth(self) -> int:
         """Return the number of parent links between this node and the root.
 
         Returns:
@@ -90,7 +90,7 @@ class Node:
         return self.parent.depth + 1 if self.parent else 0
 
     @property
-    def weight(self):
+    def weight(self) -> int:
         """Return the number of nodes in this subtree, including this node.
 
         Returns:
@@ -104,7 +104,7 @@ class Node:
         return weight
 
     @property
-    def balance_factor(self):
+    def balance_factor(self) -> int:
         """Return left-subtree height minus right-subtree height.
 
         Returns:
@@ -115,7 +115,7 @@ class Node:
         return left_height - right_height
 
     @property
-    def root(self):
+    def root(self) -> Node:
         """Return the root node of the tree containing this node.
 
         Returns:

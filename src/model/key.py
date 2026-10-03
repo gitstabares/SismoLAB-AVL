@@ -5,7 +5,7 @@ class Key(tuple):
     Higher priority indicates a more critical event.
     """
 
-    def __new__(cls, magnitude: float, deepness: float, is_populated: bool, identifier: int):
+    def __new__(cls, magnitude:float, deepness:float, is_populated:bool, identifier:int):
         """Initializes a Key instance.
 
         Args:
@@ -24,15 +24,15 @@ class Key(tuple):
         return super().__new__(cls, [priority, magnitude, identifier])
 
     @property
-    def priority(self):
+    def priority(self) -> int:
         return self[0]
 
     @property
-    def magnitude(self):
+    def magnitude(self) -> float:
         return self[1]
 
     @property
-    def identifier(self):
+    def identifier(self) -> float:
         return self[2]
 
     def __eq__(self, other:Key):
@@ -45,6 +45,11 @@ class Key(tuple):
             bool: True if the identifiers are equal, False otherwise.
         """
         return self.identifier == other.identifier
+
+    def __ne__(self, other:Key):
+        return (self.priority != other.priority 
+                or self.magnitude != other.magnitude 
+                or self.identifier != other.identifier)
 
     def __lt__(self, other:Key):
         """Determines if this Key is less than another Key.

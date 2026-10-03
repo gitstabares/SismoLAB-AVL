@@ -1,3 +1,7 @@
+from .key import Key
+from .node import Node
+
+
 class Tree:
     """Binary search tree that stores nodes ordered by their keys."""
 
@@ -7,42 +11,25 @@ class Tree:
         Args:
             root (Any, optional): The root node of the tree. Defaults to None.
         """
-        self.__root = None
-        self.__ids = set()
+        self.root = None
 
-    def __contains__(self, node):
-        """Return whether a node with the key exists in the tree.
-
-        Args:
-            key (Any): The key to check for.
-
-        Returns:
-            bool: True if present, False otherwise.
-        """
-        return node.get_id() in self.__ids
-
-    def get_root(self):
-        """Return the root node, or None when the tree is empty.
-
-        Returns:
-            Any: The root node.
-        """
+    @property
+    def root(self) -> Node:
         return self.__root
 
-    def get_node(self, key):
-        """Find and return the node with the specified key using binary search.
+    @root.setter
+    def root(self, root:Node):
+        self.__root = root
 
-        Args:
-            key (Any): The key to search for.
+    def __contains__(self, node:Node):
+        return True if self.get_node(node.key) else False
 
-        Returns:
-            Any: The node if found, else None.
-        """
+    def get_node(self, key) -> Node:
         for node in self.get_levelorder_traverse():
-            if node.get_key() == key:
+            if node.key == key:
                 return node
 
-    def add_node(self, new_node):
+    def add_node(self, new_node:Node) -> Node:
         """Insert new_node according to its key.
 
         Nodes with keys already present in the tree are ignored.
@@ -50,28 +37,28 @@ class Tree:
         Args:
             new_node (Any): The new node to insert.
         """
-        if not self.__root:
-            self.__root = new_node
+        if not self.root:
+            self.root = new_node
             return
 
-        def __add_node(root):
-            if root.get_key() > new_node.get_key():
-                if not root.get_left():
-                    new_node.set_parent(root)
-                    root.set_left(new_node)
-                    self.__ids.add(new_node.get_id())
+        def __add_node(root:Node) -> Node:
+            if root.key > new_node.key:
+                if not root.left:
+                    new_node.parent = root
+                    root.left = new_node
+                    return new_node
                 else:
-                    __add_node(root.get_left())
-            elif root.get_key() < new_node.get_key():
-                if not root.get_right():
-                    new_node.set_parent(root)
-                    root.set_right(new_node)
-                    self.__ids.add(new_node.get_id())
+                    __add_node(root.left)
+            elif root.key < new_node.key:
+                if not root.right:
+                    new_node.parent = root
+                    root.right = new_node
+                    return new_node
                 else:
-                    __add_node(root.get_right())
-        return __add_node(self.__root)
+                    __add_node(root.right)
+        return __add_node(self.root)
 
-    def pop_node(self, key):
+    def pop_node(self, key:Key) -> Node:
         """Remove and return the node with the specified key.
 
         When a node has two children, its in-order predecessor replaces it.
@@ -86,41 +73,40 @@ class Tree:
         node = self.get_node(key)
         if node is None:
             return None
-        if not node.get_left():
-            self.replace_node(node, node.get_right())
-        elif not node.get_right():
-            self.replace_node(node, node.get_left())
+        if not node.left:
+            self.replace_node(node, node.right)
+        elif not node.right:
+            self.replace_node(node, node.left)
         else:
-            predecessor = self.__get_maximum(node.get_left())
-            self.replace_node(predecessor, predecessor.get_left())
+            predecessor = self.__get_maximum(node.left)
+            self.replace_node(predecessor, predecessor.left)
             self.replace_node(node, predecessor)
-            predecessor.set_left(node.get_left())
-            predecessor.set_right(node.get_right())
-            if predecessor.get_left():
-                predecessor.get_left().set_parent(predecessor)
-            if predecessor.get_right():
-                predecessor.get_right().set_parent(predecessor)
-        self.__ids.discard(node.get_id())
+            predecessor.left = node.left
+            predecessor.right = node.right
+            if predecessor.left:
+                predecessor.left.parent = predecessor
+            if predecessor.right:
+                predecessor.right.parent = predecessor
         return node
 
-    def replace_node(self, old_node, new_node):
+    def replace_node(self, old_node:Node, new_node:Node):
         """Replace a node in its parent link and update the new parent.
 
         Args:
             old_node (Any): The node to be replaced.
             new_node (Any): The node to replace with.
         """
-        parent = old_node.get_parent()
+        parent = old_node.parent
         if parent is None:
-            self.__root = new_node
-        elif parent.get_left() is old_node:
-            parent.set_left(new_node)
-        elif parent.get_right() is old_node:
-            parent.set_right(new_node)
+            self.root = new_node
+        elif parent.left is old_node:
+            parent.left = new_node
+        elif parent.right is old_node:
+            parent.right = new_node
         if new_node:
-            new_node.set_parent(parent)
+            new_node.parent = parent
 
-    def __get_minimum(self, root):
+    def __get_minimum(self, root:Node) -> Node:
         """Return the smallest node in the subtree rooted at root.
 
         Args:
@@ -129,21 +115,21 @@ class Tree:
         Returns:
             Any: The node with the smallest key.
         """
-        if root.get_left():
-            return self.__get_minimum(root.get_left())
+        if root.left:
+            return self.__get_minimum(root.left)
         return root
     
-    def get_minimum(self):
+    def get_minimum(self) -> Node:
         """Return the smallest node in the tree, or None if empty.
 
         Returns:
             Any: The node with the smallest key.
         """
-        if self.__root is None:
+        if self.root is None:
             return None
-        return self.__get_minimum(self.__root)
+        return self.__get_minimum(self.root)
     
-    def __get_maximum(self, root):
+    def __get_maximum(self, root:Node) -> Node:
         """Return the largest node in the subtree rooted at root.
 
         Args:
@@ -152,73 +138,73 @@ class Tree:
         Returns:
             Any: The node with the largest key.
         """
-        if root.get_right():
-            return self.__get_maximum(root.get_right())
+        if root.right:
+            return self.__get_maximum(root.right)
         return root
 
-    def get_maximum(self):
+    def get_maximum(self) -> Node:
         """Return the largest node in the tree, or None if empty.
 
         Returns:
             Any: The node with the largest key.
         """
-        if self.__root is None:
+        if self.root is None:
             return None
-        return self.__get_maximum(self.__root)
+        return self.__get_maximum(self.root)
 
-    def get_height(self):
+    def get_height(self) -> int:
         """Return the height reported by the root node.
 
         Returns:
             int: The height of the tree.
         """
-        return self.__root.get_height() if self.__root else 0
+        return self.root.get_height() if self.root else 0
 
-    def get_weight(self):
+    def get_weight(self) -> int:
         """Return the number of nodes reported by the root node.
 
         Returns:
             int: The total weight (node count) of the tree.
         """
-        return self.__root.get_weight() if self.__root else 0
+        return self.root.get_weight() if self.root else 0
 
-    def __rotate_left(self, node):
+    def __rotate_left(self, node:Node):
         """Perform a left rotation around the given node.
 
         Args:
             node (Any): The node to rotate around.
         """
-        pivot = node.get_right()
+        pivot = node.right
 
         if not node or not pivot:
             return
 
-        child = pivot.get_left()
+        child = pivot.left
 
         self.replace_node(pivot, child)
         self.replace_node(node, pivot)
-        pivot.set_left(node)
-        node.set_parent(pivot)
+        pivot.left = node
+        node.parent = pivot
 
-    def __rotate_right(self, node):
+    def __rotate_right(self, node:Node):
         """Perform a right rotation around the given node.
 
         Args:
             node (Any): The node to rotate around.
         """
-        pivot = node.get_left()
+        pivot = node.left
 
         if not node or not pivot:
             return
         
-        child = pivot.get_right()
+        child = pivot.right
 
         self.replace_node(pivot, child)
         self.replace_node(node, pivot)
-        pivot.set_right(node)
-        node.set_parent(pivot)
+        pivot.right = node
+        node.parent = pivot
 
-    def __balance_node(self, node):
+    def __balance_node(self, node:Node):
         """Rotate node until its balance factor is within range.
 
         Args:
@@ -229,42 +215,42 @@ class Tree:
         balance_factor = node.get_balance_factor()
 
         while balance_factor > 1:
-            left_child = node.get_left()
+            left_child = node.left
             if left_child.get_balance_factor() < 0:
                 self.__rotate_left(left_child)
             self.__rotate_right(node)
             balance_factor = node.get_balance_factor()
 
         while balance_factor < -1:
-            right_child = node.get_right()
+            right_child = node.right
             if right_child.get_balance_factor() > 0:
                 self.__rotate_right(right_child)
             self.__rotate_left(node)
             balance_factor = node.get_balance_factor()
 
-    def balance_branch(self, node):
+    def balance_branch(self, node:Node):
         """Balance node and each of its ancestors.
 
         Args:
             node (Any): The start node to balance upward from.
         """
         self.__balance_node(node)
-        if node.get_parent():
-            self.balance_branch(node.get_parent())
+        if node.parent:
+            self.balance_branch(node.parent)
 
     def balance_tree(self):
         """Balance every subtree until the root remains unchanged."""
-        if self.__root is None:
+        if self.root is None:
             return
 
         while True:
-            old_root = self.__root
-            self.__balance_subtree(self.__root)
+            old_root = self.root
+            self.__balance_subtree(self.root)
 
-            if old_root is self.__root:
+            if old_root is self.root:
                 break
 
-    def __balance_subtree(self, node):
+    def __balance_subtree(self, node:Node):
         """Recursively balance children before balancing node.
 
         Args:
@@ -273,15 +259,15 @@ class Tree:
         if node is None:
             return
 
-        left = node.get_left()
-        right = node.get_right()
+        left = node.left
+        right = node.right
 
         self.__balance_subtree(left)
         self.__balance_subtree(right)
 
         self.__balance_node(node)
 
-    def get_preorder_traverse(self):
+    def get_preorder_traverse(self) -> list[Node]:
         """Return nodes in root-left-right order.
 
         Returns:
@@ -292,12 +278,12 @@ class Tree:
             if node is None:
                 return
             result.append(node)
-            traverse(node.get_left())
-            traverse(node.get_right())
-        traverse(self.__root)
+            traverse(node.left)
+            traverse(node.right)
+        traverse(self.root)
         return result
 
-    def get_inorder_traverse(self):
+    def get_inorder_traverse(self) -> list[Node]:
         """Return nodes in left-root-right order (sorted by key).
 
         Returns:
@@ -307,13 +293,13 @@ class Tree:
         def traverse(node):
             if node is None:
                 return
-            traverse(node.get_left())
+            traverse(node.left)
             result.append(node)
-            traverse(node.get_right())
-        traverse(self.__root)
+            traverse(node.right)
+        traverse(self.root)
         return result
 
-    def get_postorder_traverse(self):
+    def get_postorder_traverse(self) -> list[Node]:
         """Return nodes in left-right-root order.
 
         Returns:
@@ -323,24 +309,24 @@ class Tree:
         def traverse(node):
             if node is None:
                 return
-            traverse(node.get_left())
-            traverse(node.get_right())
+            traverse(node.left)
+            traverse(node.right)
             result.append(node)
-        traverse(self.__root)
+        traverse(self.root)
         return result
 
-    def get_levelorder_traverse(self):
+    def get_levelorder_traverse(self) -> list[Node]:
         """Return nodes level by level from the root downward.
 
         Returns:
             List[Any]: Level-order traversal of nodes.
         """
-        if not self.__root:
+        if not self.root:
             return []
-        queue = [self.__root]
+        queue = [self.root]
         for node in queue:
-            if node.get_left():
-                queue.append(node.get_left())
-            if node.get_right():
-                queue.append(node.get_right())
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
         return queue

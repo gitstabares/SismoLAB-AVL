@@ -1,12 +1,12 @@
-from hmac import new
-
 from .tree import Tree
+from .event import Event
+from .key import Key
 
 
 class EventTree(Tree):
     """Store seismic events and thresholds for their classification."""
 
-    def __init__(self, W= 48, R= 40, L= 3, autobalance= False):
+    def __init__(self, W:float= 48, R:float= 40, L:float= 3, autobalance= False):
         """Initialize the tree.
 
         Args:
@@ -17,81 +17,49 @@ class EventTree(Tree):
             autobalance (bool): Whether the tree should autobalance.
         """
         super().__init__()
-        self.__autobalance = bool(autobalance)
-        self.__W = W
-        self.__R = R
-        self.__L = L
-        
-    def get_autobalance(self):
-        """Return whether automatic balancing is enabled.
+        self.autobalance = bool(autobalance)
+        self.W = W
+        self.R = R
+        self.L = L
 
-        Returns:
-            bool: True if autobalance is enabled, False otherwise.
-        """
+    @property
+    def autobalance(self) -> bool:
         return self.__autobalance
 
-    def set_autobalance(self, value):
-        """Set whether automatic balancing is enabled.
-
-        Args:
-            value (bool): The new autobalance state.
-        """
+    @autobalance.setter
+    def autobalance(self, value:bool):
         self.__autobalance = value
         if value:
             self.balance_tree()
 
-    def get_W(self):
-        """Return the aftershock time-window threshold in hours.
-
-        Returns:
-            float: The aftershock time window in hours.
-        """
+    @property
+    def W(self) -> float:
         return self.__W
 
-    def set_W(self, W):
-        """Set the aftershock time-window threshold in hours.
-
-        Args:
-            W (float): The new aftershock time window in hours.
-        """
+    @W.setter
+    def W(self,W):
         self.__W = W
         self.update_aftershocks()
 
-    def get_R(self):
-        """Return the maximum distance for aftershock association.
-
-        Returns:
-            float: The maximum distance.
-        """
+    @property
+    def R(self) -> float:
         return self.__R
 
-    def set_R(self, R):
-        """Set the maximum distance for aftershock association.
-
-        Args:
-            R (float): The new maximum distance.
-        """
+    @R.setter
+    def R(self,R):
         self.__R = R
         self.update_aftershocks()
 
-    def get_L(self):
-        """Return the depth threshold for costly access.
-
-        Returns:
-            float: The depth threshold.
-        """
+    @property
+    def L(self) -> float:
         return self.__L
 
-    def set_L(self, L):
-        """Set the depth threshold for costly access.
-
-        Args:
-            L (float): The new depth threshold.
-        """
+    @L.setter
+    def L(self,L):
         self.__L = L
         self.update_costly_access()
 
-    def add_node(self, new_node):
+    def add_node(self, new_node:Event) -> Event:
         result = super().add_node(new_node)
         self.update_aftershocks()
         self.update_costly_access()
@@ -99,46 +67,40 @@ class EventTree(Tree):
             self.balance_branch(new_node)
         return result
 
-    def pop_node(self, key):
+    def pop_node(self, key) -> Event:
         result = super().pop_node(key)
         self.update_aftershocks()
         self.update_costly_access()
-        self.__ids.discard()
         if self.__autobalance:
             self.balance_tree()
+        return result
+
+    def balance_branch(self, node):
+        result = super().balance_branch(node)
+        self.update_costly_access()
+        return result
+
+    def balance_tree(self):
+        result = super().balance_tree()
+        self.update_costly_access()
         return result
 
     def update_aftershocks(self):
         """Append events that meet the aftershock association criteria."""
         for seism in self.get_levelorder_traverse():
-            seism.set_aftershocks([])
+            seism.aftershocks = []
             for aftershock in self.get_levelorder_traverse():
                 # An aftershock must be smaller, later within W hours, and
                 # closer than R to the originating event.
-                if (seism.get_magnitude() > aftershock.get_magnitude() and
-                    0 < (aftershock.get_date() - seism.get_date()).days < self.__W / 24 and
-                    (aftershock.get_epicenter() - seism.get_epicenter()).get_length() < self.__R):
-                    seism.get_aftershocks().append(aftershock)
+                if (seism.magnitude > aftershock.magnitude and
+                    0 < (aftershock.date - seism.date).days < self.W / 24 and
+                    (aftershock.epicenter - seism.epicenter).length < self.R):
+                    seism.aftershocks.append(aftershock)
 
     def update_costly_access(self):
         """Update each event's costly-access flag from its priority and depth."""
         for seism in self.get_levelorder_traverse():
-            seism.set_costly_access(seism.get_key().get_priority() == 3 and seism.get_depth() > self.__L)
-
-    def archive(self, key):
-        """Archive a node by replacing it with None, balancing if necessary.
-
-        Args:
-            key (Any): The key of the node to archive.
-
-        Returns:
-            EventTree: A new EventTree with the archived node as its root.
-        """
-        node = self.get_node(key)
-        self.replace_node(node, None)
-        if self.__autobalance:
-            self.balance_tree()
-        return EventTree(root=node)
+            seism.costly_access = seism.key.priority == 3 and seism.depth > self.L
 
     def get_echart_dict(self):
         """

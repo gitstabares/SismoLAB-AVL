@@ -1,4 +1,4 @@
-from src.core import Point
+from .point import Point
 
 
 class PopulatedZones(set):

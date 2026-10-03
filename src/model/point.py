@@ -1,7 +1,7 @@
 class Point(tuple):
     """A two-dimensional point with coordinates clamped to the 0-1000 range."""
 
-    def __new__(cls, x: float, y: float):
+    def __new__(cls, x:float, y:float):
         """Create a Point object, validating bounds.
 
         Args:
@@ -17,17 +17,17 @@ class Point(tuple):
         return super().__new__(cls, [round(x, 1), round(y, 1)])
 
     @property
-    def x(self):
+    def x(self) -> float:
         """float: The x-coordinate of the point."""
         return self[0]
 
     @property
-    def y(self):
+    def y(self) -> float:
         """float: The y-coordinate of the point."""
         return self[1]
 
     @property
-    def length(self):
+    def length(self) -> float:
         """Return the Euclidean distance from the origin.
 
         Returns:
@@ -63,7 +63,7 @@ class Point(tuple):
         """
         return Point(self.x - other.x, self.y - other.y)
 
-    def __mod__(self, divisor:float| int):
+    def __mod__(self, divisor:float|int):
         """Return the coordinate-wise modulus using the given divisor.
 
         Args:
