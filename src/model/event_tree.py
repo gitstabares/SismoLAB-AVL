@@ -1,6 +1,7 @@
 from .tree import Tree
 from .event import Event
 from .key import Key
+from src.utils.intensity_color_mapper import IntensityColorMapper
 
 
 class EventTree(Tree):
@@ -108,8 +109,8 @@ class EventTree(Tree):
         Returns:
             Dict[str, Any]: A dictionary containing the ECharts configuration and tree data.
         """
-        
-        def _get_data(node):
+        color_magnitude = IntensityColorMapper(-2,10)
+        def _get_data(node:Event):
             """
             Recursively extracts data from a tree node to format it for ECharts.
 
@@ -133,7 +134,10 @@ class EventTree(Tree):
                 'children': [
                     _get_data(node.get_left()), 
                     _get_data(node.get_right())
-                ]
+                ],
+                "itemStyle": {
+                        "color": color_magnitude.interpolate(node.get_magnitude()),  # Node color (blue)
+                    },
             }
             
         return {
@@ -156,11 +160,7 @@ class EventTree(Tree):
                         "color": "black",    # Text color
                         "fontSize": 14
                     },
-                    "symbol": "rectangle",
-                    "itemStyle": {
-                        "color": "#3b82f6",  # Node color (blue)
-                        "borderColor": "#1d4ed8"
-                    },
+                    "symbol": "circle",
                     "lineStyle": {
                         "color": "#ccc",     # Edge color
                         "width": 2,
