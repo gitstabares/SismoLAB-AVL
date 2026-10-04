@@ -107,7 +107,9 @@ def header():
                             picker_menu.close()
                             reset_pickers()
 
-                        ui.button('Confirmar', on_click=confirm_time).props('flat color=primary').classes('mt-2 w-full')
+                        with ui.row(wrap=False):
+                            ui.button('Cancelar', on_click=show_date_picker).props('flat color=primary').classes('mt-2 w-full')
+                            ui.button('Confirmar', on_click=confirm_time).props('flat color=primary').classes('mt-2 w-full')
 
                 def show_date_picker():
                     """Cambia la vista del menú al selector de fecha (Date Picker) y reinicia el flujo."""
