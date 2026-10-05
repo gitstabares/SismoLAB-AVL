@@ -35,21 +35,27 @@ class EventTree(Tree):
         return self._W
 
     def set_W(self, W):
-        self._W = W
+        if not W:
+            return
+        self._W = max(0,W)
         self.update_aftershocks()
 
     def get_R(self) -> float:
         return self._R
 
     def set_R(self, R):
-        self._R = R
+        if not R:
+            return
+        self._R = max(0,R)
         self.update_aftershocks()
 
     def get_L(self) -> float:
         return self._L
 
     def set_L(self, L):
-        self._L = L
+        if not L:
+            return
+        self._L = max(0,L)
         self.update_costly_access()
             
     def add_node(self, new_node:Event) -> Event:

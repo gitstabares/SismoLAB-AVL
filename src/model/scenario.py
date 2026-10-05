@@ -3,6 +3,7 @@ from .event_tree import EventTree
 from .event import Event
 from .key import Key
 from .report import Report
+import datetime as dt
 
 class Scenario:
     """Manages seismic event trees and populated zones within a given tile size.
@@ -17,7 +18,8 @@ class Scenario:
         self.set_populated_zones(PopulatedZones())
         self.set_archived_AVL_trees(set())
         self.set_eliminated_ids(set())
-
+        self.set_current_time(dt.datetime.now())
+        
     def get_AVL(self) -> EventTree:
         return self._AVL
 
@@ -47,6 +49,12 @@ class Scenario:
 
     def set_eliminated_ids(self, value: set):
         self._eliminated_ids = value
+
+    def get_current_time(self) -> dt.datetime:
+        return self._current_time
+
+    def set_current_time(self,time:dt.datetime):
+        self._current_time = time
 
     def archive_event(self, key:Key):
         """Archive events from the trees by a given key.
