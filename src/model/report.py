@@ -1,3 +1,7 @@
+import stat
+
+from numpy import isin
+
 from .point import Point
 from .key import Key
 from datetime import datetime as dt
@@ -49,7 +53,7 @@ class Report:
                         self.get_identifier()))
 
     def __repr__(self):
-        return f"{self.get_identifier()}"
+        return f"{self.get_key()}"
 
     def get_identifier(self) -> int:
         """Return the report identifier.
@@ -68,10 +72,12 @@ class Report:
         Raises:
             ValueError: If the ID is not between 1 and 999999.
         """
-        val = int(identifier)
-        if not (1 <= val <= 999999):
-            raise ValueError(f"Id must be an integer between 1 and 999999. Got: {val}")
-        self._identifier = val
+        if identifier is None:
+            raise Exception("Identifier can't be none")
+        identifier = int(identifier)
+        if not (1 <= identifier <= 999999):
+            raise ValueError(f"Id must be an integer between 1 and 999999. Got: {identifier}")
+        self._identifier = identifier
 
     def get_magnitude(self) -> float:
         """Return the earthquake magnitude.
@@ -90,10 +96,11 @@ class Report:
         Raises:
             ValueError: If the magnitude is not between -2 and 10.
         """
-        val = round(magnitude, 1)
-        if not (-2 <= val <= 10):
-            raise ValueError(f"Magnitude must be between -2 and 10. Got: {val}")
-        self._magnitude = val
+        if magnitude is None:
+            raise Exception("Magnitude can't be none")
+        if not (-2 <= magnitude <= 10):
+            raise ValueError(f"Magnitude must be between -2 and 10. Got: {magnitude}")
+        self._magnitude = magnitude
 
     def get_deepness(self) -> float:
         """Return the earthquake depth in kilometers.
@@ -112,10 +119,11 @@ class Report:
         Raises:
             ValueError: If the depth is not between 0 and 700.
         """
-        val = round(deepness, 1)
-        if not (0 <= val <= 700):
-            raise ValueError(f"Deepness must be between 0 and 700. Got: {val}")
-        self._deepness = val
+        if deepness is None:
+            raise Exception("Deepness can't be none")
+        if not (0 <= deepness <= 700):
+            raise ValueError(f"Deepness must be between 0 and 700. Got: {deepness}")
+        self._deepness = deepness
 
     def get_epicenter(self) -> Point:
         """Return the epicenter point.
@@ -190,10 +198,12 @@ class Report:
         Raises:
             ValueError: If the review is negative.
         """
-        val = int(review)
-        if val < 0:
-            raise ValueError(f"Review must be non-negative. Got: {val}")
-        self._review = val
+        if review is None:
+            raise Exception("Review can't be none")
+        review = int(review)
+        if review < 0:
+            raise ValueError(f"Review must be non-negative. Got: {review}")
+        self._review = review
 
     def get_key(self) -> Key:
         return self._key

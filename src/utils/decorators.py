@@ -1,3 +1,5 @@
+from nicegui import ui
+
 def EventTrigger(function):
     """
     Decorates a function so it notifies registered subscribers when called.
@@ -24,7 +26,10 @@ def EventTrigger(function):
         Returns:
             Any: The response from the original function.
         """
-        response = function(*args, **kwargs)
+        try:
+            response = function(*args, **kwargs)
+        except Exception as e:
+            ui.notify(e)
         # Notify listeners only after the event function has completed.
         for subscriber in wrapper.subscribers:
             subscriber()

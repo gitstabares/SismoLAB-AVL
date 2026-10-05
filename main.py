@@ -1,6 +1,7 @@
 from nicegui import ui, app
 from nicegui.events import ValueChangeEventArguments
 from src.model import *
+from src.utils.decorators import OnEvent
 import datetime as dt
 
 reports = [
@@ -14,7 +15,6 @@ reports = [
     Report(1008, 3.5, 18.2, 150.3, 430.6, "2026-10-03T09:12:00", "Station-Gamma", True, 1),
     Report(1009, 5.6, 85.4, 540.8, 620.1, "2026-10-03T10:30:00", "Station-Delta", True, 2),
     Report(1010, 1.8, 2.1, 200.0, 200.0, "2026-10-03T11:00:00", "Station-Epsilon", False, 1),
-    Report(1001, 9.8, 15.0, 120.5, 340.2, "2026-10-01T08:30:00", "Station-Tolu", True, 3),
 ]
 
 global_state = Scenario()
@@ -72,35 +72,30 @@ ui.add_css('''
     }
 ''')
 
-current_datetime = dt.datetime.now()
-
 def header():
     with ui.header(wrap=False).classes('items-center dashboard-card').style('border-radius:0px'):
         ui.image('assets/icon.svg').classes('w-10 h-auto')
         ui.label('SismoLab AVL').classes('title font-semibold text-3xl')
         ui.separator().props('vertical')
 
-        global current_datetime
-        date_picker = ui.date_input(value=current_datetime.date()).props('readonly borderless dark').style('width:140px').picker.on_value_change(lambda e:update_datetime())
-        time_picker = ui.time_input(value=current_datetime.time()).props('readonly borderless dark mask=time').style('width:100px').picker.on_value_change(lambda e:update_datetime())
+        date_picker = ui.date_input(value=global_state.get_current_time().date()).props('readonly borderless dark').style('width:140px').picker.on_value_change(lambda e:update_datetime())
+        time_picker = ui.time_input(value=global_state.get_current_time().time()).props('readonly borderless dark mask=time').style('width:100px').picker.on_value_change(lambda e:update_datetime())
 
         def update_datetime():
-            global current_datetime
             if not date_picker.value or not time_picker.value:
-                date_picker.set_value(current_datetime.date())
-                time_picker.set_value(current_datetime.time())
+                date_picker.set_value(global_state.get_current_time().date())
+                time_picker.set_value(global_state.get_current_time().time())
                 return
             new_datetime = dt.datetime.fromisoformat(str(date_picker.value)+'T'+str(time_picker.value))
-            if new_datetime < current_datetime:
-                date_picker.value = current_datetime.date()
-                time_picker.value = current_datetime.time()
+            if new_datetime < global_state.get_current_time():
+                date_picker.value = global_state.get_current_time().date()
+                time_picker.value = global_state.get_current_time().time()
                 ui.notify('Invalid date or time, they just can go foward',position='top')
                 return
             global_state.set_current_time(new_datetime)
-            current_datetime = new_datetime
 
         ui.checkbox('Stress mode',on_change=lambda e:update_stressmode(e)).props('unchecked-icon=local_fire_department checked-icon=local_fire_department keep_color=false').style('--q-primary: transparent;')
-
+        ui.checkbox('Burst mode',on_change=lambda e:global_state.set_burst_mode(e.value)).props('unchecked-icon=burst_mode checked-icon=burst_mode color=red')
         def update_stressmode(e:ValueChangeEventArguments):
             if e.value:
                 e.sender.classes('font-effect-fire-animation')
@@ -108,59 +103,95 @@ def header():
                 e.sender._classes.clear()
             global_state.get_AVL().set_autobalance(not e.value)
 
-        ui.number(prefix='W : ',min=0,value=48,validation={'There must be a value':lambda v:v != None},on_change=lambda e:global_state.get_AVL().set_W(e.value)).classes('w-50')
-        ui.number(prefix='R : ',min=0,value=48,validation={'There must be a value':lambda v:v != None},on_change=lambda e:global_state.get_AVL().set_R(e.value)).classes('w-50')
-        ui.number(prefix='L : ',min=0,value=48,validation={'There must be a value':lambda v:v != None},on_change=lambda e:global_state.get_AVL().set_L(e.value)).classes('w-50')
+        ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_W(e.value)).classes('w-50')
+        ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_R(e.value)).classes('w-50')
+        ui.number(prefix='L : ',min=0,value=3,validation={'L must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_L(e.value)).classes('w-50')
         ui.button(icon='undo').props('round')
         ui.button(icon='redo').props('round')
 
-def tree_avl():
-    with ui.column().classes('dashboard-card col-span-5'):
+def AVL_tree():
+    with ui.column().classes('dashboard-card col-span-5 h-full'):
         with ui.row().classes('items-center'):
             ui.icon('account_tree', size='sm').classes('text-cyan-400')
             ui.label('AVL Tree').classes('title')
-        with ui.card().classes('w-full bg-white'):
-            ui.echart(global_state.get_AVL_JSON())
+        with ui.card().classes('w-full bg-white h-full'):
+            avl_graph = ui.echart(global_state.get_AVL_JSON()).classes('w-full h-full')
 
-def tree_bst():
-    with ui.column().classes('dashboard-card col-span-5'):
+    @OnEvent(global_state.insert_report)
+    def update_AVL_tree():
+        avl_graph._props['options'] = global_state.get_AVL_JSON()
+        avl_graph.update()
+
+def BST_tree():
+    with ui.column().classes('dashboard-card col-span-5 h-full'):
         with ui.row().classes('items-center'):
             ui.icon('account_tree', size='sm').classes('text-cyan-400')
             ui.label('BST Tree').classes('title')
-        with ui.card().classes('w-full bg-white'):
-            ui.echart(global_state.get_BST_JSON())
+        with ui.card().classes('w-full bg-white h-full'):
+            bst_graph = ui.echart(global_state.get_BST_JSON()).classes('w-full h-full')
+
+    @OnEvent(global_state.insert_report)
+    def update_BST_tree():
+        bst_graph._props['options'] = global_state.get_BST_JSON()
+        bst_graph.update()
 
 def reports_queue():
+
     with ui.column().classes('dashboard-card col-span-2 h-full'):
         with ui.row().classes('items-center'):
             ui.icon('queue', size='sm').classes('text-cyan-400')
             ui.label('Reports queue').classes('title')
-            ui.button(icon='add').props('round size=xs').classes('ml-auto')
-        with ui.list() as queue:
-            ui.item('Primer item')
+        with ui.scroll_area().props('visible=false'):
+            queue = ui.list().props('dense separator')
+
+    @OnEvent(global_state.insert_report)
+    def update_reports_queue():
+        try:
+            with queue:
+                queue.clear()
+                for report in global_state.reports_queue:
+                    ui.item(str(report))
+        except Exception as e:
+            ui.notify(e)
 
 def add_event_form():
     with ui.row().classes('dashboard-card col-span-4 grid grid-cols-3 h-full'):
         with ui.row().classes('items-center col-span-3'):
             ui.icon('checklist', size='sm').classes('text-cyan-400')
             ui.label('New report form').classes('title')
-            ui.button(icon='add').classes('ml-auto').props('round size=sm')
-        with ui.column().classes('gap-0'):
-            ui.number('Identifier',prefix='SIS-').classes('w-full')
-            ui.number('Magnitude',min=-2,max=10,precision=1).classes('w-full')
-            ui.number('Deepness',min=0,precision=1).classes('w-full')
-        with ui.column().classes('gap-0'):
-            ui.input('Origin Station').classes('w-full')
-            ui.label('Datetime').classes('mt-2')
-            ui.date_input(value=current_datetime.date()).props('readonly borderless dark').classes('w-full').picker
-            ui.time_input(value=current_datetime.time()).props('readonly borderless dark mask=time').classes('w-full').picker
-        with ui.column().classes('gap-0'):
-            ui.number('Version',value=1,min=1).classes('w-full')
-            ui.label('Epicenter').classes('mt-2')
+            ui.button(icon='add',on_click=lambda e:add_event()).classes('ml-auto').props('round')
+        with ui.column():
+            identifier = ui.number('Identifier',prefix='SIS-',validation={'The identifier must be bigger than zero':lambda v:v is not None and v > 0}).classes('w-full')
+            magnitude = ui.number('Magnitude',min=-2,max=10,precision=1,validation={'The magnitude must be between -2.0 and 10.0':lambda v:v is not None and -2 <= v <= 10}).classes('w-full')
+            deepness = ui.number('Deepness',min=0,precision=1,validation={'The deepness must be bigger or equal than zero':lambda v:v is not None and v >= 0}).classes('w-full')
+        with ui.column():
+            station = ui.input('Origin Station').classes('w-full')
+            ui.label('Datetime')
+            date = ui.date_input(value=global_state.get_current_time().date()).props('readonly borderless dark').classes('w-full').picker
+            time = ui.time_input(value=global_state.get_current_time().time()).props('readonly borderless dark mask=time').classes('w-full').picker
+        with ui.column():
+            version = ui.number('Version',value=1,min=1,validation={'The version must be bigger than zero':lambda v:v is not None and v > 0}).classes('w-full')
+            ui.label('Epicenter')
             with ui.row().classes('w-full no-wrap'):
-                ui.number('X',min=0,max=1000,precision=1).classes('w-1/2')
-                ui.number('Y',min=0,max=1000,precision=1).classes('w-1/2')
+                x = ui.number('X',min=0,max=1000,precision=1,validation={'The x coordinate of epicenter must be between 0 and 1000':lambda v:v is not None and 0 <= v <= 1000}).classes('w-1/2')
+                y = ui.number('Y',min=0,max=1000,precision=1,validation={'The y coordinate of epicenter must be between 0 and 1000':lambda v:v is not None and 0 <= v <= 1000}).classes('w-1/2')
 
+    def add_event():
+        try:
+            epicenter = Point(x.value,y.value)
+            report = Report(identifier.value,
+                            magnitude.value,
+                            deepness.value,
+                            x.value,
+                            y.value,
+                            str(date.value)+'T'+str(time.value),
+                            station.value,
+                            epicenter in global_state.get_populated_zones(),
+                            version.value)
+            ui.notify(f'Se creó el reporte {report} con éxito')
+            global_state.insert_report(report)
+        except Exception as e:
+            ui.notify(e)
 
 def events_map():
     with ui.column().classes('dashboard-card col-span-4 h-full'):
@@ -186,9 +217,9 @@ def events_map():
 def main():
 
     header()
-    with ui.row().classes('w-full grid grid-cols-12'):
-        tree_avl()
-        tree_bst()
+    with ui.row().classes('w-full grid grid-cols-12 min-h-[1000px]'):
+        AVL_tree()
+        BST_tree()
         reports_queue()
         events_map()
         add_event_form()

@@ -71,7 +71,7 @@ class Event(Node, Report):
         self.update_key()
 
     def get_data(self) -> dict:
-        notatr = ('_Event_key','_Event_revised','_Event_aftershocks','_Event_costly_access')
+        notatr = ('_identifier','_key','_revised','_review','_station','_aftershocks','_costly_access','_left','_right','_parent')
         return {k: v for k, v in self.__dict__.items() if k not in notatr}
 
     def update_key(self):

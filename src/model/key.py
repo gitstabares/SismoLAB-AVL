@@ -98,4 +98,4 @@ class Key(tuple):
         Returns:
             str: A string in the format "(priority, magnitude, SIS-identifier)".
         """
-        return f"({self.get_priority()}, {self.get_magnitude()}, SIS-{self.get_identifier():06d})"
+        return f"(P={self.get_priority()}, M={self.get_magnitude()}, SIS-{self.get_identifier():06d})"

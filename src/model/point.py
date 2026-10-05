@@ -14,6 +14,8 @@ class Point(tuple):
         Raises:
             ValueError: If either coordinate is outside the [0, 1000] range.
         """
+        if x is None or y is None:
+            raise Exception("No coordinate can be none")
         return super().__new__(cls, [round(x, 1), round(y, 1)])
 
     def get_x(self) -> float:

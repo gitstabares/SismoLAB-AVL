@@ -1,9 +1,12 @@
+from collections import deque
+from src.utils.decorators import EventTrigger
 from .populated_zones import PopulatedZones
 from .event_tree import EventTree
 from .event import Event
 from .key import Key
 from .report import Report
 import datetime as dt
+
 
 class Scenario:
     """Manages seismic event trees and populated zones within a given tile size.
@@ -19,6 +22,8 @@ class Scenario:
         self.set_archived_AVL_trees(set())
         self.set_eliminated_ids(set())
         self.set_current_time(dt.datetime.now())
+        self.reports_queue = deque()
+        self.set_burst_mode(False)
         
     def get_AVL(self) -> EventTree:
         return self._AVL
@@ -56,6 +61,14 @@ class Scenario:
     def set_current_time(self,time:dt.datetime):
         self._current_time = time
 
+    def get_burst_mode(self) -> bool:
+        return self._burst_mode
+
+    def set_burst_mode(self, value: bool):
+        self._burst_mode = value
+        while self.reports_queue:
+            self.insert_report(self.reports_queue.popleft())
+
     def archive_event(self, key:Key):
         """Archive events from the trees by a given key.
 
@@ -72,6 +85,7 @@ class Scenario:
         tree.add_node(node)
         self.get_archived_AVL_trees().add(tree)
 
+    @EventTrigger
     def insert_report(self, report:Report):
         """Insert or update a report in the scenario's event trees.
 
@@ -83,6 +97,10 @@ class Scenario:
             Exception: If there's an event with different data but the same review score.
             Exception: If the report's information is too old (lower review score).
         """
+        if self.get_burst_mode():
+            self.reports_queue.append(report)
+            return
+
         if report.get_identifier() in self.get_eliminated_ids():
             raise Exception("The ID registered was used previously and currently is deleted.")
 
@@ -115,6 +133,7 @@ class Scenario:
                 self.get_BST().update_aftershocks()
                 self.get_BST().update_costly_access()
             elif new_event.get_review() == actual_AVL.get_review():
+                print(new_event.get_data(),actual_AVL.get_data())
                 if new_event.get_data() == actual_AVL.get_data():
                     actual_AVL.set_revised(True)
                     actual_BST.set_revised(True)

@@ -136,7 +136,7 @@ class EventTree(Tree):
                     "tooltip": {"show": False}   # Prevents user interaction
                 }
             return {
-                'name': str(node),
+                'name': f'SIS-{node.get_identifier():06d}',
                 'children': [
                     _get_data(node.get_left()), 
                     _get_data(node.get_right())
