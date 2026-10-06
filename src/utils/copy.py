@@ -1,3 +1,7 @@
+from collections import deque
+import datetime as dt
+
+
 def copy(obj):
     """
     Creates a deep copy of an object, handling primitive types, iterables, and custom objects.
@@ -13,7 +17,7 @@ def copy(obj):
     # memo contains the objects already copied, to avoid circular references
     memo = {}
     
-    def __copy(__obj):
+    def __copy(_obj):
         """
         Recursive helper function to perform the actual deep copying.
         
@@ -26,26 +30,32 @@ def copy(obj):
         # It isn't needed to copy primitives
         primitive_types = (int, str, float, bool, type(None))
         
-        if isinstance(__obj, primitive_types): 
-            return __obj
-        if isinstance(__obj, list): 
-            return [__copy(i) for i in __obj]
-        if isinstance(__obj, tuple): 
-            return (__copy(i) for i in __obj)
-        if isinstance(__obj, dict): 
-            return {__copy(k): __copy(v) for k, v in __obj.items()}
+        if isinstance(_obj, primitive_types): 
+            return _obj
+        if isinstance(_obj, list): 
+            return [__copy(i) for i in _obj]
+        if isinstance(_obj, tuple): 
+            return (__copy(i) for i in _obj)
+        if isinstance(_obj, dict): 
+            return {__copy(k): __copy(v) for k, v in _obj.items()}
+        if isinstance(_obj, deque):
+            return deque([__copy(i) for i in _obj])
+        if isinstance(_obj, set):
+            return set([__copy(i) for i in _obj])
+        if isinstance(_obj, dt.datetime):
+            return _obj.replace()
             
         # Verifying if the object to copy has already been copied
-        obj_id = id(__obj)
+        obj_id = id(_obj)
         if obj_id in memo: 
             return memo[obj_id]
             
         # Creating a new empty object without calling __init__
-        new_obj = type(__obj).__new__(type(__obj))
+        new_obj = type(_obj).__new__(type(_obj))
         memo[obj_id] = new_obj
         
         # Recursively copy all attributes of the object
-        for k, v in __obj.__dict__.items():
+        for k, v in _obj.__dict__.items():
             setattr(new_obj, k, __copy(v))
             
         return new_obj

@@ -1,12 +1,13 @@
-from hmac import new
-
 from .tree import Tree
+from .event import Event
+from .key import Key
+from src.utils.intensity_color_mapper import IntensityColorMapper
 
 
 class EventTree(Tree):
     """Store seismic events and thresholds for their classification."""
 
-    def __init__(self, W= 48, R= 40, L= 3, autobalance= False):
+    def __init__(self, W:float= 48, R:float= 40, L:float= 3, autobalance= False):
         """Initialize the tree.
 
         Args:
@@ -17,95 +18,70 @@ class EventTree(Tree):
             autobalance (bool): Whether the tree should autobalance.
         """
         super().__init__()
-        self.__autobalance = bool(autobalance)
-        self.__W = W
-        self.__R = R
-        self.__L = L
-        
-    def get_autobalance(self):
-        """Return whether automatic balancing is enabled.
+        self._autobalance = autobalance
+        self._W = W
+        self._R = R
+        self._L = L
 
-        Returns:
-            bool: True if autobalance is enabled, False otherwise.
-        """
-        return self.__autobalance
+    def get_autobalance(self) -> bool:
+        return self._autobalance
 
-    def set_autobalance(self, value):
-        """Set whether automatic balancing is enabled.
-
-        Args:
-            value (bool): The new autobalance state.
-        """
-        self.__autobalance = value
-        if value:
+    def set_autobalance(self, value:bool):
+        self._autobalance = bool(value)
+        if self._autobalance:
             self.balance_tree()
 
-    def get_W(self):
-        """Return the aftershock time-window threshold in hours.
-
-        Returns:
-            float: The aftershock time window in hours.
-        """
-        return self.__W
+    def get_W(self) -> float:
+        return self._W
 
     def set_W(self, W):
-        """Set the aftershock time-window threshold in hours.
-
-        Args:
-            W (float): The new aftershock time window in hours.
-        """
-        self.__W = W
+        if not W:
+            return
+        self._W = max(0,W)
         self.update_aftershocks()
 
-    def get_R(self):
-        """Return the maximum distance for aftershock association.
-
-        Returns:
-            float: The maximum distance.
-        """
-        return self.__R
+    def get_R(self) -> float:
+        return self._R
 
     def set_R(self, R):
-        """Set the maximum distance for aftershock association.
-
-        Args:
-            R (float): The new maximum distance.
-        """
-        self.__R = R
+        if not R:
+            return
+        self._R = max(0,R)
         self.update_aftershocks()
 
-    def get_L(self):
-        """Return the depth threshold for costly access.
-
-        Returns:
-            float: The depth threshold.
-        """
-        return self.__L
+    def get_L(self) -> float:
+        return self._L
 
     def set_L(self, L):
-        """Set the depth threshold for costly access.
-
-        Args:
-            L (float): The new depth threshold.
-        """
-        self.__L = L
+        if not L:
+            return
+        self._L = max(0,L)
         self.update_costly_access()
-
-    def add_node(self, new_node):
+            
+    def add_node(self, new_node:Event) -> Event:
         result = super().add_node(new_node)
         self.update_aftershocks()
         self.update_costly_access()
-        if self.__autobalance:
+        if self._autobalance:
             self.balance_branch(new_node)
         return result
 
-    def pop_node(self, key):
+    def pop_node(self, key:Key) -> Event:
         result = super().pop_node(key)
         self.update_aftershocks()
         self.update_costly_access()
-        self.__ids.discard()
-        if self.__autobalance:
+        if self._autobalance:
             self.balance_tree()
+        return result
+
+    def balance_branch(self, node:Event):
+        result = super().balance_branch(node)
+        self.update_costly_access()
+        return result
+
+    def balance_tree(self):
+        result = super().balance_tree()
+        self.update_costly_access()
         return result
 
     def update_aftershocks(self):
@@ -116,29 +92,14 @@ class EventTree(Tree):
                 # An aftershock must be smaller, later within W hours, and
                 # closer than R to the originating event.
                 if (seism.get_magnitude() > aftershock.get_magnitude() and
-                    0 < (aftershock.get_date() - seism.get_date()).days < self.__W / 24 and
-                    (aftershock.get_epicenter() - seism.get_epicenter()).get_length() < self.__R):
+                    0 < (aftershock.get_date() - seism.get_date()).days < self.get_W() / 24 and
+                    (aftershock.get_epicenter() - seism.get_epicenter()).get_length() < self.get_R()):
                     seism.get_aftershocks().append(aftershock)
 
     def update_costly_access(self):
         """Update each event's costly-access flag from its priority and depth."""
         for seism in self.get_levelorder_traverse():
-            seism.set_costly_access(seism.get_key().get_priority() == 3 and seism.get_depth() > self.__L)
-
-    def archive(self, key):
-        """Archive a node by replacing it with None, balancing if necessary.
-
-        Args:
-            key (Any): The key of the node to archive.
-
-        Returns:
-            EventTree: A new EventTree with the archived node as its root.
-        """
-        node = self.get_node(key)
-        self.replace_node(node, None)
-        if self.__autobalance:
-            self.balance_tree()
-        return EventTree(root=node)
+            seism.set_costly_access(seism.get_key().get_priority() == 3 and seism.get_depth() > self.get_L())
 
     def get_echart_dict(self):
         """
@@ -154,8 +115,8 @@ class EventTree(Tree):
         Returns:
             Dict[str, Any]: A dictionary containing the ECharts configuration and tree data.
         """
-        
-        def __get_data(node):
+        color_magnitude = IntensityColorMapper(1,3,'YlOrRd')
+        def _get_data(node:Event):
             """
             Recursively extracts data from a tree node to format it for ECharts.
 
@@ -175,11 +136,16 @@ class EventTree(Tree):
                     "tooltip": {"show": False}   # Prevents user interaction
                 }
             return {
-                'name': str(node),
+                'name': f'SIS-{node.get_identifier():06d}',
                 'children': [
-                    __get_data(node.get_left()), 
-                    __get_data(node.get_right())
-                ]
+                    _get_data(node.get_left()), 
+                    _get_data(node.get_right())
+                ] if node.get_left() or node.get_right() else [],
+                'itemStyle': {
+                        'color': color_magnitude.interpolate(node.get_key().get_priority()),  # Node color (blue)
+                },
+                'symbol': 'diamond' if node.get_costly_access() else 'circle',
+                'tooltip':str(node.get_key())
             }
             
         return {
@@ -190,22 +156,18 @@ class EventTree(Tree):
             "series": [
                 {
                     "type": "tree",
-                    "data": [__get_data(self.get_root())],
+                    "data": [_get_data(self.get_root())],
                     "orient": "TB",          # Top to Bottom
                     "roam": True,            # Enables zooming and dragging
                     "symbolSize": 40,        # Node size
                     "initialTreeDepth": -1,  # -1 to expand the entire tree initially
+                    'expandAndCollapse': False,
                     "label": {
                         "position": "inside",
                         "verticalAlign": "middle",
                         "align": "center",
                         "color": "black",    # Text color
                         "fontSize": 14
-                    },
-                    "symbol": "circle",
-                    "itemStyle": {
-                        "color": "#3b82f6",  # Node color (blue)
-                        "borderColor": "#1d4ed8"
                     },
                     "lineStyle": {
                         "color": "#ccc",     # Edge color

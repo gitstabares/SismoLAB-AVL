@@ -1,7 +1,7 @@
-class Point(tuple):
+class Point():
     """A two-dimensional point with coordinates clamped to the 0-1000 range."""
 
-    def __new__(cls, x, y):
+    def __init__(self, x:float, y:float):
         """Create a Point object, validating bounds.
 
         Args:
@@ -14,21 +14,31 @@ class Point(tuple):
         Raises:
             ValueError: If either coordinate is outside the [0, 1000] range.
         """
-        if not (0 <= x <= 1000) or not (0 <= y <= 1000):
-            raise ValueError(f"both coordinates must be between 0 and 1000. Got: ({x},{y})")
-        return super().__new__(cls, [round(x, 1), round(y, 1)])
+        if x is None or y is None:
+            raise Exception("No coordinate can be none")
+        self._x = x
+        self._y = y
 
-    @property
-    def x(self):
+    def get_x(self) -> float:
         """float: The x-coordinate of the point."""
-        return self[0]
+        return self._x
 
-    @property
-    def y(self):
+    def get_y(self) -> float:
         """float: The y-coordinate of the point."""
-        return self[1]
+        return self._y
+
+    def get_length(self) -> float:
+        """Return the Euclidean distance from the origin.
+
+        Returns:
+            float: The distance from the origin (0, 0).
+        """
+        return (self.get_x()**2 + self.get_y()**2)**(1/2)
+
+    def __eq__(self, other:Point) -> bool:
+        return self.get_x() == other.get_x() and self.get_y() == other.get_y()
     
-    def __add__(self, other):
+    def __add__(self, other:Point):
         """Return the coordinate-wise sum as a new point.
 
         Args:
@@ -40,11 +50,9 @@ class Point(tuple):
         Raises:
             TypeError: If the other operand is not a Point.
         """
-        if not isinstance(other, Point): 
-            raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
-        return Point(self.x + other.x, self.y + other.y)
+        return Point(self.get_x() + other.get_x(), self.get_y() + other.get_y())
     
-    def __sub__(self, other):
+    def __sub__(self, other:Point):
         """Return the coordinate-wise difference as a new point.
 
         Args:
@@ -56,11 +64,9 @@ class Point(tuple):
         Raises:
             TypeError: If the other operand is not a Point.
         """
-        if not isinstance(other, Point): 
-            raise TypeError(f"unsupported operand type(s) for -: '{type(self).__name__}' and '{type(other).__name__}'")
-        return Point(self.x - other.x, self.y - other.y)
+        return Point(self.get_x() - other.get_x(), self.get_y() - other.get_y())
 
-    def __mod__(self, divisor):
+    def __mod__(self, divisor:float):
         """Return the coordinate-wise modulus using the given divisor.
 
         Args:
@@ -69,12 +75,7 @@ class Point(tuple):
         Returns:
             Point: A new point resulting from the modulo operation.
         """
-        return Point(self.x % divisor, self.y % divisor)
-        
-    def get_length(self):
-        """Return the Euclidean distance from the origin.
+        return Point(self.get_x() % divisor, self.get_y() % divisor)
 
-        Returns:
-            float: The distance from the origin (0, 0).
-        """
-        return (self.x**2 + self.y**2)**(1/2)
+    def __repr__(self):
+        return f"({self._x},{self._y})"

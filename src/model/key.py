@@ -1,65 +1,64 @@
-class Key:
+class Key():
     """Represents a key used for prioritizing and ordering seismic events.
 
     The priority is determined by the magnitude, deepness, and whether the area is populated.
     Higher priority indicates a more critical event.
     """
 
-    def __init__(self, magnitude, deepness, is_populated, id):
+    def __init__(self, magnitude:float, deepness:float, is_populated:bool, identifier:int):
         """Initializes a Key instance.
 
         Args:
             magnitude (float): The magnitude of the seismic event.
             deepness (float): The depth of the seismic event in kilometers.
             is_populated (bool): True if the event occurred in a populated area.
-            id (Any): A unique identifier for the event.
+            identifier (Any): A unique identifier for the event.
         """
         if magnitude >= 4.5:
             if magnitude >= 6.0 or (deepness <= 30 and is_populated):
-                self.__priority = 3
+                priority = 3
             else:
-                self.__priority = 2
+                priority = 2
         else:
-            self.__priority = 1  
-        self.__magnitude = magnitude
-        self.__id = id
+            priority = 1
+        self._priority = priority
+        self._magnitude = magnitude
+        self._identifier = identifier
 
-    def get_tuple(self):
-        """Returns a tuple representation of the key's sorting criteria.
+    def get_priority(self) -> int:
+        return self._priority
 
-        Returns:
-            tuple: A tuple containing (priority, magnitude, id).
-        """
-        return (self.__priority, self.__magnitude, self.__id)
-    
-    def get_priority(self):
-        """Gets the priority of the seismic event.
+    def get_magnitude(self) -> float:
+        return self._magnitude
 
-        Returns:
-            int: The priority level (1, 2, or 3, where 3 is the highest).
-        """
-        return self.__priority
+    def get_identifier(self) -> float:
+        return self._identifier
 
-    def __eq__(self, other):
-        """Checks if two Key instances are equal based on their ID.
+    def __eq__(self, other:Key):
+        """Checks if two Key instances are equal based on their identifier.
 
         Args:
             other (Any): The other Key instance to compare with.
 
         Returns:
-            bool: True if the IDs are equal, False otherwise.
+            bool: True if the identifiers are equal, False otherwise.
         """
-        if not isinstance(other, Key):
-            return NotImplemented
-        return self.__id == other.__id
+        if not isinstance(other,Key):
+            return self.get_identifier() == other
+        return self.get_identifier() == other.get_identifier()
 
-    def __lt__(self, other):
+    def __ne__(self, other:Key):
+        return (self.get_priority() != other.get_priority() 
+                or self.get_magnitude() != other.get_magnitude() 
+                or self.get_identifier() != other.get_identifier())
+
+    def __lt__(self, other:Key):
         """Determines if this Key is less than another Key.
 
         Comparison is done in the following order:
         1. Priority
         2. Magnitude
-        3. ID
+        3. identifier
 
         Args:
             other (Any): The other Key instance to compare with.
@@ -67,23 +66,21 @@ class Key:
         Returns:
             bool: True if this Key is strictly less than the other Key.
         """
-        if not isinstance(other, Key):
-            return NotImplemented
-        if self.__priority != other.__priority:
-            return self.__priority < other.__priority
+        if self.get_priority() != other.get_priority():
+            return self.get_priority() < other.get_priority()
 
-        if self.__magnitude != other.__magnitude:
-            return self.__magnitude < other.__magnitude
+        if self.get_magnitude() != other.get_magnitude():
+            return self.get_magnitude() < other.get_magnitude()
 
-        return self.__id < other.__id
+        return self.get_identifier() < other.get_identifier()
 
-    def __gt__(self, other):
+    def __gt__(self, other:Key):
         """Determines if this Key is greater than another Key.
 
         Comparison is done in the following order:
         1. Priority
         2. Magnitude
-        3. ID
+        3. identifier
 
         Args:
             other (Any): The other Key instance to compare with.
@@ -91,20 +88,18 @@ class Key:
         Returns:
             bool: True if this Key is strictly greater than the other Key.
         """
-        if not isinstance(other, Key):
-            return NotImplemented
-        if self.__priority != other.__priority:
-            return self.__priority > other.__priority
+        if self.get_priority() != other.get_priority():
+            return self.get_priority() > other.get_priority()
 
-        if self.__magnitude != other.__magnitude:
-            return self.__magnitude > other.__magnitude
+        if self.get_magnitude() != other.get_magnitude():
+            return self.get_magnitude() > other.get_magnitude()
 
-        return self.__id > other.__id
+        return self.get_identifier() > other.get_identifier()
 
     def __repr__(self):
         """Returns a string representation of the Key.
 
         Returns:
-            str: A string in the format "(priority, magnitude, SIS-id)".
+            str: A string in the format "(priority, magnitude, SIS-identifier)".
         """
-        return f"({self.__priority}, {self.__magnitude}, SIS-{self.__id:06d})"
+        return f"(P={self.get_priority()}, M={self.get_magnitude()}, SIS-{self.get_identifier():06d})"

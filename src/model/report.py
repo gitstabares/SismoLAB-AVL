@@ -1,5 +1,11 @@
+import stat
+
+from numpy import isin
+
 from .point import Point
+from .key import Key
 from datetime import datetime as dt
+
 
 class Report:
     """Represents a seismic report entry.
@@ -8,7 +14,18 @@ class Report:
     normalized form suitable for further processing or persistence.
     """
 
-    def __init__(self, id, magnitude, deepness, x, y, date, origin_station, review = 1):
+    def __init__(
+            self,
+            identifier:int,
+            magnitude:float,
+            deepness:float,
+            x:float,
+            y:float,
+            date:str,
+            station:str = "",
+            is_populated:bool = False,
+            review:int = 1):
+
         """Initialize a report with the provided seismic information.
 
         Args:
@@ -18,48 +35,58 @@ class Report:
             x (float): X coordinate of the epicenter.
             y (float): Y coordinate of the epicenter.
             date (str): ISO date string for the event date/time.
-            origin_station (str): Station that generated or reported the event.
+            station (str): Station that generated or reported the event.
             review (int, optional): Review score or level associated with the report. Defaults to 1.
         """
-        self.__set_id(id)
-        self.__set_magnitude(magnitude)
-        self.__set_deepness(deepness)
-        self.__set_epicenter(x, y)
-        self.__set_date(date)
-        self.__set_review(review)
-        self.__origin_station = origin_station
+        self.set_identifier(identifier)
+        self.set_magnitude(magnitude)
+        self.set_deepness(deepness)
+        self.set_epicenter(x,y)
+        self.set_date(date)
+        self.set_station(station)
+        self.set_is_populated(is_populated)
+        self.set_review(review)
+        self.set_key(Key(self.get_magnitude(),
+                        self.get_deepness(),
+                        self.get_is_populated(),
+                        self.get_identifier()))
 
-    def get_id(self):
+    def __repr__(self):
+        return f"{self.get_key()}"
+
+    def get_identifier(self) -> int:
         """Return the report identifier.
 
         Returns:
             int: The unique report ID.
         """
-        return self.__id
+        return self._identifier
 
-    def __set_id(self, id):
+    def set_identifier(self, identifier:int):
         """Validate and set the report identifier.
 
         Args:
-            id (Any): The ID to set.
+            identifier (Any): The ID to set.
 
         Raises:
             ValueError: If the ID is not between 1 and 999999.
         """
-        val = int(id)
-        if not (1 <= val <= 999999):
-            raise ValueError(f"Id must be between 1 and 999999. Got: {val}")
-        self.__id = val
+        if identifier is None:
+            raise Exception("Identifier can't be none")
+        identifier = int(identifier)
+        if not (1 <= identifier <= 999999):
+            raise ValueError(f"Id must be an integer between 1 and 999999. Got: {identifier}")
+        self._identifier = identifier
 
-    def get_magnitude(self):
+    def get_magnitude(self) -> float:
         """Return the earthquake magnitude.
 
         Returns:
             float: The magnitude.
         """
-        return self.__magnitude
+        return self._magnitude
 
-    def __set_magnitude(self, magnitude):
+    def set_magnitude(self, magnitude:float):
         """Validate and set the magnitude range and one decimal place.
 
         Args:
@@ -68,20 +95,21 @@ class Report:
         Raises:
             ValueError: If the magnitude is not between -2 and 10.
         """
-        val = round(magnitude, 1)
-        if not (-2 <= val <= 10):
-            raise ValueError(f"Magnitude must be between -2 and 10. Got: {val}")
-        self.__magnitude = val
+        if magnitude is None:
+            raise Exception("Magnitude can't be none")
+        if not (-2 <= magnitude <= 10):
+            raise ValueError(f"Magnitude must be between -2 and 10. Got: {magnitude}")
+        self._magnitude = magnitude
 
-    def get_deepness(self):
+    def get_deepness(self) -> float:
         """Return the earthquake depth in kilometers.
 
         Returns:
             float: The depth.
         """
-        return self.__deepness
+        return self._deepness
 
-    def __set_deepness(self, deepness):
+    def set_deepness(self, deepness:float):
         """Validate and set the depth range and one decimal place.
 
         Args:
@@ -90,53 +118,77 @@ class Report:
         Raises:
             ValueError: If the depth is not between 0 and 700.
         """
-        val = round(deepness, 1)
-        if not (0 <= val <= 700):
-            raise ValueError(f"Deepness must be between 0 and 700. Got: {val}")
-        self.__deepness = val
+        if deepness is None:
+            raise Exception("Deepness can't be none")
+        if not (0 <= deepness <= 700):
+            raise ValueError(f"Deepness must be between 0 and 700. Got: {deepness}")
+        self._deepness = deepness
 
-    def get_epicenter(self):
+    def get_epicenter(self) -> Point:
         """Return the epicenter point.
 
         Returns:
             Point: The epicenter coordinates.
         """
-        return self.__epicenter
+        return self._epicenter
 
-    def __set_epicenter(self, x, y):
+    def set_epicenter(self, x:float, y:float):
         """Create and set a Point object for the epicenter coordinates.
 
         Args:
-            x (float): The X coordinate.
-            y (float): The Y coordinate.
+            point (Point): The point representing the epicenter.
         """
-        self.__epicenter = Point(x, y)
+        if not (0 <= x <= 1000) or not (0 <= y <= 1000):
+            raise ValueError(f"Deepness must be between 0 and 700. Got: ({x},{y})")
+        self._epicenter = Point(x,y)
 
-    def get_date(self):
+    def get_date(self) -> dt:
         """Return the event date as a datetime object.
 
         Returns:
             dt: The event date.
         """
-        return self.__date
+        return self._date
 
-    def __set_date(self, date):
+    def set_date(self, date:str):
         """Parse and set the ISO date string into a datetime object.
 
         Args:
             date (str): The ISO format date string.
         """
-        self.__date = dt.fromisoformat(date)
+        self._date = dt.fromisoformat(date)
 
-    def get_review(self):
+    def get_station(self) -> str:
+        """Return the station that originated the report.
+
+        Returns:
+            str: The origin station string.
+        """
+        return self._station
+
+    def set_station(self, station:str):
+        """Set the station name.
+
+        Args:
+            station (str): The station name.
+        """
+        self._station = station
+
+    def get_is_populated(self) -> bool:
+        return self._is_populated
+
+    def set_is_populated(self, is_populated:bool):
+        self._is_populated = is_populated
+
+    def get_review(self) -> int:
         """Return the review value associated with the report.
 
         Returns:
             int: The review value.
         """
-        return self.__review
+        return self._review
 
-    def __set_review(self, review):
+    def set_review(self, review:int):
         """Validate and set the review value and ensure it is not negative.
 
         Args:
@@ -145,15 +197,15 @@ class Report:
         Raises:
             ValueError: If the review is negative.
         """
-        val = int(review)
-        if val < 0:
-            raise ValueError(f"Review must be non-negative. Got: {val}")
-        self.__review = val
+        if review is None:
+            raise Exception("Review can't be none")
+        review = int(review)
+        if review < 0:
+            raise ValueError(f"Review must be non-negative. Got: {review}")
+        self._review = review
 
-    def get_origin_station(self):
-        """Return the station that originated the report.
+    def get_key(self) -> Key:
+        return self._key
 
-        Returns:
-            str: The origin station string.
-        """
-        return self.__origin_station
+    def set_key(self, key:Key):
+        self._key = key
