@@ -105,9 +105,9 @@ def header():
                 e.sender._classes.clear()
             global_state.get_AVL().set_autobalance(not e.value)
 
-        ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_W(e.value)).classes('w-50').tooltip('Temporal margin for aftershocks')
-        ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_R(e.value)).classes('w-50').tooltip('Spatial margin for aftershocks')
-        ui.number(prefix='L : ',min=0,value=3,validation={'L must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_L(e.value)).classes('w-50').tooltip('Costly access limit')
+        ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_W(e.value)).classes('w-50').tooltip('Temporal margin for aftershocks')
+        ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_R(e.value)).classes('w-50').tooltip('Spatial margin for aftershocks')
+        ui.number(prefix='L : ',min=0,value=3,validation={'L must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_L(e.value)).classes('w-50').tooltip('Costly access limit')
         ui.button(icon='undo',on_click=lambda e: global_state.undo()).props('round').tooltip('Undo').bind_enabled_from(global_state,'can_undo')
         ui.button(icon='redo',on_click=lambda e: global_state.redo()).props('round').tooltip('Redo').bind_enabled_from(global_state,'can_redo')
 
@@ -134,7 +134,6 @@ def BST_tree():
 
     @OnEvent(Scenario.refresh)
     def update_BST_tree():
-        bst_graph.clear()
         bst_graph._props['options'] = global_state.get_BST_JSON()
         bst_graph.update()
 

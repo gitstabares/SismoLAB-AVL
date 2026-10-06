@@ -236,17 +236,29 @@ class Scenario:
         self.get_BST().set_L(L)
 
     def commit(self):
-        self.undo_queue.append((copy.deepcopy(self._AVL),copy.deepcopy(self._BST)))
+        self.undo_queue.append((copy.deepcopy(self._AVL),
+                                copy.deepcopy(self._BST),
+                                copy.deepcopy(self.reports_queue),
+                                copy.deepcopy(self._eliminated_ids),
+                                copy.deepcopy(self._archived_AVL_trees)))
         self.redo_queue.clear()
 
     def undo(self) -> Scenario:
-        self.redo_queue.append((copy.deepcopy(self._AVL),copy.deepcopy(self._BST)))
-        (self._AVL,self._BST) = self.undo_queue.pop()
+        self.redo_queue.append((copy.deepcopy(self._AVL),
+                                copy.deepcopy(self._BST),
+                                copy.deepcopy(self.reports_queue),
+                                copy.deepcopy(self._eliminated_ids),
+                                copy.deepcopy(self._archived_AVL_trees)))
+        (self._AVL,self._BST,self.reports_queue,self._eliminated_ids,self._archived_AVL_trees) = self.undo_queue.pop()
         self.refresh()
 
     def redo(self) -> Scenario:
-        self.undo_queue.append((copy.deepcopy(self._AVL),copy.deepcopy(self._BST)))
-        (self._AVL,self._BST) = self.redo_queue.pop()
+        self.undo_queue.append((copy.deepcopy(self._AVL),
+                                copy.deepcopy(self._BST),
+                                copy.deepcopy(self.reports_queue),
+                                copy.deepcopy(self._eliminated_ids),
+                                copy.deepcopy(self._archived_AVL_trees)))
+        (self._AVL,self._BST,self.reports_queue,self._eliminated_ids,self._archived_AVL_trees) = self.redo_queue.pop()
         self.refresh()
 
     @property
