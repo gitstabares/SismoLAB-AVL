@@ -76,3 +76,6 @@ class Point():
             Point: A new point resulting from the modulo operation.
         """
         return Point(self.get_x() % divisor, self.get_y() % divisor)
+
+    def __repr__(self):
+        return f"({self._x},{self._y})"

@@ -24,8 +24,6 @@ class Tree:
 
     def get_node(self, key:Key) -> Node:
         for node in self.get_levelorder_traverse():
-            if len(self.get_levelorder_traverse()) == 9:
-                pass
             if node.get_key() == key:
                 return node
 

@@ -43,6 +43,8 @@ class Key():
         Returns:
             bool: True if the identifiers are equal, False otherwise.
         """
+        if not isinstance(other,Key):
+            return self.get_identifier() == other
         return self.get_identifier() == other.get_identifier()
 
     def __ne__(self, other:Key):

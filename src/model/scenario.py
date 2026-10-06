@@ -161,14 +161,15 @@ class Scenario:
                 raise Exception("Report's information too old. There's newer information in the tree.")
         self.refresh()
 
-    def delete_event(self, identifier):
+    def delete_event(self, key:Key):
         """Delete an event by its identifier.
 
         Args:
             identifier (Any): The identifier of the event to delete.
         """
-        self.get_AVL().pop_node(identifier)
-        self.get_BST().pop_node(identifier)
+        identifier = key.get_identifier()
+        self.get_AVL().pop_node(key)
+        self.get_BST().pop_node(key)
         self.get_eliminated_ids().add(identifier)
         self.refresh()
 

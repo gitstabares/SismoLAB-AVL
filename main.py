@@ -1,5 +1,5 @@
 from nicegui import ui
-from nicegui.events import ValueChangeEventArguments
+from nicegui.events import EChartComponentClickEventArguments, ValueChangeEventArguments
 from src.model import *
 from src.utils import *
 import datetime as dt
@@ -111,13 +111,24 @@ def header():
         ui.button(icon='undo',on_click=lambda e: global_state.undo()).props('round').tooltip('Undo').bind_enabled_from(global_state,'can_undo')
         ui.button(icon='redo',on_click=lambda e: global_state.redo()).props('round').tooltip('Redo').bind_enabled_from(global_state,'can_redo')
 
+def show_event(e):
+    identifier = e.name[4:]
+    nodo = global_state.get_event_AVL(int(identifier))
+    with ui.dialog() as dialog,ui.card(align_items='end'):
+        with ui.list().props('dense separator'):
+            for k,v in nodo.__dict__.items():
+                ui.item(f'{k[1:].capitalize()}:{str(v)}')
+        ui.button(icon='delete',on_click=lambda e:global_state.delete_event(nodo.get_key())).props('round')
+    dialog.open()
+
 def AVL_tree():
+
     with ui.column().classes('dashboard-card col-span-5 h-full'):
         with ui.row().classes('items-center'):
             ui.icon('account_tree', size='sm').classes('text-cyan-400')
             ui.label('AVL Tree').classes('title')
         with ui.card().classes('w-full bg-white h-full'):
-            avl_graph = ui.echart(global_state.get_AVL_JSON()).classes('w-full h-full')
+            avl_graph = ui.echart(global_state.get_AVL_JSON()).classes('w-full h-full').on_click(show_event)
 
     @OnEvent(Scenario.refresh)
     def update_AVL_tree():
@@ -130,7 +141,7 @@ def BST_tree():
             ui.icon('account_tree', size='sm').classes('text-cyan-400')
             ui.label('BST Tree').classes('title')
         with ui.card().classes('w-full bg-white h-full'):
-            bst_graph = ui.echart(global_state.get_BST_JSON(),on_point_click=lambda e:ui.notify(e.value)).classes('w-full h-full')
+            bst_graph = ui.echart(global_state.get_BST_JSON()).classes('w-full h-full').on_click(show_event)
 
     @OnEvent(Scenario.refresh)
     def update_BST_tree():

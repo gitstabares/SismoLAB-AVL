@@ -145,6 +145,7 @@ class EventTree(Tree):
                         'color': color_magnitude.interpolate(node.get_key().get_priority()),  # Node color (blue)
                 },
                 'symbol': 'diamond' if node.get_costly_access() else 'circle',
+                'key':str(node.get_key())
             }
             
         return {
@@ -160,6 +161,7 @@ class EventTree(Tree):
                     "roam": True,            # Enables zooming and dragging
                     "symbolSize": 40,        # Node size
                     "initialTreeDepth": -1,  # -1 to expand the entire tree initially
+                    'expandAndCollapse': False,
                     "label": {
                         "position": "inside",
                         "verticalAlign": "middle",
