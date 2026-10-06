@@ -1,8 +1,11 @@
-from nicegui import ui, app
-from nicegui.events import ValueChangeEventArguments
+import glob
+
+from nicegui import ui
 from src.model import *
 from src.utils.decorators import OnEvent
 import datetime as dt
+from src.utils.intensity_color_mapper import IntensityColorMapper
+
 
 reports = [
     Report(1001, 4.5, 15.0, 120.5, 340.2, "2026-10-01T08:30:00", "Station-Alpha", True, 2),
@@ -18,6 +21,7 @@ reports = [
 ]
 
 global_state = Scenario()
+scenario_manager = ScenarioManager(global_state)
 
 for r in reports:
     global_state.insert_report(r)
@@ -103,11 +107,11 @@ def header():
                 e.sender._classes.clear()
             global_state.get_AVL().set_autobalance(not e.value)
 
-        ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_W(e.value)).classes('w-50')
-        ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_R(e.value)).classes('w-50')
-        ui.number(prefix='L : ',min=0,value=3,validation={'L must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_L(e.value)).classes('w-50')
-        ui.button(icon='undo').props('round')
-        ui.button(icon='redo').props('round')
+        ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_W(e.value)).classes('w-50').tooltip('Temporal margin for aftershocks')
+        ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_R(e.value)).classes('w-50').tooltip('Spatial margin for aftershocks')
+        ui.number(prefix='L : ',min=0,value=3,validation={'L must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_L(e.value)).classes('w-50').tooltip('Costly access limit')
+        ui.button(icon='undo').props('round').tooltip('Undo')
+        ui.button(icon='redo').props('round').tooltip('Redo')
 
 def AVL_tree():
     with ui.column().classes('dashboard-card col-span-5 h-full'):
@@ -118,6 +122,7 @@ def AVL_tree():
             avl_graph = ui.echart(global_state.get_AVL_JSON()).classes('w-full h-full')
 
     @OnEvent(global_state.insert_report)
+    @OnEvent(global_state.delete_event)
     def update_AVL_tree():
         avl_graph._props['options'] = global_state.get_AVL_JSON()
         avl_graph.update()
@@ -128,22 +133,24 @@ def BST_tree():
             ui.icon('account_tree', size='sm').classes('text-cyan-400')
             ui.label('BST Tree').classes('title')
         with ui.card().classes('w-full bg-white h-full'):
-            bst_graph = ui.echart(global_state.get_BST_JSON()).classes('w-full h-full')
+            bst_graph = ui.echart(global_state.get_BST_JSON(),on_point_click=lambda e:ui.notify(e.value)).classes('w-full h-full')
 
     @OnEvent(global_state.insert_report)
+    @OnEvent(global_state.delete_event)
     def update_BST_tree():
         bst_graph._props['options'] = global_state.get_BST_JSON()
         bst_graph.update()
 
 def reports_queue():
-
     with ui.column().classes('dashboard-card col-span-2 h-full'):
-        with ui.row().classes('items-center'):
+        with ui.row().classes('w-full items-center'):
             ui.icon('queue', size='sm').classes('text-cyan-400')
             ui.label('Reports queue').classes('title')
+            ui.button(icon='send',on_click=lambda e:global_state.insert_report(global_state.reports_queue.popleft())).classes('ml-auto').props('round').tooltip('Send next report')
         with ui.scroll_area().props('visible=false'):
             queue = ui.list().props('dense separator')
 
+    @OnEvent(global_state.add_report)
     @OnEvent(global_state.insert_report)
     def update_reports_queue():
         try:
@@ -159,7 +166,7 @@ def add_event_form():
         with ui.row().classes('items-center col-span-3'):
             ui.icon('checklist', size='sm').classes('text-cyan-400')
             ui.label('New report form').classes('title')
-            ui.button(icon='add',on_click=lambda e:add_event()).classes('ml-auto').props('round')
+            ui.button(icon='add',on_click=lambda e:add_event()).classes('ml-auto').props('round').tooltip('Add report')
         with ui.column():
             identifier = ui.number('Identifier',prefix='SIS-',validation={'The identifier must be bigger than zero':lambda v:v is not None and v > 0}).classes('w-full')
             magnitude = ui.number('Magnitude',min=-2,max=10,precision=1,validation={'The magnitude must be between -2.0 and 10.0':lambda v:v is not None and -2 <= v <= 10}).classes('w-full')
@@ -188,8 +195,8 @@ def add_event_form():
                             station.value,
                             epicenter in global_state.get_populated_zones(),
                             version.value)
-            ui.notify(f'Se creó el reporte {report} con éxito')
-            global_state.insert_report(report)
+            global_state.add_report(report)
+            ui.notify(f'The report {report} was succesfully created')
         except Exception as e:
             ui.notify(e)
 
@@ -198,24 +205,46 @@ def events_map():
         with ui.row().classes('items-center'):
             ui.icon('map', size='sm').classes('text-cyan-400')
             ui.label('Realtime events map').classes('title text-2xl')
-
+        lat_min, lat_max = -85.051129, 85.051129
+        lng_min, lng_max = -170.0, 190.0
         global_map = ui.leaflet(
             center=(0,0),
             zoom=1,
             options={
-                'maxBounds': [[-85.051129, -170], [85.051129, 190]],
+                'maxBounds': [[lat_min, lng_min], [lat_max, lng_max]],
                 'maxBoundsViscosity': 1.0,
                 'minZoom':1
             }
         ).classes('w-full h-full')
-        
-        with ui.row().classes('items-center gap-2'):
-            ui.badge('Alta', color='red')
-            ui.badge('Media', color='orange')
-            ui.badge('Baja', color='blue')
+
+    @OnEvent(global_state.insert_report)
+    def update_map():
+        global_map.clear_layers()
+        global_map.tile_layer(
+            url_template='https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+            options={
+                'attribution': '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+            }
+        )
+        color_mapper = IntensityColorMapper(-2,10)
+        for seism in global_state.get_AVL().get_levelorder_traverse():
+            lng = lng_min + (seism.get_epicenter().get_x() / 1000) * (lng_max - lng_min)
+            lat = lat_max - (seism.get_epicenter().get_y() / 1000) * (lat_max - lat_min)
+            global_map.generic_layer(
+                name='circle',
+                args=[
+                    [lat, lng],
+                    {
+                        'color': color_mapper.interpolate(seism.get_magnitude()),
+                        'fillColor': color_mapper.interpolate(seism.get_magnitude()),
+                        'fillOpacity': 0.1,
+                        'radius': seism.get_magnitude() * 1e5,
+                        'weight': 1
+                    }
+                ]
+            )
 
 def main():
-
     header()
     with ui.row().classes('w-full grid grid-cols-12 min-h-[1000px]'):
         AVL_tree()

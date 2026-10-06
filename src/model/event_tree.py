@@ -115,7 +115,7 @@ class EventTree(Tree):
         Returns:
             Dict[str, Any]: A dictionary containing the ECharts configuration and tree data.
         """
-        color_magnitude = IntensityColorMapper(-2,10)
+        color_magnitude = IntensityColorMapper(1,3,'YlOrRd')
         def _get_data(node:Event):
             """
             Recursively extracts data from a tree node to format it for ECharts.
@@ -141,9 +141,10 @@ class EventTree(Tree):
                     _get_data(node.get_left()), 
                     _get_data(node.get_right())
                 ],
-                "itemStyle": {
-                        "color": color_magnitude.interpolate(node.get_magnitude()),  # Node color (blue)
-                    },
+                'itemStyle': {
+                        'color': color_magnitude.interpolate(node.get_key().get_priority()),  # Node color (blue)
+                },
+                'symbol': 'diamond' if node.get_costly_access() else 'circle',
             }
             
         return {
@@ -166,7 +167,6 @@ class EventTree(Tree):
                         "color": "black",    # Text color
                         "fontSize": 14
                     },
-                    "symbol": "circle",
                     "lineStyle": {
                         "color": "#ccc",     # Edge color
                         "width": 2,

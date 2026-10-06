@@ -6,7 +6,8 @@ from .node import Node
 from .point import Point
 from .populated_zones import PopulatedZones
 from .report import Report
+from .scenario_manager import ScenarioManager
 from .scenario import Scenario
 from .tree import Tree
 
-__all__=['Circle','EventTree','Event','Key','Node','Point','PopulatedZones','Report','Scenario','Tree']
+__all__=['Circle','EventTree','Event','Key','Node','Point','PopulatedZones','Report','ScenarioManager','Scenario','Tree']

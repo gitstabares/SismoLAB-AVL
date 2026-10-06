@@ -1,11 +1,11 @@
-from collections import deque
-from src.utils.decorators import EventTrigger
+from src.utils import *
 from .populated_zones import PopulatedZones
 from .event_tree import EventTree
 from .event import Event
 from .key import Key
 from .report import Report
 import datetime as dt
+from collections import deque
 
 
 class Scenario:
@@ -24,6 +24,8 @@ class Scenario:
         self.set_current_time(dt.datetime.now())
         self.reports_queue = deque()
         self.set_burst_mode(False)
+        self.undo_queue = deque(maxlen=3)
+        self.redo_deque = deque(maxlen=3)
         
     def get_AVL(self) -> EventTree:
         return self._AVL
@@ -86,6 +88,13 @@ class Scenario:
         self.get_archived_AVL_trees().add(tree)
 
     @EventTrigger
+    def add_report(self, report:Report):
+        if self.get_burst_mode():
+            self.reports_queue.append(report)
+        else:
+            self.insert_report(report)
+
+    @EventTrigger
     def insert_report(self, report:Report):
         """Insert or update a report in the scenario's event trees.
 
@@ -97,10 +106,6 @@ class Scenario:
             Exception: If there's an event with different data but the same review score.
             Exception: If the report's information is too old (lower review score).
         """
-        if self.get_burst_mode():
-            self.reports_queue.append(report)
-            return
-
         if report.get_identifier() in self.get_eliminated_ids():
             raise Exception("The ID registered was used previously and currently is deleted.")
 
@@ -133,7 +138,6 @@ class Scenario:
                 self.get_BST().update_aftershocks()
                 self.get_BST().update_costly_access()
             elif new_event.get_review() == actual_AVL.get_review():
-                print(new_event.get_data(),actual_AVL.get_data())
                 if new_event.get_data() == actual_AVL.get_data():
                     actual_AVL.set_revised(True)
                     actual_BST.set_revised(True)
@@ -145,6 +149,7 @@ class Scenario:
             else:
                 raise Exception("Report's information too old. There's newer information in the tree.")
 
+    @EventTrigger
     def delete_event(self, identifier):
         """Delete an event by its identifier.
 
@@ -217,3 +222,14 @@ class Scenario:
         """
         self.get_AVL().set_L(L)
         self.get_BST().set_L(L)
+
+    def commit(self):
+        self.undo_queue.append(copy(self))
+
+    def undo(self):
+        self.redo_deque.append(copy(self))
+        return self.undo_queue.popleft()
+
+    def redo(self):
+        self.undo_queue.append(copy(self))
+        return self.redo_deque.popleft()

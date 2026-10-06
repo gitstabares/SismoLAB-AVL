@@ -26,6 +26,7 @@ def EventTrigger(function):
         Returns:
             Any: The response from the original function.
         """
+        response = None
         try:
             response = function(*args, **kwargs)
         except Exception as e:

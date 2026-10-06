@@ -1,5 +1,5 @@
-from . import copy
-from . import decorators
+from .copy import *
 from .serializer import Serializer
+from .decorators import *
 
-__all__=['Serializer','copy','decorators']
+__all__=['Serializer','copy','EventTrigger','OnEvent']
