@@ -26,8 +26,8 @@ class Scenario:
         self.set_current_time(dt.datetime.now())
         self.reports_queue = deque()
         self.set_burst_mode(False)
-        self.undo_queue = deque()
-        self.redo_deque = deque()
+        self.undo_queue = deque(maxlen=3)
+        self.redo_queue = deque(maxlen=3)
         
     def get_AVL(self) -> EventTree:
         return self._AVL
@@ -236,19 +236,18 @@ class Scenario:
         self.get_BST().set_L(L)
 
     def commit(self):
-        self.undo_queue.append(copy.deepcopy(self))
-        self.redo_deque.clear()
-        return
+        self.undo_queue.append((copy.deepcopy(self._AVL),copy.deepcopy(self._BST)))
+        self.redo_queue.clear()
 
     def undo(self) -> Scenario:
-        new = self.undo_queue.pop()
-        new.redo_deque.append(self)
-        return new
+        self.redo_queue.append((copy.deepcopy(self._AVL),copy.deepcopy(self._BST)))
+        (self._AVL,self._BST) = self.undo_queue.pop()
+        self.refresh()
 
     def redo(self) -> Scenario:
-        new = self.redo_deque.pop()
-        new.undo_queue.append(self)
-        return new
+        self.undo_queue.append((copy.deepcopy(self._AVL),copy.deepcopy(self._BST)))
+        (self._AVL,self._BST) = self.redo_queue.pop()
+        self.refresh()
 
     @property
     def can_undo(self):
@@ -256,7 +255,7 @@ class Scenario:
 
     @property
     def can_redo(self):
-        return len(self.redo_deque) > 0
+        return len(self.redo_queue) > 0
 
     @EventTrigger
     def refresh(self):

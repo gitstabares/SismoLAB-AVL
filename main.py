@@ -108,22 +108,8 @@ def header():
         ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_W(e.value)).classes('w-50').tooltip('Temporal margin for aftershocks')
         ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_R(e.value)).classes('w-50').tooltip('Spatial margin for aftershocks')
         ui.number(prefix='L : ',min=0,value=3,validation={'L must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_L(e.value)).classes('w-50').tooltip('Costly access limit')
-        undo_button = ui.button(icon='undo',on_click=lambda e: undo()).props('round').tooltip('Undo').bind_enabled_from(global_state,'can_undo')
-        redo_button = ui.button(icon='redo',on_click=lambda e: redo()).props('round').tooltip('Redo').bind_enabled_from(global_state,'can_redo')
-
-    def undo():
-        global global_state
-        global_state = global_state.undo()
-        undo_button.bind_enabled_from(global_state,'can_undo')
-        redo_button.bind_enabled_from(global_state,'can_redo')
-        global_state.refresh()
-
-    def redo():
-        global global_state
-        global_state = global_state.redo()
-        undo_button.bind_enabled_from(global_state,'can_undo')
-        redo_button.bind_enabled_from(global_state,'can_redo')
-        global_state.refresh()
+        ui.button(icon='undo',on_click=lambda e: global_state.undo()).props('round').tooltip('Undo').bind_enabled_from(global_state,'can_undo')
+        ui.button(icon='redo',on_click=lambda e: global_state.redo()).props('round').tooltip('Redo').bind_enabled_from(global_state,'can_redo')
 
 def AVL_tree():
     with ui.column().classes('dashboard-card col-span-5 h-full'):
