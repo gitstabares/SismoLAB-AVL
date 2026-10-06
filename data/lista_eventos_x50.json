@@ -1,0 +1,1806 @@
+{
+    "$id": 140004548750464,
+    "$type": "list",
+    "items": [
+        {
+            "$id": 140004996363808,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8301,
+                "_magnitude": 6.9,
+                "_deepness": 29.2,
+                "_epicenter": {
+                    "$id": 140004996363856,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 225.1,
+                        "_y": 645.2
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T01:11:00"
+                },
+                "_station": "Estacion-Aguadas",
+                "_is_populated": true,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004996363904,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.9,
+                        "_identifier": 8301
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004996364000,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8302,
+                "_magnitude": 4.6,
+                "_deepness": 74.1,
+                "_epicenter": {
+                    "$id": 140004996364048,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 755.2,
+                        "_y": 285.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T02:22:00"
+                },
+                "_station": "Estacion-Supia",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004996364144,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 4.6,
+                        "_identifier": 8302
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004996364192,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8303,
+                "_magnitude": 2.7,
+                "_deepness": 14.3,
+                "_epicenter": {
+                    "$id": 140004996364240,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 95.3,
+                        "_y": 835.1
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T03:33:00"
+                },
+                "_station": "Estacion-Marmato",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004996364336,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 2.7,
+                        "_identifier": 8303
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004996364384,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8304,
+                "_magnitude": 5.9,
+                "_deepness": 19.4,
+                "_epicenter": {
+                    "$id": 140004996364432,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 655.4,
+                        "_y": 595.2
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T04:44:00"
+                },
+                "_station": "Estacion-Pensilvania",
+                "_is_populated": true,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004996364528,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 5.9,
+                        "_identifier": 8304
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004996364576,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8305,
+                "_magnitude": 3.7,
+                "_deepness": 41.2,
+                "_epicenter": {
+                    "$id": 140004996364624,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 415.5,
+                        "_y": 185.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T05:55:00"
+                },
+                "_station": "Estacion-Marquetalia",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004996364720,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 3.7,
+                        "_identifier": 8305
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004996364768,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8306,
+                "_magnitude": 7.6,
+                "_deepness": 195.4,
+                "_epicenter": {
+                    "$id": 140004996364816,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 875.6,
+                        "_y": 795.4
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T07:06:00"
+                },
+                "_station": "Estacion-Norcasia",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004996364912,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 7.6,
+                        "_identifier": 8306
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004996364960,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8307,
+                "_magnitude": 4.1,
+                "_deepness": 9.8,
+                "_epicenter": {
+                    "$id": 140004996365008,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 255.7,
+                        "_y": 725.5
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T08:18:00"
+                },
+                "_station": "Estacion-Victoria",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004996365104,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 4.1,
+                        "_identifier": 8307
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004996365152,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8308,
+                "_magnitude": 5.7,
+                "_deepness": 104.6,
+                "_epicenter": {
+                    "$id": 140004996365200,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 495.8,
+                        "_y": 935.6
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T10:29:00"
+                },
+                "_station": "Estacion-LaDorada",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004996365296,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 5.7,
+                        "_identifier": 8308
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004996365344,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8309,
+                "_magnitude": 6.3,
+                "_deepness": 56.7,
+                "_epicenter": {
+                    "$id": 140004996365392,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 175.9,
+                        "_y": 395.7
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T12:41:00"
+                },
+                "_station": "Estacion-Filadelfia",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004996365488,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.3,
+                        "_identifier": 8309
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004996365536,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8310,
+                "_magnitude": 1.9,
+                "_deepness": 4.6,
+                "_epicenter": {
+                    "$id": 140004996365584,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 675.1,
+                        "_y": 615.8
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T14:52:00"
+                },
+                "_station": "Estacion-LaMerced",
+                "_is_populated": true,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004996365680,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 1.9,
+                        "_identifier": 8310
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004549973808,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8401,
+                "_magnitude": 5.9,
+                "_deepness": 53.4,
+                "_epicenter": {
+                    "$id": 140004996483696,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 82.2,
+                        "_y": 89.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T00:47:00"
+                },
+                "_station": "Estacion-8401",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004548330176,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 5.9,
+                        "_identifier": 8401
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004548650928,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8402,
+                "_magnitude": 7.6,
+                "_deepness": 84.4,
+                "_epicenter": {
+                    "$id": 140004548651024,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 219.2,
+                        "_y": 282.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T01:30:00"
+                },
+                "_station": "Estacion-8402",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004548651072,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 7.6,
+                        "_identifier": 8402
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004548759088,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8403,
+                "_magnitude": 2.6,
+                "_deepness": 115.4,
+                "_epicenter": {
+                    "$id": 140004548759184,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 356.2,
+                        "_y": 475.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T02:13:00"
+                },
+                "_station": "Estacion-8403",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004548759232,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 2.6,
+                        "_identifier": 8403
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004548770272,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8404,
+                "_magnitude": 4.3,
+                "_deepness": 146.4,
+                "_epicenter": {
+                    "$id": 140004548770368,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 493.2,
+                        "_y": 668.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T02:56:00"
+                },
+                "_station": "Estacion-8404",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004548770464,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 4.3,
+                        "_identifier": 8404
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004548800784,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8405,
+                "_magnitude": 6.0,
+                "_deepness": 177.4,
+                "_epicenter": {
+                    "$id": 140004548800880,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 630.2,
+                        "_y": 861.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T03:39:00"
+                },
+                "_station": "Estacion-8405",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004548800928,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.0,
+                        "_identifier": 8405
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004548960352,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8406,
+                "_magnitude": 7.7,
+                "_deepness": 208.4,
+                "_epicenter": {
+                    "$id": 140004548960448,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 767.2,
+                        "_y": 144.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T04:22:00"
+                },
+                "_station": "Estacion-8406",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004548960496,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 7.7,
+                        "_identifier": 8406
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004549006384,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8407,
+                "_magnitude": 2.7,
+                "_deepness": 9.4,
+                "_epicenter": {
+                    "$id": 140004549006480,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 904.2,
+                        "_y": 337.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T05:05:00"
+                },
+                "_station": "Estacion-8407",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004549006528,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 2.7,
+                        "_identifier": 8407
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004549053376,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8408,
+                "_magnitude": 4.4,
+                "_deepness": 40.4,
+                "_epicenter": {
+                    "$id": 140004549053472,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 116.2,
+                        "_y": 530.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T05:48:00"
+                },
+                "_station": "Estacion-8408",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004549053520,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 4.4,
+                        "_identifier": 8408
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004549100752,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8409,
+                "_magnitude": 6.1,
+                "_deepness": 71.4,
+                "_epicenter": {
+                    "$id": 140004549100848,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 253.2,
+                        "_y": 723.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T06:31:00"
+                },
+                "_station": "Estacion-8409",
+                "_is_populated": true,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004549100896,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.1,
+                        "_identifier": 8409
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547084896,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8410,
+                "_magnitude": 7.8,
+                "_deepness": 102.4,
+                "_epicenter": {
+                    "$id": 140004547084992,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 390.2,
+                        "_y": 916.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T07:14:00"
+                },
+                "_station": "Estacion-8410",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547085040,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 7.8,
+                        "_identifier": 8410
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547117424,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8411,
+                "_magnitude": 2.8,
+                "_deepness": 133.4,
+                "_epicenter": {
+                    "$id": 140004547117520,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 527.2,
+                        "_y": 199.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T07:57:00"
+                },
+                "_station": "Estacion-8411",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547117568,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 2.8,
+                        "_identifier": 8411
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547200064,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8412,
+                "_magnitude": 4.5,
+                "_deepness": 164.4,
+                "_epicenter": {
+                    "$id": 140004547200160,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 664.2,
+                        "_y": 392.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T08:40:00"
+                },
+                "_station": "Estacion-8412",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547200208,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 4.5,
+                        "_identifier": 8412
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547250704,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8413,
+                "_magnitude": 6.2,
+                "_deepness": 195.4,
+                "_epicenter": {
+                    "$id": 140004547250800,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 801.2,
+                        "_y": 585.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T09:23:00"
+                },
+                "_station": "Estacion-8413",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547250848,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.2,
+                        "_identifier": 8413
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547335072,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8414,
+                "_magnitude": 1.2,
+                "_deepness": 226.4,
+                "_epicenter": {
+                    "$id": 140004547335168,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 938.2,
+                        "_y": 778.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T10:06:00"
+                },
+                "_station": "Estacion-8414",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547335216,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 1.2,
+                        "_identifier": 8414
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547399840,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8415,
+                "_magnitude": 2.9,
+                "_deepness": 27.4,
+                "_epicenter": {
+                    "$id": 140004547400416,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 150.2,
+                        "_y": 61.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T10:49:00"
+                },
+                "_station": "Estacion-8415",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547400464,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 2.9,
+                        "_identifier": 8415
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547410160,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8416,
+                "_magnitude": 4.6,
+                "_deepness": 58.4,
+                "_epicenter": {
+                    "$id": 140004547410736,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 287.2,
+                        "_y": 254.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T11:32:00"
+                },
+                "_station": "Estacion-8416",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547410784,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 4.6,
+                        "_identifier": 8416
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547470272,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8417,
+                "_magnitude": 6.3,
+                "_deepness": 89.4,
+                "_epicenter": {
+                    "$id": 140004547470848,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 424.2,
+                        "_y": 447.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T12:15:00"
+                },
+                "_station": "Estacion-8417",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547470896,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.3,
+                        "_identifier": 8417
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547563152,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8418,
+                "_magnitude": 1.3,
+                "_deepness": 120.4,
+                "_epicenter": {
+                    "$id": 140004547563728,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 561.2,
+                        "_y": 640.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T12:58:00"
+                },
+                "_station": "Estacion-8418",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547563776,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 1.3,
+                        "_identifier": 8418
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547574816,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8419,
+                "_magnitude": 3.0,
+                "_deepness": 151.4,
+                "_epicenter": {
+                    "$id": 140004547575392,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 698.2,
+                        "_y": 833.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T13:41:00"
+                },
+                "_station": "Estacion-8419",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547575440,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 3.0,
+                        "_identifier": 8419
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547668464,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8420,
+                "_magnitude": 4.7,
+                "_deepness": 182.4,
+                "_epicenter": {
+                    "$id": 140004547669040,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 835.2,
+                        "_y": 116.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T14:24:00"
+                },
+                "_station": "Estacion-8420",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547669088,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 4.7,
+                        "_identifier": 8420
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547746304,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8421,
+                "_magnitude": 6.4,
+                "_deepness": 213.4,
+                "_epicenter": {
+                    "$id": 140004547746880,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 47.2,
+                        "_y": 309.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T15:07:00"
+                },
+                "_station": "Estacion-8421",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547746928,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.4,
+                        "_identifier": 8421
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547824720,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8422,
+                "_magnitude": 1.4,
+                "_deepness": 14.4,
+                "_epicenter": {
+                    "$id": 140004547825296,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 184.2,
+                        "_y": 502.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T15:50:00"
+                },
+                "_station": "Estacion-8422",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547825344,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 1.4,
+                        "_identifier": 8422
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547837536,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8423,
+                "_magnitude": 3.1,
+                "_deepness": 45.4,
+                "_epicenter": {
+                    "$id": 140004547936576,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 321.2,
+                        "_y": 695.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T16:33:00"
+                },
+                "_station": "Estacion-8423",
+                "_is_populated": true,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547936528,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 3.1,
+                        "_identifier": 8423
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004547949296,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8424,
+                "_magnitude": 4.8,
+                "_deepness": 76.4,
+                "_epicenter": {
+                    "$id": 140004547949872,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 458.2,
+                        "_y": 888.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T17:16:00"
+                },
+                "_station": "Estacion-8424",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004547949920,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 4.8,
+                        "_identifier": 8424
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004548028864,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8425,
+                "_magnitude": 6.5,
+                "_deepness": 107.4,
+                "_epicenter": {
+                    "$id": 140004548029440,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 595.2,
+                        "_y": 171.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T17:59:00"
+                },
+                "_station": "Estacion-8425",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004548029488,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.5,
+                        "_identifier": 8425
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004546027664,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8426,
+                "_magnitude": 1.5,
+                "_deepness": 138.4,
+                "_epicenter": {
+                    "$id": 140004546028240,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 732.2,
+                        "_y": 364.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T18:42:00"
+                },
+                "_station": "Estacion-8426",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004546028288,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 1.5,
+                        "_identifier": 8426
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004546156960,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8427,
+                "_magnitude": 3.2,
+                "_deepness": 169.4,
+                "_epicenter": {
+                    "$id": 140004546157536,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 869.2,
+                        "_y": 557.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T19:25:00"
+                },
+                "_station": "Estacion-8427",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004546157584,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 3.2,
+                        "_identifier": 8427
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004546221104,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8428,
+                "_magnitude": 4.9,
+                "_deepness": 200.4,
+                "_epicenter": {
+                    "$id": 140004546221680,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 81.2,
+                        "_y": 750.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T20:08:00"
+                },
+                "_station": "Estacion-8428",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004546221728,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 4.9,
+                        "_identifier": 8428
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004546318400,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8429,
+                "_magnitude": 6.6,
+                "_deepness": 231.4,
+                "_epicenter": {
+                    "$id": 140004546318976,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 218.2,
+                        "_y": 943.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T20:51:00"
+                },
+                "_station": "Estacion-8429",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004546319024,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.6,
+                        "_identifier": 8429
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004546399888,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8430,
+                "_magnitude": 1.6,
+                "_deepness": 32.4,
+                "_epicenter": {
+                    "$id": 140004546400464,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 355.2,
+                        "_y": 226.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T21:34:00"
+                },
+                "_station": "Estacion-8430",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004546400512,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 1.6,
+                        "_identifier": 8430
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004546514144,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8431,
+                "_magnitude": 3.3,
+                "_deepness": 63.4,
+                "_epicenter": {
+                    "$id": 140004546514720,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 492.2,
+                        "_y": 419.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T22:17:00"
+                },
+                "_station": "Estacion-8431",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004546514768,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 3.3,
+                        "_identifier": 8431
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004546596208,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8432,
+                "_magnitude": 5.0,
+                "_deepness": 94.4,
+                "_epicenter": {
+                    "$id": 140004546596784,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 629.2,
+                        "_y": 612.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T23:00:00"
+                },
+                "_station": "Estacion-8432",
+                "_is_populated": true,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004546596832,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 5.0,
+                        "_identifier": 8432
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004546678656,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8433,
+                "_magnitude": 6.7,
+                "_deepness": 125.4,
+                "_epicenter": {
+                    "$id": 140004546679232,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 766.2,
+                        "_y": 805.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-05T23:43:00"
+                },
+                "_station": "Estacion-8433",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004546679280,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.7,
+                        "_identifier": 8433
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004546794256,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8434,
+                "_magnitude": 1.7,
+                "_deepness": 156.4,
+                "_epicenter": {
+                    "$id": 140004546794832,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 903.2,
+                        "_y": 88.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T00:26:00"
+                },
+                "_station": "Estacion-8434",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004546794880,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 1.7,
+                        "_identifier": 8434
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004546877472,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8435,
+                "_magnitude": 3.4,
+                "_deepness": 187.4,
+                "_epicenter": {
+                    "$id": 140004546878048,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 115.2,
+                        "_y": 281.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T01:09:00"
+                },
+                "_station": "Estacion-8435",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004546878096,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 3.4,
+                        "_identifier": 8435
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004546961072,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8436,
+                "_magnitude": 5.1,
+                "_deepness": 218.4,
+                "_epicenter": {
+                    "$id": 140004546961648,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 252.2,
+                        "_y": 474.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T01:52:00"
+                },
+                "_station": "Estacion-8436",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004546961696,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 5.1,
+                        "_identifier": 8436
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004544997056,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8437,
+                "_magnitude": 6.8,
+                "_deepness": 19.4,
+                "_epicenter": {
+                    "$id": 140004544997632,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 389.2,
+                        "_y": 667.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T02:35:00"
+                },
+                "_station": "Estacion-8437",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004544997680,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.8,
+                        "_identifier": 8437
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004545081424,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8438,
+                "_magnitude": 1.8,
+                "_deepness": 50.4,
+                "_epicenter": {
+                    "$id": 140004545082000,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 526.2,
+                        "_y": 860.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T03:18:00"
+                },
+                "_station": "Estacion-8438",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004545082048,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 1.8,
+                        "_identifier": 8438
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004545166176,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8439,
+                "_magnitude": 3.5,
+                "_deepness": 81.4,
+                "_epicenter": {
+                    "$id": 140004545166752,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 663.2,
+                        "_y": 143.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T04:01:00"
+                },
+                "_station": "Estacion-8439",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004545166800,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 3.5,
+                        "_identifier": 8439
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140004545349680,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8440,
+                "_magnitude": 5.2,
+                "_deepness": 112.4,
+                "_epicenter": {
+                    "$id": 140004545350256,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 800.2,
+                        "_y": 336.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T04:44:00"
+                },
+                "_station": "Estacion-8440",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140004545350304,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 5.2,
+                        "_identifier": 8440
+                    }
+                }
+            }
+        }
+    ]
+}

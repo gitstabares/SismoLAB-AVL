@@ -110,12 +110,51 @@ def header():
             global_state.set_stress_mode(e.value)
 
         async def upload(e):
-            global global_state
-            file = await e.file.text()
-            ui.notify('The file was uploaded successfully')
-            new_global_state = serializer.deserialize(json.loads(file))
-            global_state.__dict__.update(new_global_state.__dict__)
-            global_state.refresh()
+            content = await e.file.text()
+            loaded = serializer.deserialize(json.loads(content))
+
+            if isinstance(loaded, list):
+                # Validate all items before modifying the current scenario.
+                if not all(isinstance(report, Report) for report in loaded):
+                    ui.notify(
+                        "The list must contain only reports.",
+                        type="negative",
+                    )
+                    return
+
+                processed = 0
+                issues = []
+
+                # Insert into the existing scenario without clearing its trees.
+                for report in loaded:
+                    try:
+                        global_state.insert_report(report)
+                        processed += 1
+                    except Exception as error:
+                        # Continue processing the remaining reports.
+                        issues.append(
+                            f"ID {report.get_identifier()}: {error}"
+                        )
+
+                global_state.refresh()
+                ui.notify(
+                    f"Processed without exceptions: {processed}/{len(loaded)}"
+                )
+
+                for issue in issues:
+                    ui.notify(issue, type="warning")
+
+            elif isinstance(loaded, Scenario):
+                # Only a topology load replaces the current scenario.
+                global_state.__dict__.update(loaded.__dict__)
+                global_state.refresh()
+                ui.notify("Scenario topology loaded successfully")
+
+            else:
+                ui.notify(
+                    "Expected a report list or a Scenario.",
+                    type="negative",
+                )
 
         ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_W(e.value)).classes('w-50').tooltip('Temporal margin for aftershocks')
         ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_R(e.value)).classes('w-50').tooltip('Spatial margin for aftershocks')
