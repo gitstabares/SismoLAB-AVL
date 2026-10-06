@@ -1,10 +1,8 @@
-import glob
-
 from nicegui import ui
+from nicegui.events import ValueChangeEventArguments
 from src.model import *
-from src.utils.decorators import OnEvent
+from src.utils import *
 import datetime as dt
-from src.utils.intensity_color_mapper import IntensityColorMapper
 
 
 reports = [
@@ -21,10 +19,9 @@ reports = [
 ]
 
 global_state = Scenario()
-scenario_manager = ScenarioManager(global_state)
 
-for r in reports:
-    global_state.insert_report(r)
+for report in reports:
+    global_state.add_report(report)
 
 ui.add_head_html('''
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -100,6 +97,7 @@ def header():
 
         ui.checkbox('Stress mode',on_change=lambda e:update_stressmode(e)).props('unchecked-icon=local_fire_department checked-icon=local_fire_department keep_color=false').style('--q-primary: transparent;')
         ui.checkbox('Burst mode',on_change=lambda e:global_state.set_burst_mode(e.value)).props('unchecked-icon=burst_mode checked-icon=burst_mode color=red')
+        
         def update_stressmode(e:ValueChangeEventArguments):
             if e.value:
                 e.sender.classes('font-effect-fire-animation')
@@ -110,8 +108,22 @@ def header():
         ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_W(e.value)).classes('w-50').tooltip('Temporal margin for aftershocks')
         ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_R(e.value)).classes('w-50').tooltip('Spatial margin for aftershocks')
         ui.number(prefix='L : ',min=0,value=3,validation={'L must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.get_AVL().set_L(e.value)).classes('w-50').tooltip('Costly access limit')
-        ui.button(icon='undo').props('round').tooltip('Undo')
-        ui.button(icon='redo').props('round').tooltip('Redo')
+        undo_button = ui.button(icon='undo',on_click=lambda e: undo()).props('round').tooltip('Undo').bind_enabled_from(global_state,'can_undo')
+        redo_button = ui.button(icon='redo',on_click=lambda e: redo()).props('round').tooltip('Redo').bind_enabled_from(global_state,'can_redo')
+
+    def undo():
+        global global_state
+        global_state = global_state.undo()
+        undo_button.bind_enabled_from(global_state,'can_undo')
+        redo_button.bind_enabled_from(global_state,'can_redo')
+        global_state.refresh()
+
+    def redo():
+        global global_state
+        global_state = global_state.redo()
+        undo_button.bind_enabled_from(global_state,'can_undo')
+        redo_button.bind_enabled_from(global_state,'can_redo')
+        global_state.refresh()
 
 def AVL_tree():
     with ui.column().classes('dashboard-card col-span-5 h-full'):
@@ -121,8 +133,7 @@ def AVL_tree():
         with ui.card().classes('w-full bg-white h-full'):
             avl_graph = ui.echart(global_state.get_AVL_JSON()).classes('w-full h-full')
 
-    @OnEvent(global_state.insert_report)
-    @OnEvent(global_state.delete_event)
+    @OnEvent(Scenario.refresh)
     def update_AVL_tree():
         avl_graph._props['options'] = global_state.get_AVL_JSON()
         avl_graph.update()
@@ -135,9 +146,9 @@ def BST_tree():
         with ui.card().classes('w-full bg-white h-full'):
             bst_graph = ui.echart(global_state.get_BST_JSON(),on_point_click=lambda e:ui.notify(e.value)).classes('w-full h-full')
 
-    @OnEvent(global_state.insert_report)
-    @OnEvent(global_state.delete_event)
+    @OnEvent(Scenario.refresh)
     def update_BST_tree():
+        bst_graph.clear()
         bst_graph._props['options'] = global_state.get_BST_JSON()
         bst_graph.update()
 
@@ -146,12 +157,18 @@ def reports_queue():
         with ui.row().classes('w-full items-center'):
             ui.icon('queue', size='sm').classes('text-cyan-400')
             ui.label('Reports queue').classes('title')
-            ui.button(icon='send',on_click=lambda e:global_state.insert_report(global_state.reports_queue.popleft())).classes('ml-auto').props('round').tooltip('Send next report')
-        with ui.scroll_area().props('visible=false'):
+            ui.button(icon='send',on_click=lambda e:send_report_from_queue()).classes('ml-auto').props('round').tooltip('Send next report')
+        with ui.scroll_area().classes('h-full').props('visible=false'):
             queue = ui.list().props('dense separator')
 
-    @OnEvent(global_state.add_report)
-    @OnEvent(global_state.insert_report)
+    def send_report_from_queue():
+        try:
+            global_state.insert_report(global_state.reports_queue.popleft())
+        except Exception as e:
+            ui.notify(e)
+        global_state.refresh()
+
+    @OnEvent(Scenario.refresh)
     def update_reports_queue():
         try:
             with queue:
@@ -217,7 +234,7 @@ def events_map():
             }
         ).classes('w-full h-full')
 
-    @OnEvent(global_state.insert_report)
+    @OnEvent(Scenario.refresh)
     def update_map():
         global_map.clear_layers()
         global_map.tile_layer(
@@ -408,6 +425,7 @@ def main():
                     with ui.row().classes('w-full justify-between items-center mt-1 pt-1 border-t border-slate-800'):
                         ui.label('stack depth 18 / 64 · persistencia cada 5 uvs').classes('text-[9px] text-slate-500')
                         ui.button('ROLLBACK SEGURO', icon='history', on_click=lambda: ui.notify('Secure rollback executed')).classes('bg-emerald-950 text-emerald-400 text-[10px] border border-emerald-800 px-2 py-1')
-main()
 
-ui.run(title='SismoLab AVL', dark=True, favicon='assets/icon.svg')
+if __name__ in {"__main__", "__mp_main__"}:
+    main()
+    ui.run(title='SismoLab AVL', dark=True, favicon='assets/icon.svg')

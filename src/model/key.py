@@ -1,11 +1,11 @@
-class Key(tuple):
+class Key():
     """Represents a key used for prioritizing and ordering seismic events.
 
     The priority is determined by the magnitude, deepness, and whether the area is populated.
     Higher priority indicates a more critical event.
     """
 
-    def __new__(cls, magnitude:float, deepness:float, is_populated:bool, identifier:int):
+    def __init__(self, magnitude:float, deepness:float, is_populated:bool, identifier:int):
         """Initializes a Key instance.
 
         Args:
@@ -20,17 +20,19 @@ class Key(tuple):
             else:
                 priority = 2
         else:
-            priority = 1  
-        return super().__new__(cls, [priority, magnitude, identifier])
+            priority = 1
+        self._priority = priority
+        self._magnitude = magnitude
+        self._identifier = identifier
 
     def get_priority(self) -> int:
-        return self[0]
+        return self._priority
 
     def get_magnitude(self) -> float:
-        return self[1]
+        return self._magnitude
 
     def get_identifier(self) -> float:
-        return self[2]
+        return self._identifier
 
     def __eq__(self, other:Key):
         """Checks if two Key instances are equal based on their identifier.

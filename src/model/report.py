@@ -38,7 +38,6 @@ class Report:
             station (str): Station that generated or reported the event.
             review (int, optional): Review score or level associated with the report. Defaults to 1.
         """
-
         self.set_identifier(identifier)
         self.set_magnitude(magnitude)
         self.set_deepness(deepness)

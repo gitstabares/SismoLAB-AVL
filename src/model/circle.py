@@ -1,15 +1,16 @@
 from .point import Point
 
 
-class Circle(tuple):
-    def __new__(cls, center:Point, radius:float):
-        return super().__new__(cls,[center,radius])
+class Circle():
+    def __init__(self, center:Point, radius:float):
+        self._center = center
+        self._radius = radius
 
     def __repr__(self):
         return f"(C={self.get_center()},R={self.get_radius()})"
 
     def get_center(self) -> Point:
-        return self[0]
+        return self._center
 
     def get_radius(self) -> float:
-        return self[1]
+        return self._radius

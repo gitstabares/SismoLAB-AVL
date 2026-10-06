@@ -1,5 +1,6 @@
-from .copy import *
+#from .copy import *
 from .serializer import Serializer
 from .decorators import *
+from .intensity_color_mapper import IntensityColorMapper
 
-__all__=['Serializer','copy','EventTrigger','OnEvent']
+__all__=['EventTrigger','OnEvent','IntensityColorMapper','Serializer']

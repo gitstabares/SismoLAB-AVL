@@ -1,3 +1,5 @@
+from warnings import catch_warnings
+
 from src.utils import *
 from .populated_zones import PopulatedZones
 from .event_tree import EventTree
@@ -6,7 +8,7 @@ from .key import Key
 from .report import Report
 import datetime as dt
 from collections import deque
-
+import copy
 
 class Scenario:
     """Manages seismic event trees and populated zones within a given tile size.
@@ -24,8 +26,8 @@ class Scenario:
         self.set_current_time(dt.datetime.now())
         self.reports_queue = deque()
         self.set_burst_mode(False)
-        self.undo_queue = deque(maxlen=3)
-        self.redo_deque = deque(maxlen=3)
+        self.undo_queue = deque()
+        self.redo_deque = deque()
         
     def get_AVL(self) -> EventTree:
         return self._AVL
@@ -69,7 +71,11 @@ class Scenario:
     def set_burst_mode(self, value: bool):
         self._burst_mode = value
         while self.reports_queue:
-            self.insert_report(self.reports_queue.popleft())
+            try:
+                self.insert_report(self.reports_queue.popleft())
+            except:
+                pass
+            self.refresh()
 
     def archive_event(self, key:Key):
         """Archive events from the trees by a given key.
@@ -87,14 +93,14 @@ class Scenario:
         tree.add_node(node)
         self.get_archived_AVL_trees().add(tree)
 
-    @EventTrigger
     def add_report(self, report:Report):
         if self.get_burst_mode():
+            self.commit()
             self.reports_queue.append(report)
+            self.refresh()
         else:
             self.insert_report(report)
 
-    @EventTrigger
     def insert_report(self, report:Report):
         """Insert or update a report in the scenario's event trees.
 
@@ -113,18 +119,21 @@ class Scenario:
 
         for tree in self.get_archived_AVL_trees():
             if new_event in tree:
+                self.commit()
                 self.get_AVL().add_node(Event(report))
                 self.get_BST().add_node(Event(report))
                 self.get_archived_AVL_trees().discard(tree)
                 return
         
         if new_event not in self.get_AVL():
+            self.commit()
             self.get_AVL().add_node(Event(report))
             self.get_BST().add_node(Event(report))
         else:
             actual_AVL = self.get_AVL().get_node(report.get_key())
             actual_BST = self.get_BST().get_node(report.get_key())
             if new_event.get_review() > actual_AVL.get_review():
+                self.commit()
                 if new_event.get_key() != actual_AVL.get_key():
                     self.get_AVL().pop_node(report.get_key())
                     self.get_BST().pop_node(report.get_key())
@@ -139,17 +148,19 @@ class Scenario:
                 self.get_BST().update_costly_access()
             elif new_event.get_review() == actual_AVL.get_review():
                 if new_event.get_data() == actual_AVL.get_data():
+                    self.commit()
                     actual_AVL.set_revised(True)
                     actual_BST.set_revised(True)
                     if not actual_AVL.get_station():
                         actual_AVL.set_station(new_event.get_station())
                         actual_BST.set_station(new_event.get_station())
+                    raise Exception("Event with the same data was confirmed in the tree as revised.")
                 else:
                     raise Exception("There's an event in the tree with different data and same review.")
             else:
                 raise Exception("Report's information too old. There's newer information in the tree.")
+        self.refresh()
 
-    @EventTrigger
     def delete_event(self, identifier):
         """Delete an event by its identifier.
 
@@ -159,6 +170,7 @@ class Scenario:
         self.get_AVL().pop_node(identifier)
         self.get_BST().pop_node(identifier)
         self.get_eliminated_ids().add(identifier)
+        self.refresh()
 
     def get_AVL_JSON(self):
         return self.get_AVL().get_echart_dict()
@@ -224,12 +236,28 @@ class Scenario:
         self.get_BST().set_L(L)
 
     def commit(self):
-        self.undo_queue.append(copy(self))
+        self.undo_queue.append(copy.deepcopy(self))
+        self.redo_deque.clear()
+        return
 
-    def undo(self):
-        self.redo_deque.append(copy(self))
-        return self.undo_queue.popleft()
+    def undo(self) -> Scenario:
+        new = self.undo_queue.pop()
+        new.redo_deque.append(self)
+        return new
 
-    def redo(self):
-        self.undo_queue.append(copy(self))
-        return self.redo_deque.popleft()
+    def redo(self) -> Scenario:
+        new = self.redo_deque.pop()
+        new.undo_queue.append(self)
+        return new
+
+    @property
+    def can_undo(self):
+        return len(self.undo_queue) > 0
+
+    @property
+    def can_redo(self):
+        return len(self.redo_deque) > 0
+
+    @EventTrigger
+    def refresh(self):
+        pass

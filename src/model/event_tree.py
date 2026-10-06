@@ -140,7 +140,7 @@ class EventTree(Tree):
                 'children': [
                     _get_data(node.get_left()), 
                     _get_data(node.get_right())
-                ],
+                ] if node.get_left() or node.get_right() else [],
                 'itemStyle': {
                         'color': color_magnitude.interpolate(node.get_key().get_priority()),  # Node color (blue)
                 },

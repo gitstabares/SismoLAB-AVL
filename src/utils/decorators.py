@@ -27,10 +27,13 @@ def EventTrigger(function):
             Any: The response from the original function.
         """
         response = None
+        '''        
         try:
             response = function(*args, **kwargs)
         except Exception as e:
             ui.notify(e)
+        '''
+        response = function(*args, **kwargs)
         # Notify listeners only after the event function has completed.
         for subscriber in wrapper.subscribers:
             subscriber()

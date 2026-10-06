@@ -1,7 +1,7 @@
-class Point(tuple):
+class Point():
     """A two-dimensional point with coordinates clamped to the 0-1000 range."""
 
-    def __new__(cls, x:float, y:float):
+    def __init__(self, x:float, y:float):
         """Create a Point object, validating bounds.
 
         Args:
@@ -16,15 +16,16 @@ class Point(tuple):
         """
         if x is None or y is None:
             raise Exception("No coordinate can be none")
-        return super().__new__(cls, [round(x, 1), round(y, 1)])
+        self._x = x
+        self._y = y
 
     def get_x(self) -> float:
         """float: The x-coordinate of the point."""
-        return self[0]
+        return self._x
 
     def get_y(self) -> float:
         """float: The y-coordinate of the point."""
-        return self[1]
+        return self._y
 
     def get_length(self) -> float:
         """Return the Euclidean distance from the origin.
@@ -33,6 +34,9 @@ class Point(tuple):
             float: The distance from the origin (0, 0).
         """
         return (self.get_x()**2 + self.get_y()**2)**(1/2)
+
+    def __eq__(self, other:Point) -> bool:
+        return self.get_x() == other.get_x() and self.get_y() == other.get_y()
     
     def __add__(self, other:Point):
         """Return the coordinate-wise sum as a new point.

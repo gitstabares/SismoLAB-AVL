@@ -24,6 +24,8 @@ class Tree:
 
     def get_node(self, key:Key) -> Node:
         for node in self.get_levelorder_traverse():
+            if len(self.get_levelorder_traverse()) == 9:
+                pass
             if node.get_key() == key:
                 return node
 
@@ -46,14 +48,14 @@ class Tree:
                     root.set_left(new_node)
                     return new_node
                 else:
-                    _add_node(root.get_left())
+                    return _add_node(root.get_left())
             elif root.get_key() < new_node.get_key():
                 if not root.get_right():
                     new_node.set_parent(root)
                     root.set_right(new_node)
                     return new_node
                 else:
-                    _add_node(root.get_right())
+                    return _add_node(root.get_right())
         return _add_node(self.get_root())
 
     def pop_node(self, key:Key) -> Node:
