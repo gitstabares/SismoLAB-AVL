@@ -94,6 +94,14 @@ class Serializer:
                     "items": [convert(x) for x in obj]
                 }
 
+            # Sets
+            if isinstance(obj, set):
+                return {
+                    "$id": identity,
+                    "$type": "set",
+                    "items": [convert(x) for x in obj]
+                }
+
             # Dictionaries
             if isinstance(obj, dict):
                 return {
@@ -173,6 +181,12 @@ class Serializer:
                 obj_deque = deque([rebuild(item) for item in element["items"]])
                 memo[element["$id"]] = obj_deque
                 return obj_deque
+
+            # Sets
+            if obj_type == "set":
+                obj_set = set([rebuild(item) for item in element["items"]])
+                memo[element["$id"]] = obj_set
+                return obj_set
             
             # Dictionaries
             if obj_type == "dict":

@@ -1,5 +1,6 @@
+import json
 from nicegui import ui
-from nicegui.events import EChartComponentClickEventArguments, ValueChangeEventArguments
+from nicegui.events import ValueChangeEventArguments
 from src.model import *
 from src.utils import *
 import datetime as dt
@@ -19,6 +20,9 @@ reports = [
 ]
 
 global_state = Scenario()
+serializer = Serializer()
+for _type in (Circle,EventTree,Event,Key,Node,Point,PopulatedZones,Report,Scenario,Tree,IntensityColorMapper):
+    serializer.register(_type)
 
 for report in reports:
     global_state.add_report(report)
@@ -103,22 +107,36 @@ def header():
                 e.sender.classes('font-effect-fire-animation')
             else:
                 e.sender._classes.clear()
-            global_state.get_AVL().set_autobalance(not e.value)
+            global_state.set_stress_mode(e.value)
+
+        async def upload(e):
+            global global_state
+            file = await e.file.text()
+            ui.notify('The file was uploaded successfully')
+            new_global_state = serializer.deserialize(json.loads(file))
+            global_state.__dict__.update(new_global_state.__dict__)
+            global_state.refresh()
 
         ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_W(e.value)).classes('w-50').tooltip('Temporal margin for aftershocks')
         ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_R(e.value)).classes('w-50').tooltip('Spatial margin for aftershocks')
         ui.number(prefix='L : ',min=0,value=3,validation={'L must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_L(e.value)).classes('w-50').tooltip('Costly access limit')
-        ui.button(icon='undo',on_click=lambda e: global_state.undo()).props('round').tooltip('Undo').bind_enabled_from(global_state,'can_undo')
-        ui.button(icon='redo',on_click=lambda e: global_state.redo()).props('round').tooltip('Redo').bind_enabled_from(global_state,'can_redo')
+        ui.button(icon='undo',on_click=lambda: global_state.undo()).props('round').tooltip('Undo').bind_enabled_from(global_state,'can_undo')
+        ui.button(icon='redo',on_click=lambda: global_state.redo()).props('round').tooltip('Redo').bind_enabled_from(global_state,'can_redo')
+        ui.button(icon='save',on_click=lambda: ui.download.content(json.dumps(serializer.serialize(global_state),indent=4),'savestate.json')).props('round').tooltip('Save state')
+        ui.upload(on_upload=lambda e:upload(e),on_rejected=lambda:ui.notify("The file couldn't be uploaded"),auto_upload=True)
 
 def show_event(e):
+
     identifier = e.name[4:]
     nodo = global_state.get_event_AVL(int(identifier))
     with ui.dialog() as dialog,ui.card(align_items='end'):
         with ui.list().props('dense separator'):
             for k,v in nodo.__dict__.items():
                 ui.item(f'{k[1:].capitalize()}:{str(v)}')
-        ui.button(icon='delete',on_click=lambda e:global_state.delete_event(nodo.get_key())).props('round')
+        def delete_and_close(node:Node):
+            global_state.delete_event(node.get_key())
+            dialog.close()
+        ui.button(icon='delete',on_click=lambda e:delete_and_close(nodo)).props('round')
     dialog.open()
 
 def AVL_tree():
@@ -141,7 +159,7 @@ def BST_tree():
             ui.icon('account_tree', size='sm').classes('text-cyan-400')
             ui.label('BST Tree').classes('title')
         with ui.card().classes('w-full bg-white h-full'):
-            bst_graph = ui.echart(global_state.get_BST_JSON()).classes('w-full h-full').on_click(show_event)
+            bst_graph = ui.echart(global_state.get_BST_JSON()).classes('w-full h-full').on_click(show_event).on('mouseover',lambda:ui.notify('Pinga'))
 
     @OnEvent(Scenario.refresh)
     def update_BST_tree():
@@ -265,162 +283,6 @@ def main():
         reports_queue()
         events_map()
         add_event_form()
-
-    with ui.row().classes('w-full gap-3 grid grid-cols-1 lg:grid-cols-12 mb-3 items-center'):
-        
-        # Station Status list (Left - 3 cols)
-        with ui.column().classes('dashboard-card p-2 col-span-3 flex flex-col gap-1.5'):
-            for name, ms, status, col in [('EST-01 Alpha', '18 ms', 'ÓPTIMA', 'green'), 
-                                        ('EST-02 Norte', '24 ms', 'ÓPTIMA', 'green'), 
-                                        ('EST-03 Costa', '91 ms', 'INESTABLE', 'orange'), 
-                                        ('EST-04 Cordillera', '31 ms', 'ÓPTIMA', 'green')]:
-                with ui.row().classes('w-full justify-between items-center bg-[#070a0f] p-1.5 rounded border border-slate-800'):
-                    with ui.row().classes('items-center gap-2'):
-                        ui.icon('sensors', size='xs').classes('text-cyan-400')
-                        with ui.column().classes('gap-0'):
-                            ui.label(name).classes('text-xs font-bold text-white')
-                            ui.label(status).classes(f'text-[9px] text-{col}-400')
-                    ui.label(ms).classes('text-xs font-mono text-slate-400')
-
-        # Telemetry Selected Details & Complexity Cost (Center - 6 cols)
-        with ui.column().classes('dashboard-card p-3 col-span-6 flex flex-row items-center justify-between'):
-            with ui.column().classes('gap-1'):
-                ui.label('MODO SELECCIONADO').classes('text-[10px] text-slate-400')
-                ui.badge('PENDIENTE', color='orange').classes('text-[10px]')
-                ui.label('K=(P3, M6.2, I148)').classes('text-sm font-bold font-mono text-cyan-400')
-                with ui.row().classes('gap-4 text-[11px] text-slate-400'):
-                    ui.label('evento: S-148 / Andina Sur')
-                    ui.label('zona: Z-04 Cordillera')
-                    ui.label('réplica: S-144 (r+1)')
-
-            with ui.row().classes('gap-6'):
-                with ui.column().classes('gap-0 items-center bg-[#070a0f] p-2 rounded border border-slate-800'):
-                    ui.label('MAGNITUD').classes('text-[9px] text-slate-400')
-                    ui.label('6.2 Mw').classes('text-xs font-bold text-orange-400')
-                with ui.column().classes('gap-0 items-center bg-[#070a0f] p-2 rounded border border-slate-800'):
-                    ui.label('PROFUNDIDAD').classes('text-[9px] text-slate-400')
-                    ui.label('18.4 km').classes('text-xs font-bold text-white')
-                with ui.column().classes('gap-0 items-center bg-[#070a0f] p-2 rounded border border-slate-800'):
-                    ui.label('LATENCIA').classes('text-[9px] text-slate-400')
-                    ui.label('42 ms').classes('text-xs font-bold text-emerald-400')
-                with ui.column().classes('gap-0 items-center bg-[#070a0f] p-2 rounded border border-slate-800'):
-                    ui.label('RÉPLICAS').classes('text-[9px] text-slate-400')
-                    ui.label('83').classes('text-xs font-bold text-cyan-400')
-
-        # Search cost complexity (Right - 3 cols)
-        with ui.column().classes('dashboard-card p-3 col-span-3 flex flex-col justify-center'):
-            with ui.row().classes('w-full justify-between items-center mb-1'):
-                ui.label('COSTO DE BÚSQUEDA').classes('text-[10px] text-slate-400')
-                ui.label('4 comparaciones').classes('text-[10px] text-slate-500')
-            ui.label('O(log n)').classes('text-2xl font-bold font-mono text-cyan-400')
-            ui.label('óptimo: s 5  BST: 7').classes('text-[10px] text-slate-400 mt-1')
-
-    with ui.row().classes('w-full gap-3 grid grid-cols-1 lg:grid-cols-12'):
-        
-        # 4. QUERIES, COST & ROLLBACK INSPECTION PANEL (Bottom - 12 cols)
-        with ui.column().classes('dashboard-card p-3 col-span-12 flex flex-col'):
-            with ui.row().classes('w-full justify-between items-center mb-2'):
-                with ui.row().classes('items-center gap-1'):
-                    ui.icon('search', size='xs').classes('text-cyan-400')
-                    ui.label('Consultas, costo y retroceso').classes('text-xs font-bold text-cyan-400 tracking-wider')
-                with ui.row().classes('items-center gap-3'):
-                    with ui.row().classes('items-center gap-1 bg-[#16a34a]/20 px-2 py-0.5 rounded border border-emerald-600/50'):
-                        ui.icon('check', size='xs').classes('text-emerald-400')
-                        ui.label('ÍNDICE CONSISTENTE').classes('text-[10px] font-bold text-emerald-400')
-                    ui.label('Última evaluación 01:41:37 UTC · 12 ms').classes('text-[10px] text-slate-400 font-mono')
-
-            # Advanced queries search row
-            with ui.row().classes('w-full gap-3 items-center bg-[#070a0f] p-2 rounded border border-slate-800 mb-3'):
-                ui.label('CONSULTAS AVANZADAS').classes('text-[10px] font-bold text-slate-400')
-                with ui.row().classes('gap-2 items-center flex-1'):
-                    ui.chip('Magnitud ≥ 4.0 Mw', icon='filter_alt').props('color=dark text-color=orange outline').classes('text-[10px]')
-                    ui.chip('estado: Pendiente', icon='filter_alt').props('color=dark text-color=cyan outline').classes('text-[10px]')
-                    ui.chip('ventana: 24 h', icon='schedule').props('color=dark text-color=slate-300 outline').classes('text-[10px]')
-                    ui.chip('zona: Andino', icon='place').props('color=dark text-color=slate-300 outline').classes('text-[10px]')
-                ui.button('Ejecutar', icon='play_arrow', on_click=lambda: ui.notify('Query executed successfully')).classes('bg-cyan-950 text-cyan-300 text-xs border border-cyan-800')
-
-            # Three split columns at the bottom
-            with ui.row().classes('w-full gap-3 grid grid-cols-1 lg:grid-cols-12'):
-                
-                # Left: SQL / AVL Query results table (4 cols)
-                with ui.column().classes('col-span-4 bg-[#070a0f] p-2.5 rounded border border-slate-800 gap-2'):
-                    ui.label('SEARCH AVL WHERE Mc4.0 AND status=PEND AND tc24h').classes('text-[10px] font-mono text-slate-400')
-                    
-                    # Results table mockup
-                    with ui.row().classes('w-full justify-between text-[10px] font-bold text-slate-500 border-b border-slate-800 pb-1'):
-                        ui.label('PRIORIDAD / CLAVE')
-                        ui.label('ZONA')
-                        ui.label('ESTADO')
-                        ui.label('COSTO')
-                    
-                    for p, clave, zona, estado, costo in [('P3', '(6.2, 148)', 'Cordillera', 'Pendiente', '4 pasos'),
-                                                        ('P2', '(5.4, 149)', 'Costa', 'Pendiente', '5 pasos'),
-                                                        ('P2', '(4.3, 144)', 'Norte', 'Pendiente', '3 pasos'),
-                                                        ('P2', '(4.2, 136)', 'Andina', 'Pendiente', '6 pasos')]:
-                        with ui.row().classes('w-full justify-between items-center text-[11px] py-0.5'):
-                            with ui.row().classes('gap-1 items-center'):
-                                ui.badge(p, color='orange' if '3' in p else 'yellow').classes('text-[9px]')
-                                ui.label(clave).classes('font-mono text-cyan-400')
-                            ui.label(zona).classes('text-slate-400')
-                            ui.label(estado).classes('text-orange-400 text-[10px]')
-                            ui.label(costo).classes('font-mono text-slate-300')
-                    
-                    ui.label('4 resultados de 27 · 10 nodos podados').classes('text-[9px] text-slate-500 mt-1')
-
-                # Middle: Cost Auditor (4 cols)
-                with ui.column().classes('col-span-4 bg-[#070a0f] p-2.5 rounded border border-slate-800 gap-2'):
-                    with ui.row().classes('w-full justify-between items-center'):
-                        ui.label('AUDITOR DE COSTO').classes('text-[10px] font-bold text-slate-400')
-                        ui.badge('1 ANOMALÍA', color='orange').classes('text-[9px]')
-                    
-                    with ui.row().classes('w-full justify-between gap-2'):
-                        with ui.column().classes('flex-1 bg-[#111827] p-2 rounded border border-slate-800'):
-                            ui.label('AVL ACTUAL').classes('text-[9px] text-slate-400')
-                            ui.label('h=4  O(log n)').classes('text-xs font-bold text-cyan-400')
-                        with ui.column().classes('flex-1 bg-[#111827] p-2 rounded border border-slate-800'):
-                            ui.label('EST. REFERENCIA').classes('text-[9px] text-slate-400')
-                            ui.label('h=7  O(n)').classes('text-xs font-bold text-slate-400')
-
-                    with ui.column().classes('gap-1.5 w-full'):
-                        with ui.row().classes('w-full justify-between items-center text-[10px]'):
-                            ui.label('Buscar S-140')
-                            ui.label('4 pasos · óptimo').classes('font-mono text-emerald-400')
-                        with ui.row().classes('w-full justify-between items-center text-[10px]'):
-                            ui.label('Rango Mn4.0')
-                            ui.label('6 pasos · aceptable').classes('font-mono text-cyan-400')
-                        with ui.row().classes('w-full justify-between items-center text-[10px]'):
-                            ui.label('Rama derecha / BST')
-                            ui.label('9 pasos · costoso').classes('font-mono text-orange-400')
-                    
-                    with ui.row().classes('w-full items-center justify-between bg-orange-950/40 p-2 rounded border border-orange-900/50 mt-1'):
-                        with ui.row().classes('items-center gap-1'):
-                            ui.icon('warning', size='xs').classes('text-orange-400')
-                            ui.label('ACCESO COSTOSO: S-130 excede umbral T=8 en comparación EST.').classes('text-[9px] text-orange-300')
-                        ui.label('+125%').classes('text-xs font-bold text-orange-400')
-                    
-                    ui.label('muestra: últimas 64 operaciones · p95=6 pasos · rotaciones=11').classes('text-[9px] text-slate-500')
-
-                # Right: Rollback chronological stack & snapshot rollback (4 cols)
-                with ui.column().classes('col-span-4 bg-[#070a0f] p-2.5 rounded border border-slate-800 gap-2'):
-                    with ui.row().classes('w-full justify-between items-center'):
-                        ui.label('PILA CRONOLÓGICA DE RETROCESO').classes('text-[10px] font-bold text-slate-400')
-                        with ui.row().classes('gap-1'):
-                            ui.button('Deshacer 1', on_click=lambda: ui.notify('Reverted 1 step')).classes('bg-slate-800 text-slate-200 text-[9px] px-2 py-0.5')
-                            ui.button('Restaurar v143', on_click=lambda: ui.notify('Restored snapshot v143')).classes('bg-cyan-950 text-cyan-300 text-[9px] px-2 py-0.5 border border-cyan-800')
-
-                    with ui.column().classes('gap-1 w-full max-h-[110px] overflow-y-auto'):
-                        for time_str, action in [('01:41:32', 'ROTACIÓN RL  pivot S-144 · raíz S-148'),
-                                                ('01:39:05', 'UPDATE  S-148 prioridad P2 → P3'),
-                                                ('01:37:22', 'INSERT  K=(3,6.2,148) · EST-83'),
-                                                ('01:32:55', 'ROTACIÓN LL  subárbol S-135 · BF +2'),
-                                                ('01:28:49', 'REVISADO  S-141 · operador OP-07')]:
-                            with ui.row().classes('w-full justify-between items-center text-[10px] bg-[#111827] px-2 py-1 rounded border border-slate-800'):
-                                ui.label(time_str).classes('font-mono text-slate-400')
-                                ui.label(action).classes('text-slate-300')
-
-                    with ui.row().classes('w-full justify-between items-center mt-1 pt-1 border-t border-slate-800'):
-                        ui.label('stack depth 18 / 64 · persistencia cada 5 uvs').classes('text-[9px] text-slate-500')
-                        ui.button('ROLLBACK SEGURO', icon='history', on_click=lambda: ui.notify('Secure rollback executed')).classes('bg-emerald-950 text-emerald-400 text-[10px] border border-emerald-800 px-2 py-1')
 
 if __name__ in {"__main__", "__mp_main__"}:
     main()

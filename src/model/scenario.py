@@ -75,7 +75,7 @@ class Scenario:
                 self.insert_report(self.reports_queue.popleft())
             except:
                 pass
-            self.refresh()
+        self.refresh()
 
     def archive_event(self, key:Key):
         """Archive events from the trees by a given key.
@@ -167,6 +167,7 @@ class Scenario:
         Args:
             identifier (Any): The identifier of the event to delete.
         """
+        self.commit()
         identifier = key.get_identifier()
         self.get_AVL().pop_node(key)
         self.get_BST().pop_node(key)
@@ -208,6 +209,7 @@ class Scenario:
             value (bool): Whether autobalance should be enabled.
         """
         self.get_AVL().set_autobalance(not value)
+        self.refresh()
 
     def set_W(self, W):
         """Set the W threshold for both trees.
@@ -217,6 +219,7 @@ class Scenario:
         """
         self.get_AVL().set_W(W)
         self.get_BST().set_W(W)
+        self.refresh()
 
     def set_R(self, R):
         """Set the R radius for both trees.
@@ -226,6 +229,7 @@ class Scenario:
         """
         self.get_AVL().set_R(R)
         self.get_BST().set_R(R)
+        self.refresh()
 
     def set_L(self, L):
         """Set the L threshold for both trees.
@@ -235,6 +239,7 @@ class Scenario:
         """
         self.get_AVL().set_L(L)
         self.get_BST().set_L(L)
+        self.refresh()
 
     def commit(self):
         self.undo_queue.append((copy.deepcopy(self._AVL),

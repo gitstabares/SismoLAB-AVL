@@ -145,7 +145,7 @@ class EventTree(Tree):
                         'color': color_magnitude.interpolate(node.get_key().get_priority()),  # Node color (blue)
                 },
                 'symbol': 'diamond' if node.get_costly_access() else 'circle',
-                'key':str(node.get_key())
+                'tooltip':str(node.get_key())
             }
             
         return {
