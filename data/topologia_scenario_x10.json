@@ -1,0 +1,1066 @@
+{
+    "$id": 140172836004848,
+    "$type": "object",
+    "class": "src.model.scenario.Scenario",
+    "attributes": {
+        "_AVL": {
+            "$id": 140172836004896,
+            "$type": "object",
+            "class": "src.model.event_tree.EventTree",
+            "attributes": {
+                "_root": {
+                    "$id": 140172836005472,
+                    "$type": "object",
+                    "class": "src.model.event.Event",
+                    "attributes": {
+                        "_identifier": 7202,
+                        "_magnitude": 4.7,
+                        "_deepness": 63.8,
+                        "_epicenter": {
+                            "$id": 140172836002976,
+                            "$type": "object",
+                            "class": "src.model.point.Point",
+                            "attributes": {
+                                "_x": 735.6,
+                                "_y": 245.9
+                            }
+                        },
+                        "_date": {
+                            "$type": "datetime",
+                            "value": "2026-10-04T04:28:00"
+                        },
+                        "_station": "Estacion-Cauca",
+                        "_is_populated": false,
+                        "_review": 1,
+                        "_key": {
+                            "$id": 140172836005424,
+                            "$type": "object",
+                            "class": "src.model.key.Key",
+                            "attributes": {
+                                "_priority": 2,
+                                "_magnitude": 4.7,
+                                "_identifier": 7202
+                            }
+                        },
+                        "_left": {
+                            "$id": 140172836005568,
+                            "$type": "object",
+                            "class": "src.model.event.Event",
+                            "attributes": {
+                                "_identifier": 7205,
+                                "_magnitude": 3.8,
+                                "_deepness": 38.9,
+                                "_epicenter": {
+                                    "$id": 140172836003648,
+                                    "$type": "object",
+                                    "class": "src.model.point.Point",
+                                    "attributes": {
+                                        "_x": 395.2,
+                                        "_y": 165.6
+                                    }
+                                },
+                                "_date": {
+                                    "$type": "datetime",
+                                    "value": "2026-10-04T13:53:00"
+                                },
+                                "_station": "Estacion-Tatama",
+                                "_is_populated": false,
+                                "_review": 1,
+                                "_key": {
+                                    "$id": 140172836005760,
+                                    "$type": "object",
+                                    "class": "src.model.key.Key",
+                                    "attributes": {
+                                        "_priority": 1,
+                                        "_magnitude": 3.8,
+                                        "_identifier": 7205
+                                    }
+                                },
+                                "_left": {
+                                    "$id": 140172836006960,
+                                    "$type": "object",
+                                    "class": "src.model.event.Event",
+                                    "attributes": {
+                                        "_identifier": 7203,
+                                        "_magnitude": 2.9,
+                                        "_deepness": 12.6,
+                                        "_epicenter": {
+                                            "$id": 140172836003168,
+                                            "$type": "object",
+                                            "class": "src.model.point.Point",
+                                            "attributes": {
+                                                "_x": 85.7,
+                                                "_y": 815.4
+                                            }
+                                        },
+                                        "_date": {
+                                            "$type": "datetime",
+                                            "value": "2026-10-04T07:39:00"
+                                        },
+                                        "_station": "Estacion-Quindio",
+                                        "_is_populated": false,
+                                        "_review": 1,
+                                        "_key": {
+                                            "$id": 140172836006912,
+                                            "$type": "object",
+                                            "class": "src.model.key.Key",
+                                            "attributes": {
+                                                "_priority": 1,
+                                                "_magnitude": 2.9,
+                                                "_identifier": 7203
+                                            }
+                                        },
+                                        "_left": {
+                                            "$id": 140172836151536,
+                                            "$type": "object",
+                                            "class": "src.model.event.Event",
+                                            "attributes": {
+                                                "_identifier": 7210,
+                                                "_magnitude": 1.6,
+                                                "_deepness": 3.9,
+                                                "_epicenter": {
+                                                    "$id": 140172836004704,
+                                                    "$type": "object",
+                                                    "class": "src.model.point.Point",
+                                                    "attributes": {
+                                                        "_x": 625.7,
+                                                        "_y": 575.9
+                                                    }
+                                                },
+                                                "_date": {
+                                                    "$type": "datetime",
+                                                    "value": "2026-10-05T15:59:00"
+                                                },
+                                                "_station": "Estacion-Arma",
+                                                "_is_populated": true,
+                                                "_review": 1,
+                                                "_key": {
+                                                    "$id": 140172836151584,
+                                                    "$type": "object",
+                                                    "class": "src.model.key.Key",
+                                                    "attributes": {
+                                                        "_priority": 1,
+                                                        "_magnitude": 1.6,
+                                                        "_identifier": 7210
+                                                    }
+                                                },
+                                                "_left": null,
+                                                "_right": null,
+                                                "_parent": {
+                                                    "$ref": 140172836006960
+                                                },
+                                                "_revised": false,
+                                                "_aftershocks": {
+                                                    "$id": 140172836188160,
+                                                    "$type": "list",
+                                                    "items": []
+                                                },
+                                                "_costly_access": false
+                                            }
+                                        },
+                                        "_right": null,
+                                        "_parent": {
+                                            "$ref": 140172836005568
+                                        },
+                                        "_revised": false,
+                                        "_aftershocks": {
+                                            "$id": 140172835790464,
+                                            "$type": "list",
+                                            "items": []
+                                        },
+                                        "_costly_access": false
+                                    }
+                                },
+                                "_right": {
+                                    "$id": 140172836009456,
+                                    "$type": "object",
+                                    "class": "src.model.event.Event",
+                                    "attributes": {
+                                        "_identifier": 7207,
+                                        "_magnitude": 4.2,
+                                        "_deepness": 8.7,
+                                        "_epicenter": {
+                                            "$id": 140172836004032,
+                                            "$type": "object",
+                                            "class": "src.model.point.Point",
+                                            "attributes": {
+                                                "_x": 295.4,
+                                                "_y": 705.6
+                                            }
+                                        },
+                                        "_date": {
+                                            "$type": "datetime",
+                                            "value": "2026-10-05T03:26:00"
+                                        },
+                                        "_station": "Estacion-Otún",
+                                        "_is_populated": true,
+                                        "_review": 1,
+                                        "_key": {
+                                            "$id": 140172836009504,
+                                            "$type": "object",
+                                            "class": "src.model.key.Key",
+                                            "attributes": {
+                                                "_priority": 1,
+                                                "_magnitude": 4.2,
+                                                "_identifier": 7207
+                                            }
+                                        },
+                                        "_left": null,
+                                        "_right": null,
+                                        "_parent": {
+                                            "$ref": 140172836005568
+                                        },
+                                        "_revised": false,
+                                        "_aftershocks": {
+                                            "$id": 140172836189760,
+                                            "$type": "list",
+                                            "items": []
+                                        },
+                                        "_costly_access": false
+                                    }
+                                },
+                                "_parent": {
+                                    "$ref": 140172836005472
+                                },
+                                "_revised": false,
+                                "_aftershocks": {
+                                    "$id": 140172836108352,
+                                    "$type": "list",
+                                    "items": []
+                                },
+                                "_costly_access": false
+                            }
+                        },
+                        "_right": {
+                            "$id": 140173284779280,
+                            "$type": "object",
+                            "class": "src.model.event.Event",
+                            "attributes": {
+                                "_identifier": 7201,
+                                "_magnitude": 6.4,
+                                "_deepness": 22.7,
+                                "_epicenter": {
+                                    "$id": 140172836002784,
+                                    "$type": "object",
+                                    "class": "src.model.point.Point",
+                                    "attributes": {
+                                        "_x": 275.5,
+                                        "_y": 685.3
+                                    }
+                                },
+                                "_date": {
+                                    "$type": "datetime",
+                                    "value": "2026-10-04T02:17:00"
+                                },
+                                "_station": "Estacion-Nevado",
+                                "_is_populated": true,
+                                "_review": 1,
+                                "_key": {
+                                    "$id": 140172838297024,
+                                    "$type": "object",
+                                    "class": "src.model.key.Key",
+                                    "attributes": {
+                                        "_priority": 3,
+                                        "_magnitude": 6.4,
+                                        "_identifier": 7201
+                                    }
+                                },
+                                "_left": {
+                                    "$id": 140172836005184,
+                                    "$type": "object",
+                                    "class": "src.model.event.Event",
+                                    "attributes": {
+                                        "_identifier": 7204,
+                                        "_magnitude": 5.8,
+                                        "_deepness": 26.4,
+                                        "_epicenter": {
+                                            "$id": 140172836003360,
+                                            "$type": "object",
+                                            "class": "src.model.point.Point",
+                                            "attributes": {
+                                                "_x": 615.8,
+                                                "_y": 555.7
+                                            }
+                                        },
+                                        "_date": {
+                                            "$type": "datetime",
+                                            "value": "2026-10-04T10:46:00"
+                                        },
+                                        "_station": "Estacion-Risaralda",
+                                        "_is_populated": true,
+                                        "_review": 2,
+                                        "_key": {
+                                            "$id": 140172836005280,
+                                            "$type": "object",
+                                            "class": "src.model.key.Key",
+                                            "attributes": {
+                                                "_priority": 3,
+                                                "_magnitude": 5.8,
+                                                "_identifier": 7204
+                                            }
+                                        },
+                                        "_left": {
+                                            "$id": 140172836143616,
+                                            "$type": "object",
+                                            "class": "src.model.event.Event",
+                                            "attributes": {
+                                                "_identifier": 7208,
+                                                "_magnitude": 5.4,
+                                                "_deepness": 92.3,
+                                                "_epicenter": {
+                                                    "$id": 140172836004224,
+                                                    "$type": "object",
+                                                    "class": "src.model.point.Point",
+                                                    "attributes": {
+                                                        "_x": 475.9,
+                                                        "_y": 895.2
+                                                    }
+                                                },
+                                                "_date": {
+                                                    "$type": "datetime",
+                                                    "value": "2026-10-05T06:37:00"
+                                                },
+                                                "_station": "Estacion-Chinchina",
+                                                "_is_populated": false,
+                                                "_review": 2,
+                                                "_key": {
+                                                    "$id": 140172836143664,
+                                                    "$type": "object",
+                                                    "class": "src.model.key.Key",
+                                                    "attributes": {
+                                                        "_priority": 2,
+                                                        "_magnitude": 5.4,
+                                                        "_identifier": 7208
+                                                    }
+                                                },
+                                                "_left": null,
+                                                "_right": null,
+                                                "_parent": {
+                                                    "$ref": 140172836005184
+                                                },
+                                                "_revised": false,
+                                                "_aftershocks": {
+                                                    "$id": 140172836188992,
+                                                    "$type": "list",
+                                                    "items": []
+                                                },
+                                                "_costly_access": false
+                                            }
+                                        },
+                                        "_right": null,
+                                        "_parent": {
+                                            "$ref": 140173284779280
+                                        },
+                                        "_revised": false,
+                                        "_aftershocks": {
+                                            "$id": 140172836187968,
+                                            "$type": "list",
+                                            "items": [
+                                                {
+                                                    "$ref": 140172836151536
+                                                }
+                                            ]
+                                        },
+                                        "_costly_access": false
+                                    }
+                                },
+                                "_right": {
+                                    "$id": 140172836007056,
+                                    "$type": "object",
+                                    "class": "src.model.event.Event",
+                                    "attributes": {
+                                        "_identifier": 7206,
+                                        "_magnitude": 7.3,
+                                        "_deepness": 175.6,
+                                        "_epicenter": {
+                                            "$id": 140172836003840,
+                                            "$type": "object",
+                                            "class": "src.model.point.Point",
+                                            "attributes": {
+                                                "_x": 845.3,
+                                                "_y": 765.8
+                                            }
+                                        },
+                                        "_date": {
+                                            "$type": "datetime",
+                                            "value": "2026-10-04T17:24:00"
+                                        },
+                                        "_station": "Estacion-Tolima",
+                                        "_is_populated": false,
+                                        "_review": 3,
+                                        "_key": {
+                                            "$id": 140172836007152,
+                                            "$type": "object",
+                                            "class": "src.model.key.Key",
+                                            "attributes": {
+                                                "_priority": 3,
+                                                "_magnitude": 7.3,
+                                                "_identifier": 7206
+                                            }
+                                        },
+                                        "_left": {
+                                            "$id": 140172836145728,
+                                            "$type": "object",
+                                            "class": "src.model.event.Event",
+                                            "attributes": {
+                                                "_identifier": 7209,
+                                                "_magnitude": 6.6,
+                                                "_deepness": 48.6,
+                                                "_epicenter": {
+                                                    "$id": 140172836004464,
+                                                    "$type": "object",
+                                                    "class": "src.model.point.Point",
+                                                    "attributes": {
+                                                        "_x": 135.8,
+                                                        "_y": 375.4
+                                                    }
+                                                },
+                                                "_date": {
+                                                    "$type": "datetime",
+                                                    "value": "2026-10-05T11:48:00"
+                                                },
+                                                "_station": "Estacion-Samana",
+                                                "_is_populated": false,
+                                                "_review": 1,
+                                                "_key": {
+                                                    "$id": 140172836146208,
+                                                    "$type": "object",
+                                                    "class": "src.model.key.Key",
+                                                    "attributes": {
+                                                        "_priority": 3,
+                                                        "_magnitude": 6.6,
+                                                        "_identifier": 7209
+                                                    }
+                                                },
+                                                "_left": null,
+                                                "_right": null,
+                                                "_parent": {
+                                                    "$ref": 140172836007056
+                                                },
+                                                "_revised": false,
+                                                "_aftershocks": {
+                                                    "$id": 140172836188416,
+                                                    "$type": "list",
+                                                    "items": []
+                                                },
+                                                "_costly_access": false
+                                            }
+                                        },
+                                        "_right": null,
+                                        "_parent": {
+                                            "$ref": 140173284779280
+                                        },
+                                        "_revised": false,
+                                        "_aftershocks": {
+                                            "$id": 140172836191488,
+                                            "$type": "list",
+                                            "items": []
+                                        },
+                                        "_costly_access": false
+                                    }
+                                },
+                                "_parent": {
+                                    "$ref": 140172836005472
+                                },
+                                "_revised": false,
+                                "_aftershocks": {
+                                    "$id": 140172836188608,
+                                    "$type": "list",
+                                    "items": [
+                                        {
+                                            "$ref": 140172836009456
+                                        }
+                                    ]
+                                },
+                                "_costly_access": false
+                            }
+                        },
+                        "_parent": null,
+                        "_revised": false,
+                        "_aftershocks": {
+                            "$id": 140172836103104,
+                            "$type": "list",
+                            "items": []
+                        },
+                        "_costly_access": false
+                    }
+                },
+                "_autobalance": true,
+                "_W": 48,
+                "_R": 40,
+                "_L": 3
+            }
+        },
+        "_BST": {
+            "$id": 140172836004944,
+            "$type": "object",
+            "class": "src.model.event_tree.EventTree",
+            "attributes": {
+                "_root": {
+                    "$id": 140172837365056,
+                    "$type": "object",
+                    "class": "src.model.event.Event",
+                    "attributes": {
+                        "_identifier": 7201,
+                        "_magnitude": 6.4,
+                        "_deepness": 22.7,
+                        "_epicenter": {
+                            "$ref": 140172836002784
+                        },
+                        "_date": {
+                            "$type": "datetime",
+                            "value": "2026-10-04T02:17:00"
+                        },
+                        "_station": "Estacion-Nevado",
+                        "_is_populated": true,
+                        "_review": 1,
+                        "_key": {
+                            "$id": 140172835621536,
+                            "$type": "object",
+                            "class": "src.model.key.Key",
+                            "attributes": {
+                                "_priority": 3,
+                                "_magnitude": 6.4,
+                                "_identifier": 7201
+                            }
+                        },
+                        "_left": {
+                            "$id": 140172836006720,
+                            "$type": "object",
+                            "class": "src.model.event.Event",
+                            "attributes": {
+                                "_identifier": 7202,
+                                "_magnitude": 4.7,
+                                "_deepness": 63.8,
+                                "_epicenter": {
+                                    "$ref": 140172836002976
+                                },
+                                "_date": {
+                                    "$type": "datetime",
+                                    "value": "2026-10-04T04:28:00"
+                                },
+                                "_station": "Estacion-Cauca",
+                                "_is_populated": false,
+                                "_review": 1,
+                                "_key": {
+                                    "$id": 140172836006768,
+                                    "$type": "object",
+                                    "class": "src.model.key.Key",
+                                    "attributes": {
+                                        "_priority": 2,
+                                        "_magnitude": 4.7,
+                                        "_identifier": 7202
+                                    }
+                                },
+                                "_left": {
+                                    "$id": 140172836008928,
+                                    "$type": "object",
+                                    "class": "src.model.event.Event",
+                                    "attributes": {
+                                        "_identifier": 7203,
+                                        "_magnitude": 2.9,
+                                        "_deepness": 12.6,
+                                        "_epicenter": {
+                                            "$ref": 140172836003168
+                                        },
+                                        "_date": {
+                                            "$type": "datetime",
+                                            "value": "2026-10-04T07:39:00"
+                                        },
+                                        "_station": "Estacion-Quindio",
+                                        "_is_populated": false,
+                                        "_review": 1,
+                                        "_key": {
+                                            "$id": 140172836008784,
+                                            "$type": "object",
+                                            "class": "src.model.key.Key",
+                                            "attributes": {
+                                                "_priority": 1,
+                                                "_magnitude": 2.9,
+                                                "_identifier": 7203
+                                            }
+                                        },
+                                        "_left": {
+                                            "$id": 140172836270592,
+                                            "$type": "object",
+                                            "class": "src.model.event.Event",
+                                            "attributes": {
+                                                "_identifier": 7210,
+                                                "_magnitude": 1.6,
+                                                "_deepness": 3.9,
+                                                "_epicenter": {
+                                                    "$ref": 140172836004704
+                                                },
+                                                "_date": {
+                                                    "$type": "datetime",
+                                                    "value": "2026-10-05T15:59:00"
+                                                },
+                                                "_station": "Estacion-Arma",
+                                                "_is_populated": true,
+                                                "_review": 1,
+                                                "_key": {
+                                                    "$id": 140172836273376,
+                                                    "$type": "object",
+                                                    "class": "src.model.key.Key",
+                                                    "attributes": {
+                                                        "_priority": 1,
+                                                        "_magnitude": 1.6,
+                                                        "_identifier": 7210
+                                                    }
+                                                },
+                                                "_left": null,
+                                                "_right": null,
+                                                "_parent": {
+                                                    "$ref": 140172836008928
+                                                },
+                                                "_revised": false,
+                                                "_aftershocks": {
+                                                    "$id": 140172836189888,
+                                                    "$type": "list",
+                                                    "items": []
+                                                },
+                                                "_costly_access": false
+                                            }
+                                        },
+                                        "_right": {
+                                            "$id": 140172836005616,
+                                            "$type": "object",
+                                            "class": "src.model.event.Event",
+                                            "attributes": {
+                                                "_identifier": 7205,
+                                                "_magnitude": 3.8,
+                                                "_deepness": 38.9,
+                                                "_epicenter": {
+                                                    "$ref": 140172836003648
+                                                },
+                                                "_date": {
+                                                    "$type": "datetime",
+                                                    "value": "2026-10-04T13:53:00"
+                                                },
+                                                "_station": "Estacion-Tatama",
+                                                "_is_populated": false,
+                                                "_review": 1,
+                                                "_key": {
+                                                    "$id": 140172836006240,
+                                                    "$type": "object",
+                                                    "class": "src.model.key.Key",
+                                                    "attributes": {
+                                                        "_priority": 1,
+                                                        "_magnitude": 3.8,
+                                                        "_identifier": 7205
+                                                    }
+                                                },
+                                                "_left": null,
+                                                "_right": {
+                                                    "$id": 140172836153936,
+                                                    "$type": "object",
+                                                    "class": "src.model.event.Event",
+                                                    "attributes": {
+                                                        "_identifier": 7207,
+                                                        "_magnitude": 4.2,
+                                                        "_deepness": 8.7,
+                                                        "_epicenter": {
+                                                            "$ref": 140172836004032
+                                                        },
+                                                        "_date": {
+                                                            "$type": "datetime",
+                                                            "value": "2026-10-05T03:26:00"
+                                                        },
+                                                        "_station": "Estacion-Otún",
+                                                        "_is_populated": true,
+                                                        "_review": 1,
+                                                        "_key": {
+                                                            "$id": 140172836156384,
+                                                            "$type": "object",
+                                                            "class": "src.model.key.Key",
+                                                            "attributes": {
+                                                                "_priority": 1,
+                                                                "_magnitude": 4.2,
+                                                                "_identifier": 7207
+                                                            }
+                                                        },
+                                                        "_left": null,
+                                                        "_right": null,
+                                                        "_parent": {
+                                                            "$ref": 140172836005616
+                                                        },
+                                                        "_revised": false,
+                                                        "_aftershocks": {
+                                                            "$id": 140172836191424,
+                                                            "$type": "list",
+                                                            "items": []
+                                                        },
+                                                        "_costly_access": false
+                                                    }
+                                                },
+                                                "_parent": {
+                                                    "$ref": 140172836008928
+                                                },
+                                                "_revised": false,
+                                                "_aftershocks": {
+                                                    "$id": 140172836103232,
+                                                    "$type": "list",
+                                                    "items": []
+                                                },
+                                                "_costly_access": false
+                                            }
+                                        },
+                                        "_parent": {
+                                            "$ref": 140172836006720
+                                        },
+                                        "_revised": false,
+                                        "_aftershocks": {
+                                            "$id": 140172835789248,
+                                            "$type": "list",
+                                            "items": []
+                                        },
+                                        "_costly_access": false
+                                    }
+                                },
+                                "_right": {
+                                    "$id": 140172836011136,
+                                    "$type": "object",
+                                    "class": "src.model.event.Event",
+                                    "attributes": {
+                                        "_identifier": 7204,
+                                        "_magnitude": 5.8,
+                                        "_deepness": 26.4,
+                                        "_epicenter": {
+                                            "$ref": 140172836003360
+                                        },
+                                        "_date": {
+                                            "$type": "datetime",
+                                            "value": "2026-10-04T10:46:00"
+                                        },
+                                        "_station": "Estacion-Risaralda",
+                                        "_is_populated": true,
+                                        "_review": 2,
+                                        "_key": {
+                                            "$id": 140172836011472,
+                                            "$type": "object",
+                                            "class": "src.model.key.Key",
+                                            "attributes": {
+                                                "_priority": 3,
+                                                "_magnitude": 5.8,
+                                                "_identifier": 7204
+                                            }
+                                        },
+                                        "_left": {
+                                            "$id": 140172836156624,
+                                            "$type": "object",
+                                            "class": "src.model.event.Event",
+                                            "attributes": {
+                                                "_identifier": 7208,
+                                                "_magnitude": 5.4,
+                                                "_deepness": 92.3,
+                                                "_epicenter": {
+                                                    "$ref": 140172836004224
+                                                },
+                                                "_date": {
+                                                    "$type": "datetime",
+                                                    "value": "2026-10-05T06:37:00"
+                                                },
+                                                "_station": "Estacion-Chinchina",
+                                                "_is_populated": false,
+                                                "_review": 2,
+                                                "_key": {
+                                                    "$id": 140172836007296,
+                                                    "$type": "object",
+                                                    "class": "src.model.key.Key",
+                                                    "attributes": {
+                                                        "_priority": 2,
+                                                        "_magnitude": 5.4,
+                                                        "_identifier": 7208
+                                                    }
+                                                },
+                                                "_left": null,
+                                                "_right": null,
+                                                "_parent": {
+                                                    "$ref": 140172836011136
+                                                },
+                                                "_revised": false,
+                                                "_aftershocks": {
+                                                    "$id": 140172836108480,
+                                                    "$type": "list",
+                                                    "items": []
+                                                },
+                                                "_costly_access": false
+                                            }
+                                        },
+                                        "_right": null,
+                                        "_parent": {
+                                            "$ref": 140172836006720
+                                        },
+                                        "_revised": false,
+                                        "_aftershocks": {
+                                            "$id": 140172836191616,
+                                            "$type": "list",
+                                            "items": [
+                                                {
+                                                    "$ref": 140172836270592
+                                                }
+                                            ]
+                                        },
+                                        "_costly_access": false
+                                    }
+                                },
+                                "_parent": {
+                                    "$ref": 140172837365056
+                                },
+                                "_revised": false,
+                                "_aftershocks": {
+                                    "$id": 140172836108416,
+                                    "$type": "list",
+                                    "items": []
+                                },
+                                "_costly_access": false
+                            }
+                        },
+                        "_right": {
+                            "$id": 140172836149472,
+                            "$type": "object",
+                            "class": "src.model.event.Event",
+                            "attributes": {
+                                "_identifier": 7206,
+                                "_magnitude": 7.3,
+                                "_deepness": 175.6,
+                                "_epicenter": {
+                                    "$ref": 140172836003840
+                                },
+                                "_date": {
+                                    "$type": "datetime",
+                                    "value": "2026-10-04T17:24:00"
+                                },
+                                "_station": "Estacion-Tolima",
+                                "_is_populated": false,
+                                "_review": 3,
+                                "_key": {
+                                    "$id": 140172836149952,
+                                    "$type": "object",
+                                    "class": "src.model.key.Key",
+                                    "attributes": {
+                                        "_priority": 3,
+                                        "_magnitude": 7.3,
+                                        "_identifier": 7206
+                                    }
+                                },
+                                "_left": {
+                                    "$id": 140172836261136,
+                                    "$type": "object",
+                                    "class": "src.model.event.Event",
+                                    "attributes": {
+                                        "_identifier": 7209,
+                                        "_magnitude": 6.6,
+                                        "_deepness": 48.6,
+                                        "_epicenter": {
+                                            "$ref": 140172836004464
+                                        },
+                                        "_date": {
+                                            "$type": "datetime",
+                                            "value": "2026-10-05T11:48:00"
+                                        },
+                                        "_station": "Estacion-Samana",
+                                        "_is_populated": false,
+                                        "_review": 1,
+                                        "_key": {
+                                            "$id": 140172836266848,
+                                            "$type": "object",
+                                            "class": "src.model.key.Key",
+                                            "attributes": {
+                                                "_priority": 3,
+                                                "_magnitude": 6.6,
+                                                "_identifier": 7209
+                                            }
+                                        },
+                                        "_left": null,
+                                        "_right": null,
+                                        "_parent": {
+                                            "$ref": 140172836149472
+                                        },
+                                        "_revised": false,
+                                        "_aftershocks": {
+                                            "$id": 140172836190656,
+                                            "$type": "list",
+                                            "items": []
+                                        },
+                                        "_costly_access": false
+                                    }
+                                },
+                                "_right": null,
+                                "_parent": {
+                                    "$ref": 140172837365056
+                                },
+                                "_revised": false,
+                                "_aftershocks": {
+                                    "$id": 140172836188352,
+                                    "$type": "list",
+                                    "items": []
+                                },
+                                "_costly_access": false
+                            }
+                        },
+                        "_parent": null,
+                        "_revised": false,
+                        "_aftershocks": {
+                            "$id": 140172836103168,
+                            "$type": "list",
+                            "items": [
+                                {
+                                    "$ref": 140172836153936
+                                }
+                            ]
+                        },
+                        "_costly_access": false
+                    }
+                },
+                "_autobalance": false,
+                "_W": 48,
+                "_R": 40,
+                "_L": 3
+            }
+        },
+        "_populated_zones": {
+            "$id": 140172836209200,
+            "$type": "set",
+            "items": [
+                {
+                    "$id": 140172836267328,
+                    "$type": "object",
+                    "class": "src.model.circle.Circle",
+                    "attributes": {
+                        "_center": {
+                            "$id": 140172836267280,
+                            "$type": "object",
+                            "class": "src.model.point.Point",
+                            "attributes": {
+                                "_x": 285.5,
+                                "_y": 695.3
+                            }
+                        },
+                        "_radius": 65.0
+                    }
+                },
+                {
+                    "$id": 140172836156864,
+                    "$type": "object",
+                    "class": "src.model.circle.Circle",
+                    "attributes": {
+                        "_center": {
+                            "$id": 140172836156816,
+                            "$type": "object",
+                            "class": "src.model.point.Point",
+                            "attributes": {
+                                "_x": 620.8,
+                                "_y": 565.7
+                            }
+                        },
+                        "_radius": 75.0
+                    }
+                }
+            ]
+        },
+        "_archived_AVL_trees": {
+            "$id": 140172835546592,
+            "$type": "set",
+            "items": []
+        },
+        "_eliminated_ids": {
+            "$id": 140172835546816,
+            "$type": "set",
+            "items": []
+        },
+        "_current_time": {
+            "$type": "datetime",
+            "value": "2026-10-06T17:00:00"
+        },
+        "reports_queue": {
+            "$id": 140172836209424,
+            "$type": "deque",
+            "items": [
+                {
+                    "$id": 140172839310624,
+                    "$type": "object",
+                    "class": "src.model.report.Report",
+                    "attributes": {
+                        "_identifier": 7211,
+                        "_magnitude": 3.3,
+                        "_deepness": 17.6,
+                        "_epicenter": {
+                            "$id": 140172836006816,
+                            "$type": "object",
+                            "class": "src.model.point.Point",
+                            "attributes": {
+                                "_x": 345.7,
+                                "_y": 465.8
+                            }
+                        },
+                        "_date": {
+                            "$type": "datetime",
+                            "value": "2026-10-06T08:14:00"
+                        },
+                        "_station": "Estacion-Anserma",
+                        "_is_populated": false,
+                        "_review": 1,
+                        "_key": {
+                            "$id": 140172836005040,
+                            "$type": "object",
+                            "class": "src.model.key.Key",
+                            "attributes": {
+                                "_priority": 1,
+                                "_magnitude": 3.3,
+                                "_identifier": 7211
+                            }
+                        }
+                    }
+                },
+                {
+                    "$id": 140172836009264,
+                    "$type": "object",
+                    "class": "src.model.report.Report",
+                    "attributes": {
+                        "_identifier": 7212,
+                        "_magnitude": 5.1,
+                        "_deepness": 24.8,
+                        "_epicenter": {
+                            "$id": 140172836323936,
+                            "$type": "object",
+                            "class": "src.model.point.Point",
+                            "attributes": {
+                                "_x": 605.9,
+                                "_y": 545.6
+                            }
+                        },
+                        "_date": {
+                            "$type": "datetime",
+                            "value": "2026-10-06T09:23:00"
+                        },
+                        "_station": "Estacion-Pacora",
+                        "_is_populated": true,
+                        "_review": 1,
+                        "_key": {
+                            "$id": 140172836324032,
+                            "$type": "object",
+                            "class": "src.model.key.Key",
+                            "attributes": {
+                                "_priority": 3,
+                                "_magnitude": 5.1,
+                                "_identifier": 7212
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "_burst_mode": true,
+        "undo_queue": {
+            "$id": 140172836209664,
+            "$type": "deque",
+            "items": []
+        },
+        "redo_queue": {
+            "$id": 140172836209904,
+            "$type": "deque",
+            "items": []
+        }
+    }
+}
