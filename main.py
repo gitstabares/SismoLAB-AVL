@@ -1,11 +1,12 @@
 import json
+import re
 from nicegui import ui
 from nicegui.events import ValueChangeEventArguments
 from src.model import *
 from src.utils import *
 import datetime as dt
 
-
+    
 reports = [
     Report(1001, 4.5, 15.0, 120.5, 340.2, "2026-10-01T08:30:00", "Station-Alpha", True, 2),
     Report(1002, 5.2, 30.5, 450.0, 512.1, "2026-10-01T14:15:00", "Station-Beta", False, 2),
@@ -34,6 +35,9 @@ ui.add_head_html('''
 <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono&effect=fire-animation" rel="stylesheet">
 ''')
 ui.add_css('''
+    .q-drawer__content {
+        overflow: hidden !important;
+    }
     body {
         font-family: "IBM Plex Mono", monospace;
         font-weight: 400;
@@ -111,11 +115,14 @@ def header():
 
         async def upload(e):
             global global_state
-            file = await e.file.text()
-            ui.notify('The file was uploaded successfully')
-            new_global_state = serializer.deserialize(json.loads(file))
-            global_state.__dict__.update(new_global_state.__dict__)
-            global_state.refresh()
+            try:
+                file = await e.file.text()
+                ui.notify('The file was uploaded successfully')
+                new_global_state = serializer.deserialize(json.loads(file))
+                global_state.__dict__.update(new_global_state.__dict__)
+                global_state.refresh()
+            except:
+                ui.notify("The file doesn't have an appropiate format")
 
         ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_W(e.value)).classes('w-50').tooltip('Temporal margin for aftershocks')
         ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_R(e.value)).classes('w-50').tooltip('Spatial margin for aftershocks')
@@ -133,10 +140,18 @@ def show_event(e):
         with ui.list().props('dense separator'):
             for k,v in nodo.__dict__.items():
                 ui.item(f'{k[1:].capitalize()}:{str(v)}')
+
         def delete_and_close(node:Node):
             global_state.delete_event(node.get_key())
             dialog.close()
-        ui.button(icon='delete',on_click=lambda e:delete_and_close(nodo)).props('round')
+
+        def archive_and_close(node:Node):
+            global_state.archive_event(node.get_key())
+            dialog.close()
+
+        with ui.row().classes('w-full'):
+            ui.button(icon='archive',on_click=lambda e:archive_and_close(nodo)).props('round').tooltip('Archive event')
+            ui.button(icon='delete',on_click=lambda e:delete_and_close(nodo)).props('round').tooltip('Delete event')
     dialog.open()
 
 def AVL_tree():
@@ -159,7 +174,7 @@ def BST_tree():
             ui.icon('account_tree', size='sm').classes('text-cyan-400')
             ui.label('BST Tree').classes('title')
         with ui.card().classes('w-full bg-white h-full'):
-            bst_graph = ui.echart(global_state.get_BST_JSON()).classes('w-full h-full').on_click(show_event).on('mouseover',lambda:ui.notify('Pinga'))
+            bst_graph = ui.echart(global_state.get_BST_JSON()).classes('w-full h-full').on_click(show_event)
 
     @OnEvent(Scenario.refresh)
     def update_BST_tree():
@@ -269,13 +284,91 @@ def events_map():
                         'color': color_mapper.interpolate(seism.get_magnitude()),
                         'fillColor': color_mapper.interpolate(seism.get_magnitude()),
                         'fillOpacity': 0.1,
-                        'radius': seism.get_magnitude() * 1e5,
-                        'weight': 1
+                        'radius': (seism.get_magnitude()+2) * 1e5,
+                        'weight': 1,
                     }
                 ]
-            )
+            ).run_method('bindTooltip', f'<b>{seism.get_key()}</b> <br>{seism.get_epicenter()}')
+
+def filter_events():
+    with ui.column().classes('dashboard-card col-span-4 h-full'):
+        with ui.row().classes('items-center'):
+            ui.icon('search', size='sm').classes('text-cyan-400')
+            ui.label('Filtering events').classes('title text-2xl')
+        ui.input_chips(on_change=lambda e:update_results(e)).classes('w-full')
+        with ui.scroll_area().classes('h-full').props('visible=false'):
+            results_list = ui.list().props('dense separator')
+
+        def update_results(e):
+            results = global_state.get_AVL().get_levelorder_traverse()
+            for filter in e.value:
+                try:
+                    oper = re.split(r'(>=|<=|==|!=|>|<)',filter)
+                    results = eval(f'[seism for seism in results if seism.get_{oper[0]}() {oper[1]} {oper[2]}]')
+                except:
+                    ui.notify("One or more filters are unvalid")
+            results_list.clear()
+            with results_list:
+                for result in results:
+                    ui.item(str(result))
+
+def left_drawer():
+    with ui.left_drawer().classes('dashboard-card').props('mini') as drawer:
+        with ui.column().classes('h-1/2 w-full min-w-[280px] shrink-0'):
+            with ui.row().classes('items-center'):
+                ui.icon('forest', size='sm').classes('text-cyan-400')
+                ui.label('Archived Trees').classes('title text-2xl')
+            archived_trees = ui.scroll_area()
+
+        def build_tree(event):
+            if event is None:
+                return None
+            node = {
+                'id': str(event.get_key()),
+                'children': []
+            }
+            left = build_tree(event.get_left())
+            right = build_tree(event.get_right())
+            if left is not None:
+                node['children'].append(left)
+            if right is not None:
+                node['children'].append(right)
+            return node
+
+        @OnEvent(Scenario.refresh)
+        def update_archived_trees():
+            archived_trees.clear()
+            with archived_trees:
+                for tree in global_state.get_archived_trees():
+                    root = tree.get_root()
+                    if root is None:
+                        continue
+                    tree_data = build_tree(root)
+                    ui.tree(
+                        [tree_data],
+                        label_key='id',
+                    ).props('default-expand-all')
+                    ui.separator()
+
+        with ui.column().classes('h-1/2 w-full min-w-[280px] shrink-0'):
+            with ui.row().classes('items-center'):
+                ui.icon('folder_delete', size='sm').classes('text-cyan-400')
+                ui.label('Eliminated IDs').classes('title text-2xl')
+            with ui.scroll_area():
+                eliminated_ids = ui.list().classes('w-full').props('dense separator')
+
+        @OnEvent(Scenario.refresh)
+        def update_archived_trees():
+            with eliminated_ids:
+                eliminated_ids.clear()
+                for node in global_state.get_eliminated_ids():
+                    ui.item(str(node))
+
+        drawer.on('mouseenter', lambda: drawer.props('mini-to-overlay',remove='mini'))
+        drawer.on('mouseleave', lambda: drawer.props('mini'))
 
 def main():
+    left_drawer()
     header()
     with ui.row().classes('w-full grid grid-cols-12 min-h-[1000px]'):
         AVL_tree()
@@ -283,7 +376,9 @@ def main():
         reports_queue()
         events_map()
         add_event_form()
+        filter_events()
 
 if __name__ in {"__main__", "__mp_main__"}:
     main()
     ui.run(title='SismoLab AVL', dark=True, favicon='assets/icon.svg')
+    global_state.refresh()
