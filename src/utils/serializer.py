@@ -1,54 +1,65 @@
+"""Serialize and deserialize Python objects as JSON-compatible data.
+
+This module provides a serializer for primitive values, collections,
+dates, custom classes, and cyclic object graphs.
+"""
+
 import json
 from collections import deque
 from datetime import datetime
 
 
 class Serializer:
-    """
-    A class to serialize and deserialize complex Python objects, including custom classes,
-    lists, dictionaries, deques, and datetime objects, into/from JSON-compatible formats.
-    
-    It handles circular references by using a memoization strategy.
+    """Serialize and deserialize complex Python objects as JSON-compatible data.
+
+    The serializer supports primitive values, tuples, lists, deques, sets,
+    dictionaries, datetime objects, and registered custom classes. Circular
+    references are preserved through object identifiers stored in the serialized
+    representation.
     """
 
     def __init__(self):
-        """
-        Initializes the Serializer with an empty registry for custom classes.
+        """Initialize the serializer with an empty custom-class registry.
+
+        Returns:
+            None: Creates an empty class registry on the serializer instance.
         """
         self.classes = {}
 
     def register(self, classes):
-        """
-        Registers a custom class so that the serializer knows how to serialize
-        and deserialize its instances.
+        """Register a custom class for serialization and deserialization.
 
         Args:
-            classes (Type): The class type to register.
+            classes (type): The class to register.
         """
         name = classes.__module__ + "." + classes.__name__
         self.classes[name] = classes
 
     def serialize(self, obj):
-        """
-        Serializes an object into a JSON-compatible dictionary format.
+        """Serialize an object into a JSON-compatible representation.
 
         Args:
             obj (Any): The object to serialize.
 
         Returns:
-            Any: The serialized representation of the object (dict or primitive).
+            Any: A JSON-compatible representation of ``obj``.
+
+        Raises:
+            TypeError: If ``obj`` is an instance of an unregistered custom class.
         """
         memo: set[int] = set()
 
         def convert(obj):
-            """
-            Recursive helper function to convert an object into its serialized form.
+            """Convert an object into its serialized representation.
 
             Args:
                 obj (Any): The object to convert.
 
             Returns:
-                Any: The converted representation of the object.
+                Any: The serialized representation of ``obj``.
+
+            Raises:
+                TypeError: If ``obj`` is an instance of an unregistered custom class.
             """
             # Primitive types
             if obj is None or type(obj) in (int, str, float, bool):
@@ -127,29 +138,32 @@ class Serializer:
         return convert(obj)
 
     def deserialize(self, data):
-        """
-        Deserializes a JSON-compatible dictionary format back into a Python object.
+        """Deserialize a JSON-compatible value into its original Python object.
 
         Args:
-            data (Any): The serialized data to reconstruct.
+            data (Any): The serialized data to rebuild.
 
         Returns:
             Any: The reconstructed Python object.
-        
+
         Raises:
-            ValueError: If an unknown type is encountered.
+            ValueError: If ``data`` contains an unknown serialized type.
+            KeyError: If a required serialized field is missing.
         """
         memo = {}
 
         def rebuild(element):
-            """
-            Recursive helper function to rebuild an object from its serialized form.
+            """Rebuild a serialized object or value.
 
             Args:
                 element (Any): The serialized element to rebuild.
 
             Returns:
-                Any: The rebuilt Python object or value.
+                Any: The reconstructed Python object or value.
+
+            Raises:
+                ValueError: If ``element`` contains an unknown serialized type.
+                KeyError: If a required serialized field is missing.
             """
             # Primitive types
             if not isinstance(element, dict):
@@ -214,12 +228,11 @@ class Serializer:
         return rebuild(data)
     
     def save(self, scenario, path):
-        """
-        Serializes an object and saves it to a JSON file.
+        """Serialize an object and write it to a JSON file.
 
         Args:
             scenario (Any): The object to serialize and save.
-            path (str): The file path where the JSON data will be written.
+            path (str): The destination file path.
         """
         data = self.serialize(scenario)
 
@@ -233,14 +246,18 @@ class Serializer:
             )
 
     def load(self, path):
-        """
-        Loads JSON data from a file and deserializes it back into a Python object.
+        """Load and deserialize an object from a JSON file.
 
         Args:
-            path (str): The file path to load the JSON data from.
+            path (str): The source file path.
 
         Returns:
             Any: The deserialized Python object.
+
+        Raises:
+            ValueError: If the JSON contains an unknown serialized type.
+            FileNotFoundError: If ``path`` does not exist.
+            json.JSONDecodeError: If the file does not contain valid JSON.
         """
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)

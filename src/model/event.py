@@ -1,14 +1,16 @@
+"""Event model representing a seismic event and its metadata."""
+
 from .node import Node
 from .report import Report
 from .key import Key
 
 
 class Event(Node, Report):
-    """Represents a seismic event with its metadata and impact information.
+    """Represents a seismic event with metadata and impact information.
 
-    The object inherits from Node and uses a Key generated from the event's
-    magnitude, deepness, population flag, and identifier to support ordered
-    storage or lookup in the data structure.
+    The object inherits from :class:`Node` and uses a :class:`Key` generated
+    from the event's magnitude, deepness, population flag, and identifier to
+    support ordered storage or lookup in the data structure.
     """
 
     def __init__(self, report:Report):

@@ -1,10 +1,22 @@
+"""Utilities for storing and checking populated zones.
+
+This module defines a set of circular populated zones. A point is considered to
+belong to a populated zone when its distance from the zone's center is less than
+or equal to the zone's radius.
+"""
+
 from .point import Point
 
 
 class PopulatedZones(set):
-    """A collection of rounded populated zones."""
+    """A set of circular populated zones.
 
-    def __contains__(self, point: Point):
+    The set behaves like a normal Python set, while its membership checks use
+    each zone's center and radius to determine whether a point falls inside one of
+    the zones.
+    """
+
+    def __contains__(self, point: Point) -> bool:
         """Check if an point is in the set.
 
         Args:
