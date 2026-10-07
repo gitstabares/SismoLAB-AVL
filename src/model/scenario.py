@@ -1,37 +1,29 @@
-"""Scenario state and event-management logic for seismic data.
-
-This module coordinates the AVL and BST event trees, populated zones,
-archived trees, deleted identifiers, queued reports, and undo/redo history.
-"""
-
-from src.utils import *
+from .circle import Circle
+from .point import Point
 from .populated_zones import PopulatedZones
 from .event_tree import EventTree
 from .event import Event
 from .key import Key
 from .report import Report
+from src.utils import *
 import datetime as dt
 from collections import deque
 import copy
 
-
 class Scenario:
-    """Manage seismic event trees and related scenario state.
-
-    The scenario maintains synchronized AVL and BST trees, accumulates reports,
-and tracks archived, deleted, and queued data while supporting burst mode and
-    undo/redo operations.
+    """Manages seismic event trees and populated zones within a given tile size.
+    Maintains AVL and BST trees for event tracking and processes incoming reports.
     """
 
     def __init__(self):
-        """Initialize the scenario and its data structures.
-
-        Returns:
-            None: Initializes the trees, queues, timestamps, and state sets.
+        """Initialize the Scenario with a specified tile size.
         """
+        serializer = Serializer()
+        serializer.register(Circle)
+        serializer.register(Point)
         self.set_AVL(EventTree(autobalance=True))
         self.set_BST(EventTree())
-        self.set_populated_zones(PopulatedZones())
+        self.set_populated_zones(PopulatedZones(serializer.load('data/populated_zones.json')))
         self.set_archived_trees(set())
         self.set_eliminated_ids(set())
         self.set_current_time(dt.datetime.now())
@@ -42,115 +34,45 @@ and tracks archived, deleted, and queued data while supporting burst mode and
         self.set_T(72)
         
     def get_AVL(self) -> EventTree:
-        """Return the AVL event tree.
-
-        Returns:
-            EventTree: The AVL tree containing scenario events.
-        """
         return self._AVL
 
     def set_AVL(self, tree: EventTree):
-        """Set the AVL event tree.
-
-        Args:
-            tree (EventTree): The new AVL tree.
-        """
         self._AVL = tree
 
     def get_BST(self) -> EventTree:
-        """Return the BST event tree.
-
-        Returns:
-            EventTree: The BST tree containing scenario events.
-        """
         return self._BST
 
     def set_BST(self, tree: EventTree):
-        """Set the BST event tree.
-
-        Args:
-            tree (EventTree): The new BST tree.
-        """
         self._BST = tree
 
     def get_populated_zones(self) -> PopulatedZones:
-        """Return the populated-zones collection.
-
-        Returns:
-            PopulatedZones: The scenario's populated zone data.
-        """
         return self._populated_zones
 
     def set_populated_zones(self, zones: PopulatedZones):
-        """Set the populated-zones collection.
-
-        Args:
-            zones (PopulatedZones): The new populated zone data.
-        """
         self._populated_zones = zones
 
     def get_archived_trees(self) -> set:
-        """Return the archived event trees.
-
-        Returns:
-            set: The set of archived event trees.
-        """
         return self._archived_trees
 
     def set_archived_trees(self, value: set):
-        """Set the archived event trees.
-
-        Args:
-            value (set): The new archived-tree set.
-        """
         self._archived_trees = value
 
     def get_eliminated_ids(self) -> set:
-        """Return identifiers that were deleted from the scenario.
-
-        Returns:
-            set: The eliminated identifier set.
-        """
         return self._eliminated_ids
 
     def set_eliminated_ids(self, value: set):
-        """Set the eliminated identifier set.
-
-        Args:
-            value (set): The new eliminated identifier set.
-        """
         self._eliminated_ids = value
 
     def get_current_time(self) -> dt.datetime:
-        """Return the scenario's current time.
-
-        Returns:
-            datetime.datetime: The current scenario time.
-        """
         return self._current_time
 
-    def set_current_time(self, time: dt.datetime):
-        """Set the scenario current time.
-
-        Args:
-            time (datetime.datetime): The new current time.
-        """
+    def set_current_time(self,time:dt.datetime):
         self._current_time = time
 
     def get_burst_mode(self) -> bool:
-        """Return whether burst mode is enabled.
-
-        Returns:
-            bool: True if queued reports are processed in burst mode.
-        """
         return self._burst_mode
 
     def set_burst_mode(self, value: bool):
-        """Enable or disable burst mode and process queued reports.
-
-        Args:
-            value (bool): Whether burst mode should be enabled.
-        """
         self._burst_mode = value
         while self.reports_queue:
             try:
@@ -159,11 +81,11 @@ and tracks archived, deleted, and queued data while supporting burst mode and
                 pass
         self.refresh()
 
-    def archive_event(self, key: Key):
-        """Archive an event from the AVL tree.
+    def archive_event(self, key:Key):
+        """Archive events from the trees by a given key.
 
         Args:
-            key (Key): The key identifying the event to archive.
+            key (Any): The key identifying the event to archive.
         """
         node = self.get_AVL().get_node(key)
         if not node:
@@ -190,12 +112,7 @@ and tracks archived, deleted, and queued data while supporting burst mode and
         self.get_archived_trees().add(tree)
         self.refresh()
 
-    def add_report(self, report: Report):
-        """Queue or insert a report depending on burst mode.
-
-        Args:
-            report (Report): The report to process.
-        """
+    def add_report(self, report:Report):
         if self.get_burst_mode():
             self.commit()
             self.reports_queue.append(report)
@@ -203,7 +120,7 @@ and tracks archived, deleted, and queued data while supporting burst mode and
         else:
             self.insert_report(report)
 
-    def insert_report(self, report: Report):
+    def insert_report(self, report:Report):
         """Insert or update a report in the scenario's event trees.
 
         Args:
@@ -263,11 +180,11 @@ and tracks archived, deleted, and queued data while supporting burst mode and
                 raise Exception("Report's information too old. There's newer information in the tree.")
         self.refresh()
 
-    def delete_event(self, key: Key):
-        """Delete an event from both trees.
+    def delete_event(self, key:Key):
+        """Delete an event by its identifier.
 
         Args:
-            key (Key): The key identifying the event to delete.
+            identifier (Any): The identifier of the event to delete.
         """
         self.commit()
         identifier = key.get_identifier()
@@ -277,19 +194,9 @@ and tracks archived, deleted, and queued data while supporting burst mode and
         self.refresh()
 
     def get_AVL_JSON(self):
-        """Return the AVL tree as an ECharts-compatible dictionary.
-
-        Returns:
-            dict: Serialized AVL tree data.
-        """
         return self.get_AVL().get_echart_dict()
 
     def get_BST_JSON(self):
-        """Return the BST tree as an ECharts-compatible dictionary.
-
-        Returns:
-            dict: Serialized BST tree data.
-        """
         return self.get_BST().get_echart_dict()
 
     def get_event_AVL(self, identifier):
@@ -315,10 +222,10 @@ and tracks archived, deleted, and queued data while supporting burst mode and
         return self.get_BST().get_node(identifier)
 
     def set_stress_mode(self, value):
-        """Set the AVL tree's autobalance mode.
+        """Set the autobalance mode for the AVL tree.
 
         Args:
-            value (bool): Whether autobalance should be disabled.
+            value (bool): Whether autobalance should be enabled.
         """
         self.get_AVL().set_autobalance(not value)
         self.refresh()
@@ -358,11 +265,6 @@ and tracks archived, deleted, and queued data while supporting burst mode and
             self._T = dt.timedelta(hours=T)
 
     def commit(self):
-        """Save the current scenario state to the undo history.
-
-        Returns:
-            None: Stores deep copies of the scenario state and clears redo history.
-        """
         self.undo_queue.append((copy.deepcopy(self._AVL),
                                 copy.deepcopy(self._BST),
                                 copy.deepcopy(self.reports_queue),
@@ -371,58 +273,31 @@ and tracks archived, deleted, and queued data while supporting burst mode and
         self.redo_queue.clear()
 
     def undo(self) -> Scenario:
-        """Restore the previous scenario state.
-
-        Returns:
-            Scenario: The scenario after undoing the most recent change.
-        """
         self.redo_queue.append((copy.deepcopy(self._AVL),
                                 copy.deepcopy(self._BST),
                                 copy.deepcopy(self.reports_queue),
                                 copy.deepcopy(self._eliminated_ids),
                                 copy.deepcopy(self._archived_trees)))
-        (self._AVL, self._BST, self.reports_queue, self._eliminated_ids,
-         self._archived_trees) = self.undo_queue.pop()
+        (self._AVL,self._BST,self.reports_queue,self._eliminated_ids,self._archived_trees) = self.undo_queue.pop()
         self.refresh()
 
     def redo(self) -> Scenario:
-        """Restore a state removed by an undo operation.
-
-        Returns:
-            Scenario: The scenario after redoing the most recent undone change.
-        """
         self.undo_queue.append((copy.deepcopy(self._AVL),
                                 copy.deepcopy(self._BST),
                                 copy.deepcopy(self.reports_queue),
                                 copy.deepcopy(self._eliminated_ids),
                                 copy.deepcopy(self._archived_trees)))
-        (self._AVL, self._BST, self.reports_queue, self._eliminated_ids,
-         self._archived_trees) = self.redo_queue.pop()
+        (self._AVL,self._BST,self.reports_queue,self._eliminated_ids,self._archived_trees) = self.redo_queue.pop()
         self.refresh()
 
     @property
     def can_undo(self):
-        """Indicate whether an undo operation is available.
-
-        Returns:
-            bool: True when the undo queue is not empty.
-        """
         return len(self.undo_queue) > 0
 
     @property
     def can_redo(self):
-        """Indicate whether a redo operation is available.
-
-        Returns:
-            bool: True when the redo queue is not empty.
-        """
         return len(self.redo_queue) > 0
 
     @EventTrigger
     def refresh(self):
-        """Refresh scenario-dependent state after a mutation.
-
-        Returns:
-            None: Triggers the event refresh callback.
-        """
         pass
