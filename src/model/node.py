@@ -1,4 +1,5 @@
 class Node:
+    
     """Store a key and links to the node's children and parent."""
 
     def __init__(self, key):

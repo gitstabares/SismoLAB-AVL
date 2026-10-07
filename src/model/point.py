@@ -1,18 +1,19 @@
 class Point():
-    """A two-dimensional point with coordinates clamped to the 0-1000 range."""
+    """Represent a two-dimensional point.
 
-    def __init__(self, x:float, y:float):
-        """Create a Point object, validating bounds.
+    The point can store any numeric coordinates; bounds are not currently
+    enforced during initialization.
+    """
+
+    def __init__(self, x: float, y: float):
+        """Initialize a point with the given coordinates.
 
         Args:
             x (float): The x-coordinate.
             y (float): The y-coordinate.
 
-        Returns:
-            Point: A new Point instance.
-
         Raises:
-            ValueError: If either coordinate is outside the [0, 1000] range.
+            Exception: If either coordinate is None.
         """
         if x is None or y is None:
             raise Exception("No coordinate can be none")
@@ -20,11 +21,19 @@ class Point():
         self._y = y
 
     def get_x(self) -> float:
-        """float: The x-coordinate of the point."""
+        """Return the x-coordinate.
+
+        Returns:
+            float: The x-coordinate of the point.
+        """
         return self._x
 
     def get_y(self) -> float:
-        """float: The y-coordinate of the point."""
+        """Return the y-coordinate.
+
+        Returns:
+            float: The y-coordinate of the point.
+        """
         return self._y
 
     def get_length(self) -> float:
@@ -35,44 +44,47 @@ class Point():
         """
         return (self.get_x()**2 + self.get_y()**2)**(1/2)
 
-    def __eq__(self, other:Point) -> bool:
-        if isinstance(other,(tuple,list)):
-            return self.get_x() == other[0] and self.get_y() == other[1]
-        return self.get_x() == other.get_x() and self.get_y() == other.get_y()
-    
-    def __add__(self, other:Point):
-        """Return the coordinate-wise sum as a new point.
+    def __eq__(self, other: Point) -> bool:
+        """Return whether the point is equal to another point or coordinate pair.
 
         Args:
-            other (Any): The point to add.
+            other (Point | tuple | list): The point or coordinate pair to compare
+                against.
+
+        Returns:
+            bool: True if both coordinates are equal; otherwise, False.
+        """
+        if isinstance(other, (tuple, list)):
+            return self.get_x() == other[0] and self.get_y() == other[1]
+        return self.get_x() == other.get_x() and self.get_y() == other.get_y()
+
+    def __add__(self, other: Point):
+        """Return a new point containing the coordinate-wise sum.
+
+        Args:
+            other (Point): The point to add.
 
         Returns:
             Point: A new point representing the sum.
-
-        Raises:
-            TypeError: If the other operand is not a Point.
         """
         return Point(self.get_x() + other.get_x(), self.get_y() + other.get_y())
-    
-    def __sub__(self, other:Point):
-        """Return the coordinate-wise difference as a new point.
+
+    def __sub__(self, other: Point):
+        """Return a new point containing the coordinate-wise difference.
 
         Args:
-            other (Any): The point to subtract.
+            other (Point): The point to subtract.
 
         Returns:
             Point: A new point representing the difference.
-
-        Raises:
-            TypeError: If the other operand is not a Point.
         """
         return Point(self.get_x() - other.get_x(), self.get_y() - other.get_y())
 
-    def __mod__(self, divisor:float):
-        """Return the coordinate-wise modulus using the given divisor.
+    def __mod__(self, divisor: float):
+        """Return a new point containing the coordinate-wise modulo.
 
         Args:
-            divisor (float): The divisor for the modulo operation.
+            divisor (float): The value used as the modulo divisor.
 
         Returns:
             Point: A new point resulting from the modulo operation.
@@ -80,4 +92,9 @@ class Point():
         return Point(self.get_x() % divisor, self.get_y() % divisor)
 
     def __repr__(self):
+        """Return the point as a readable coordinate representation.
+
+        Returns:
+            str: The point coordinates in the form "(x,y)".
+        """
         return f"({self._x},{self._y})"

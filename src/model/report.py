@@ -1,3 +1,9 @@
+"""Seismic report model and validation logic.
+
+This module defines :class:`Report`, which stores and validates information
+about a seismic event before it is processed or persisted.
+"""
+
 import stat
 
 from numpy import isin
@@ -51,10 +57,20 @@ class Report:
                         self.get_is_populated(),
                         self.get_identifier()))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """Return the report key as its string representation.
+
+        Returns:
+            str: The report key.
+        """
         return f"{self.get_key()}"
 
     def get_priority(self):
+        """Return the priority value calculated from the report key.
+
+        Returns:
+            Any: The priority value associated with the report.
+        """
         return self._key.get_priority()
 
     def get_identifier(self) -> int:
@@ -178,9 +194,19 @@ class Report:
         self._station = station
 
     def get_is_populated(self) -> bool:
+        """Return whether the report has population data.
+
+        Returns:
+            bool: True if the report is populated; otherwise, False.
+        """
         return self._is_populated
 
     def set_is_populated(self, is_populated:bool):
+        """Set the populated-state flag for the report.
+
+        Args:
+            is_populated (bool): Whether the report contains population data.
+        """
         self._is_populated = is_populated
 
     def get_review(self) -> int:
