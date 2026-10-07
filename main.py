@@ -13,27 +13,10 @@ from src.model import *
 from src.utils import *
 import datetime as dt
 
-
-reports = [
-    Report(1001, 4.5, 15.0, 120.5, 340.2, "2026-10-01T08:30:00", "Station-Alpha", True, 2),
-    Report(1002, 5.2, 30.5, 450.0, 512.1, "2026-10-01T14:15:00", "Station-Beta", False, 2),
-    Report(1003, 3.1, 10.2, 890.1, 120.4, "2026-10-02T01:05:00", "Station-Gamma", True, 1),
-    Report(1004, 6.8, 110.0, 320.4, 780.9, "2026-10-02T09:45:00", "Station-Delta", True, 3),
-    Report(1005, 2.4, 5.0, 50.0, 50.0, "2026-10-02T16:20:00", "Station-Alpha", False, 1),
-    Report(1006, 4.9, 45.3, 670.2, 300.8, "2026-10-03T03:10:00", "Station-Epsilon", True, 2),
-    Report(1007, 7.1, 220.5, 910.0, 920.0, "2026-10-03T06:50:00", "Station-Beta", False, 4),
-    Report(1008, 3.5, 18.2, 150.3, 430.6, "2026-10-03T09:12:00", "Station-Gamma", True, 1),
-    Report(1009, 5.6, 85.4, 540.8, 620.1, "2026-10-03T10:30:00", "Station-Delta", True, 2),
-    Report(1010, 1.8, 2.1, 200.0, 200.0, "2026-10-03T11:00:00", "Station-Epsilon", False, 1),
-]
-
 global_state = Scenario()
 serializer = Serializer()
 for _type in (Circle,EventTree,Event,Key,Node,Point,PopulatedZones,Report,Scenario,Tree,IntensityColorMapper):
     serializer.register(_type)
-
-for report in reports:
-    global_state.add_report(report)
 
 ui.add_head_html('''
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -128,18 +111,21 @@ def header():
 
         async def upload(e):
             global global_state
-            try:
-                file = await e.file.text()
-                ui.notify('The file was uploaded successfully')
-                new_global_state = serializer.deserialize(json.loads(file))
-                global_state.__dict__.update(new_global_state.__dict__)
-                global_state.refresh()
-            except:
-                ui.notify("The file doesn't have an appropiate format")
+            file = await e.file.text()
+            ui.notify('The file was uploaded successfully')
+            obj = serializer.deserialize(json.loads(file))
+            if isinstance(obj,Scenario):
+                global_state.__dict__.update(obj.__dict__)
+            elif isinstance(obj,list):
+                for i in obj:
+                    global_state.add_report(i)
+            global_state.refresh()
+
 
         ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_W(e.value)).classes('w-50').tooltip('Temporal margin for aftershocks')
         ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_R(e.value)).classes('w-50').tooltip('Spatial margin for aftershocks')
         ui.number(prefix='L : ',min=0,value=3,validation={'L must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_L(e.value)).classes('w-50').tooltip('Costly access limit')
+        ui.number(prefix='T : ',min=0,value=72,validation={'T must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_T(e.value)).classes('w-50').tooltip('Time treshold in hours')
         ui.button(icon='undo',on_click=lambda: global_state.undo()).props('round').tooltip('Undo').bind_enabled_from(global_state,'can_undo')
         ui.button(icon='redo',on_click=lambda: global_state.redo()).props('round').tooltip('Redo').bind_enabled_from(global_state,'can_redo')
         ui.button(icon='save',on_click=lambda: ui.download.content(json.dumps(serializer.serialize(global_state),indent=4),'savestate.json')).props('round').tooltip('Save state')
@@ -168,7 +154,10 @@ def show_event(e):
             dialog.close()
 
         def archive_and_close(node:Node):
-            global_state.archive_event(node.get_key())
+            try:
+                global_state.archive_event(node.get_key())
+            except Exception as e:
+                ui.notify(e)
             dialog.close()
 
         with ui.row().classes('w-full'):

@@ -39,7 +39,8 @@ and tracks archived, deleted, and queued data while supporting burst mode and
         self.set_burst_mode(False)
         self.undo_queue = deque(maxlen=3)
         self.redo_queue = deque(maxlen=3)
-
+        self.set_T(72)
+        
     def get_AVL(self) -> EventTree:
         """Return the AVL event tree.
 
@@ -167,6 +168,20 @@ and tracks archived, deleted, and queued data while supporting burst mode and
         node = self.get_AVL().get_node(key)
         if not node:
             return
+
+        def check_archive_subtree(node:Event):
+            if node.get_priority() != 1 or self.get_current_time() - node.get_date() <= self._T:
+                return False
+            response = True
+            if node.get_left():
+                response *= check_archive_subtree(node.get_left())
+            if node.get_right():
+                response *= check_archive_subtree(node.get_right())
+            return bool(response)
+
+        if not check_archive_subtree(node):
+            raise Exception("Event can't be archived")
+        
         self.get_AVL().replace_node(node, None)
         if self.get_AVL().get_autobalance():
             self.get_AVL().balance_tree()
@@ -337,6 +352,10 @@ and tracks archived, deleted, and queued data while supporting burst mode and
         self.get_AVL().set_L(L)
         self.get_BST().set_L(L)
         self.refresh()
+
+    def set_T(self, T):
+        if T > 0:
+            self._T = dt.timedelta(hours=T)
 
     def commit(self):
         """Save the current scenario state to the undo history.
