@@ -103,7 +103,8 @@ class Scenario:
 
         if not check_archive_subtree(node):
             raise Exception("Event can't be archived")
-        
+
+        self.commit()
         self.get_AVL().replace_node(node, None)
         if self.get_AVL().get_autobalance():
             self.get_AVL().balance_tree()
