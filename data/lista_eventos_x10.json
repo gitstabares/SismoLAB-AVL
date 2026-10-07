@@ -1,0 +1,366 @@
+{
+    "$id": 140252165870016,
+    "$type": "list",
+    "items": [
+        {
+            "$id": 140252167336592,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8301,
+                "_magnitude": 6.9,
+                "_deepness": 29.2,
+                "_epicenter": {
+                    "$id": 140251717604592,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 225.1,
+                        "_y": 645.2
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T01:11:00"
+                },
+                "_station": "Estacion-Aguadas",
+                "_is_populated": true,
+                "_review": 1,
+                "_key": {
+                    "$id": 140252167325264,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.9,
+                        "_identifier": 8301
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140252166889568,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8302,
+                "_magnitude": 4.6,
+                "_deepness": 74.1,
+                "_epicenter": {
+                    "$id": 140252166887072,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 755.2,
+                        "_y": 285.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T02:22:00"
+                },
+                "_station": "Estacion-Supia",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140252166889760,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 4.6,
+                        "_identifier": 8302
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140252166889904,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8303,
+                "_magnitude": 2.7,
+                "_deepness": 14.3,
+                "_epicenter": {
+                    "$id": 140252166890336,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 95.3,
+                        "_y": 835.1
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T03:33:00"
+                },
+                "_station": "Estacion-Marmato",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140252166965200,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 2.7,
+                        "_identifier": 8303
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140252166965008,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8304,
+                "_magnitude": 5.9,
+                "_deepness": 19.4,
+                "_epicenter": {
+                    "$id": 140252165953328,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 655.4,
+                        "_y": 595.2
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T04:44:00"
+                },
+                "_station": "Estacion-Pensilvania",
+                "_is_populated": true,
+                "_review": 1,
+                "_key": {
+                    "$id": 140252165953472,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 5.9,
+                        "_identifier": 8304
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140252165953520,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8305,
+                "_magnitude": 3.7,
+                "_deepness": 41.2,
+                "_epicenter": {
+                    "$id": 140252165953568,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 415.5,
+                        "_y": 185.3
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T05:55:00"
+                },
+                "_station": "Estacion-Marquetalia",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140252165953664,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 3.7,
+                        "_identifier": 8305
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140252165953712,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8306,
+                "_magnitude": 7.6,
+                "_deepness": 195.4,
+                "_epicenter": {
+                    "$id": 140252165953760,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 875.6,
+                        "_y": 795.4
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T07:06:00"
+                },
+                "_station": "Estacion-Norcasia",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140252165953856,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 7.6,
+                        "_identifier": 8306
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140252165953904,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8307,
+                "_magnitude": 4.1,
+                "_deepness": 9.8,
+                "_epicenter": {
+                    "$id": 140252165953952,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 255.7,
+                        "_y": 725.5
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T08:18:00"
+                },
+                "_station": "Estacion-Victoria",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140252165954048,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 4.1,
+                        "_identifier": 8307
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140252165954096,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8308,
+                "_magnitude": 5.7,
+                "_deepness": 104.6,
+                "_epicenter": {
+                    "$id": 140252165954144,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 495.8,
+                        "_y": 935.6
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T10:29:00"
+                },
+                "_station": "Estacion-LaDorada",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140252165954240,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 2,
+                        "_magnitude": 5.7,
+                        "_identifier": 8308
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140252165954288,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8309,
+                "_magnitude": 6.3,
+                "_deepness": 56.7,
+                "_epicenter": {
+                    "$id": 140252165954336,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 175.9,
+                        "_y": 395.7
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T12:41:00"
+                },
+                "_station": "Estacion-Filadelfia",
+                "_is_populated": false,
+                "_review": 1,
+                "_key": {
+                    "$id": 140252165954432,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 3,
+                        "_magnitude": 6.3,
+                        "_identifier": 8309
+                    }
+                }
+            }
+        },
+        {
+            "$id": 140252165954480,
+            "$type": "object",
+            "class": "src.model.report.Report",
+            "attributes": {
+                "_identifier": 8310,
+                "_magnitude": 1.9,
+                "_deepness": 4.6,
+                "_epicenter": {
+                    "$id": 140252165954528,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 675.1,
+                        "_y": 615.8
+                    }
+                },
+                "_date": {
+                    "$type": "datetime",
+                    "value": "2026-10-06T14:52:00"
+                },
+                "_station": "Estacion-LaMerced",
+                "_is_populated": true,
+                "_review": 1,
+                "_key": {
+                    "$id": 140252165954624,
+                    "$type": "object",
+                    "class": "src.model.key.Key",
+                    "attributes": {
+                        "_priority": 1,
+                        "_magnitude": 1.9,
+                        "_identifier": 8310
+                    }
+                }
+            }
+        }
+    ]
+}
