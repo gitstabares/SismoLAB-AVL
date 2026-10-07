@@ -1,0 +1,142 @@
+{
+    "$id": 1,
+    "$type": "set",
+    "items": [
+        {
+            "$id": 2,
+            "$type": "object",
+            "class": "src.model.circle.Circle",
+            "attributes": {
+                "_center": {
+                    "$id": 3,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 760,
+                        "_y": 570
+                    }
+                },
+                "_radius": 80
+            }
+        },
+        {
+            "$id": 4,
+            "$type": "object",
+            "class": "src.model.circle.Circle",
+            "attributes": {
+                "_center": {
+                    "$id": 5,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 310,
+                        "_y": 180
+                    }
+                },
+                "_radius": 85
+            }
+        },
+        {
+            "$id": 6,
+            "$type": "object",
+            "class": "src.model.circle.Circle",
+            "attributes": {
+                "_center": {
+                    "$id": 7,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 460,
+                        "_y": 820
+                    }
+                },
+                "_radius": 105
+            }
+        },
+        {
+            "$id": 8,
+            "$type": "object",
+            "class": "src.model.circle.Circle",
+            "attributes": {
+                "_center": {
+                    "$id": 9,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 800,
+                        "_y": 210
+                    }
+                },
+                "_radius": 110
+            }
+        },
+        {
+            "$id": 10,
+            "$type": "object",
+            "class": "src.model.circle.Circle",
+            "attributes": {
+                "_center": {
+                    "$id": 11,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 180,
+                        "_y": 490
+                    }
+                },
+                "_radius": 95
+            }
+        },
+        {
+            "$id": 12,
+            "$type": "object",
+            "class": "src.model.circle.Circle",
+            "attributes": {
+                "_center": {
+                    "$id": 13,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 540,
+                        "_y": 140
+                    }
+                },
+                "_radius": 65
+            }
+        },
+        {
+            "$id": 14,
+            "$type": "object",
+            "class": "src.model.circle.Circle",
+            "attributes": {
+                "_center": {
+                    "$id": 15,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 470,
+                        "_y": 500
+                    }
+                },
+                "_radius": 120
+            }
+        },
+        {
+            "$id": 16,
+            "$type": "object",
+            "class": "src.model.circle.Circle",
+            "attributes": {
+                "_center": {
+                    "$id": 17,
+                    "$type": "object",
+                    "class": "src.model.point.Point",
+                    "attributes": {
+                        "_x": 120,
+                        "_y": 140
+                    }
+                },
+                "_radius": 70
+            }
+        }
+    ]
+}

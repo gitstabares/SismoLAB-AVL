@@ -1,9 +1,11 @@
-from src.utils import *
+from .circle import Circle
+from .point import Point
 from .populated_zones import PopulatedZones
 from .event_tree import EventTree
 from .event import Event
 from .key import Key
 from .report import Report
+from src.utils import *
 import datetime as dt
 from collections import deque
 import copy
@@ -16,9 +18,12 @@ class Scenario:
     def __init__(self):
         """Initialize the Scenario with a specified tile size.
         """
+        serializer = Serializer()
+        serializer.register(Circle)
+        serializer.register(Point)
         self.set_AVL(EventTree(autobalance=True))
         self.set_BST(EventTree())
-        self.set_populated_zones(PopulatedZones())
+        self.set_populated_zones(PopulatedZones(serializer.load('data/populated_zones.json')))
         self.set_archived_trees(set())
         self.set_eliminated_ids(set())
         self.set_current_time(dt.datetime.now())

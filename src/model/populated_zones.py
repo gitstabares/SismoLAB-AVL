@@ -14,6 +14,6 @@ class PopulatedZones(set):
             bool: True if the point is in the populated zones, False otherwise.
         """
         for circle in self:
-            if (circle.get_center() - point).get_lenght() <= circle.get_radius():
+            if (circle.get_center() - point).get_length() <= circle.get_radius():
                 return True
         return False
