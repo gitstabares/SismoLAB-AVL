@@ -6,7 +6,7 @@ from src.model import *
 from src.utils import *
 import datetime as dt
 
-    
+
 reports = [
     Report(1001, 4.5, 15.0, 120.5, 340.2, "2026-10-01T08:30:00", "Station-Alpha", True, 2),
     Report(1002, 5.2, 30.5, 450.0, 512.1, "2026-10-01T14:15:00", "Station-Beta", False, 2),
@@ -115,14 +115,16 @@ def header():
 
         async def upload(e):
             global global_state
-            try:
-                file = await e.file.text()
-                ui.notify('The file was uploaded successfully')
-                new_global_state = serializer.deserialize(json.loads(file))
-                global_state.__dict__.update(new_global_state.__dict__)
-                global_state.refresh()
-            except:
-                ui.notify("The file doesn't have an appropiate format")
+            file = await e.file.text()
+            ui.notify('The file was uploaded successfully')
+            obj = serializer.deserialize(json.loads(file))
+            if isinstance(obj,EventTree):
+                global_state.__dict__.update(obj.__dict__)
+            elif isinstance(obj,list):
+                for i in obj:
+                    global_state.add_report(i)
+            global_state.refresh()
+
 
         ui.number(prefix='W : ',min=0,value=48,validation={'W must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_W(e.value)).classes('w-50').tooltip('Temporal margin for aftershocks')
         ui.number(prefix='R : ',min=0,value=40,validation={'R must be a positive number':lambda v:v is not None and v >= 0},on_change=lambda e:global_state.set_R(e.value)).classes('w-50').tooltip('Spatial margin for aftershocks')
