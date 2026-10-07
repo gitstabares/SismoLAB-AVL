@@ -141,7 +141,6 @@ class Scenario:
             if new_event in tree:
                 self.commit()
                 self.get_AVL().add_node(Event(report))
-                self.get_BST().add_node(Event(report))
                 self.get_archived_trees().discard(tree)
                 return
         
