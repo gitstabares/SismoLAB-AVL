@@ -1,5 +1,3 @@
-from warnings import catch_warnings
-
 from src.utils import *
 from .populated_zones import PopulatedZones
 from .event_tree import EventTree
@@ -21,7 +19,7 @@ class Scenario:
         self.set_AVL(EventTree(autobalance=True))
         self.set_BST(EventTree())
         self.set_populated_zones(PopulatedZones())
-        self.set_archived_AVL_trees(set())
+        self.set_archived_trees(set())
         self.set_eliminated_ids(set())
         self.set_current_time(dt.datetime.now())
         self.reports_queue = deque()
@@ -47,11 +45,11 @@ class Scenario:
     def set_populated_zones(self, zones: PopulatedZones):
         self._populated_zones = zones
 
-    def get_archived_AVL_trees(self) -> set:
-        return self._archived_AVL_trees
+    def get_archived_trees(self) -> set:
+        return self._archived_trees
 
-    def set_archived_AVL_trees(self, value: set):
-        self._archived_AVL_trees = value
+    def set_archived_trees(self, value: set):
+        self._archived_trees = value
 
     def get_eliminated_ids(self) -> set:
         return self._eliminated_ids
@@ -91,7 +89,8 @@ class Scenario:
             self.get_AVL().balance_tree()
         tree = EventTree()
         tree.add_node(node)
-        self.get_archived_AVL_trees().add(tree)
+        self.get_archived_trees().add(tree)
+        self.refresh()
 
     def add_report(self, report:Report):
         if self.get_burst_mode():
@@ -117,12 +116,12 @@ class Scenario:
 
         new_event = Event(report)
 
-        for tree in self.get_archived_AVL_trees():
+        for tree in self.get_archived_trees():
             if new_event in tree:
                 self.commit()
                 self.get_AVL().add_node(Event(report))
                 self.get_BST().add_node(Event(report))
-                self.get_archived_AVL_trees().discard(tree)
+                self.get_archived_trees().discard(tree)
                 return
         
         if new_event not in self.get_AVL():
@@ -246,7 +245,7 @@ class Scenario:
                                 copy.deepcopy(self._BST),
                                 copy.deepcopy(self.reports_queue),
                                 copy.deepcopy(self._eliminated_ids),
-                                copy.deepcopy(self._archived_AVL_trees)))
+                                copy.deepcopy(self._archived_trees)))
         self.redo_queue.clear()
 
     def undo(self) -> Scenario:
@@ -254,8 +253,8 @@ class Scenario:
                                 copy.deepcopy(self._BST),
                                 copy.deepcopy(self.reports_queue),
                                 copy.deepcopy(self._eliminated_ids),
-                                copy.deepcopy(self._archived_AVL_trees)))
-        (self._AVL,self._BST,self.reports_queue,self._eliminated_ids,self._archived_AVL_trees) = self.undo_queue.pop()
+                                copy.deepcopy(self._archived_trees)))
+        (self._AVL,self._BST,self.reports_queue,self._eliminated_ids,self._archived_trees) = self.undo_queue.pop()
         self.refresh()
 
     def redo(self) -> Scenario:
@@ -263,8 +262,8 @@ class Scenario:
                                 copy.deepcopy(self._BST),
                                 copy.deepcopy(self.reports_queue),
                                 copy.deepcopy(self._eliminated_ids),
-                                copy.deepcopy(self._archived_AVL_trees)))
-        (self._AVL,self._BST,self.reports_queue,self._eliminated_ids,self._archived_AVL_trees) = self.redo_queue.pop()
+                                copy.deepcopy(self._archived_trees)))
+        (self._AVL,self._BST,self.reports_queue,self._eliminated_ids,self._archived_trees) = self.redo_queue.pop()
         self.refresh()
 
     @property

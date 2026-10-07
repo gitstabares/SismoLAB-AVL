@@ -54,6 +54,9 @@ class Report:
     def __repr__(self):
         return f"{self.get_key()}"
 
+    def get_priority(self):
+        return self._key.get_priority()
+
     def get_identifier(self) -> int:
         """Return the report identifier.
 

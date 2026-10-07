@@ -36,6 +36,8 @@ class Point():
         return (self.get_x()**2 + self.get_y()**2)**(1/2)
 
     def __eq__(self, other:Point) -> bool:
+        if isinstance(other,(tuple,list)):
+            return self.get_x() == other[0] and self.get_y() == other[1]
         return self.get_x() == other.get_x() and self.get_y() == other.get_y()
     
     def __add__(self, other:Point):
