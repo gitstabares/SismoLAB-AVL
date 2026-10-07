@@ -1,18 +1,19 @@
 class Key():
-    """Represents a key used for prioritizing and ordering seismic events.
+    """Represents a seismic event priority key.
 
-    The priority is determined by the magnitude, deepness, and whether the area is populated.
-    Higher priority indicates a more critical event.
+    The priority combines the event magnitude, depth, and whether the event
+    occurred in a populated area. A higher priority indicates a more critical
+    event.
     """
 
-    def __init__(self, magnitude:float, deepness:float, is_populated:bool, identifier:int):
-        """Initializes a Key instance.
+    def __init__(self, magnitude: float, deepness: float, is_populated: bool, identifier: int):
+        """Initialize a key for a seismic event.
 
         Args:
             magnitude (float): The magnitude of the seismic event.
             deepness (float): The depth of the seismic event in kilometers.
             is_populated (bool): True if the event occurred in a populated area.
-            identifier (Any): A unique identifier for the event.
+            identifier (int): A unique identifier for the event.
         """
         if magnitude >= 4.5:
             if magnitude >= 6.0 or (deepness <= 30 and is_populated):
@@ -26,45 +27,72 @@ class Key():
         self._identifier = identifier
 
     def get_priority(self) -> int:
+        """Return the priority assigned to the seismic event.
+
+        Returns:
+            int: The event priority, where a larger value indicates greater
+                urgency.
+        """
         return self._priority
 
     def get_magnitude(self) -> float:
+        """Return the seismic event magnitude.
+
+        Returns:
+            float: The magnitude of the seismic event.
+        """
         return self._magnitude
 
     def get_identifier(self) -> float:
-        return self._identifier
-
-    def __eq__(self, other:Key):
-        """Checks if two Key instances are equal based on their identifier.
-
-        Args:
-            other (Any): The other Key instance to compare with.
+        """Return the event identifier.
 
         Returns:
-            bool: True if the identifiers are equal, False otherwise.
+            float: The identifier associated with the event.
         """
-        if not isinstance(other,Key):
+        return self._identifier
+
+    def __eq__(self, other: Key):
+        """Return whether this key is equal to another value.
+
+        The comparison is based on the event identifier. If ``other`` is not a
+        ``Key`` instance, the comparison is performed against ``other`` as an
+        identifier value.
+
+        Args:
+            other (Key | Any): The value to compare with this key.
+
+        Returns:
+            bool: True if the identifiers are equal; otherwise, False.
+        """
+        if not isinstance(other, Key):
             return self.get_identifier() == other
         return self.get_identifier() == other.get_identifier()
 
-    def __ne__(self, other:Key):
-        return (self.get_priority() != other.get_priority() 
-                or self.get_magnitude() != other.get_magnitude() 
-                or self.get_identifier() != other.get_identifier())
-
-    def __lt__(self, other:Key):
-        """Determines if this Key is less than another Key.
-
-        Comparison is done in the following order:
-        1. Priority
-        2. Magnitude
-        3. identifier
+    def __ne__(self, other: Key):
+        """Return whether this key is not equal to another key.
 
         Args:
-            other (Any): The other Key instance to compare with.
+            other (Key): The key to compare with this key.
 
         Returns:
-            bool: True if this Key is strictly less than the other Key.
+            bool: True if the priority, magnitude, or identifier differs;
+                otherwise, False.
+        """
+        return (self.get_priority() != other.get_priority()
+                or self.get_magnitude() != other.get_magnitude()
+                or self.get_identifier() != other.get_identifier())
+
+    def __lt__(self, other: Key):
+        """Return whether this key has a lower order than another key.
+
+        Keys are ordered by priority, then magnitude, and finally identifier.
+
+        Args:
+            other (Key): The key to compare with this key.
+
+        Returns:
+            bool: True if this key is strictly less than ``other``; otherwise,
+                False.
         """
         if self.get_priority() != other.get_priority():
             return self.get_priority() < other.get_priority()
@@ -74,19 +102,17 @@ class Key():
 
         return self.get_identifier() < other.get_identifier()
 
-    def __gt__(self, other:Key):
-        """Determines if this Key is greater than another Key.
+    def __gt__(self, other: Key):
+        """Return whether this key has a greater order than another key.
 
-        Comparison is done in the following order:
-        1. Priority
-        2. Magnitude
-        3. identifier
+        Keys are ordered by priority, then magnitude, and finally identifier.
 
         Args:
-            other (Any): The other Key instance to compare with.
+            other (Key): The key to compare with this key.
 
         Returns:
-            bool: True if this Key is strictly greater than the other Key.
+            bool: True if this key is strictly greater than ``other``;
+                otherwise, False.
         """
         if self.get_priority() != other.get_priority():
             return self.get_priority() > other.get_priority()
@@ -97,9 +123,10 @@ class Key():
         return self.get_identifier() > other.get_identifier()
 
     def __repr__(self):
-        """Returns a string representation of the Key.
+        """Return a printable representation of the key.
 
         Returns:
-            str: A string in the format "(priority, magnitude, SIS-identifier)".
+            str: A string in the format
+                ``(P=<priority>, M=<magnitude>, SIS-<identifier>)``.
         """
         return f"(P={self.get_priority()}, M={self.get_magnitude()}, SIS-{self.get_identifier():06d})"

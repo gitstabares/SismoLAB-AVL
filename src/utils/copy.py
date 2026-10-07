@@ -1,31 +1,44 @@
+"""Provide a recursive copy helper for common Python objects.
+
+The :func:`copy` function handles primitive values, selected built-in
+containers, datetimes, and custom objects with instance attributes.
+"""
+
 from collections import deque
 import datetime as dt
 
 
 def copy(obj):
-    """
-    Creates a deep copy of an object, handling primitive types, iterables, and custom objects.
+    """Recursively copy an object using the supported type-specific rules.
 
-    This function avoids infinite recursion in case of circular references.
+    Primitive values are returned unchanged. Lists, dictionaries, deques, and
+    sets are rebuilt recursively; datetimes are copied with ``replace()``.
+    Tuple inputs currently produce a generator of copied elements. Other
+    objects are allocated without calling ``__init__`` and their attributes
+    are copied recursively. A memo is used for custom objects to preserve
+    repeated references and handle cycles among those objects.
 
     Args:
-        obj (T): The object to be copied.
+        obj: The object to copy.
 
     Returns:
-        T: A new deep copy of the original object.
+        The copied object, or the original value for primitive types.
+
+    Note:
+        The memo is applied only to custom objects. Cycles involving built-in
+        containers are therefore not guaranteed to be handled.
     """
     # memo contains the objects already copied, to avoid circular references
     memo = {}
     
     def __copy(_obj):
-        """
-        Recursive helper function to perform the actual deep copying.
-        
+        """Recursively copy a value according to its type.
+
         Args:
-            __obj (Any): The current object or sub-object being copied.
-            
+            _obj: The current object or nested value to copy.
+
         Returns:
-            Any: A deep copy of __obj.
+            The copied value.
         """
         # It isn't needed to copy primitives
         primitive_types = (int, str, float, bool, type(None))

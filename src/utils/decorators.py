@@ -1,6 +1,9 @@
-from nicegui import ui
+"""Decorators for subscribing to and notifying event handlers."""
 
-def EventTrigger(function):
+from typing import Any, Callable
+
+
+def EventTrigger(function: Callable[..., Any]) -> Callable[..., Any]:
     """
     Decorates a function so it notifies registered subscribers when called.
 
@@ -15,56 +18,43 @@ def EventTrigger(function):
     """
     subscribers = []
 
-    def wrapper(*args, **kwargs):
-        """
-        Runs the event function and then invokes its subscribers.
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        """Run the event function and then notify its subscribers.
 
         Args:
-            *args (Any): Positional arguments for the original function.
-            **kwargs (Any): Keyword arguments for the original function.
+            *args: Positional arguments passed to the original function.
+            **kwargs: Keyword arguments passed to the original function.
 
         Returns:
-            Any: The response from the original function.
+            The return value from the original function.
         """
-        response = None
-        '''        
-        try:
-            response = function(*args, **kwargs)
-        except Exception as e:
-            ui.notify(e)
-        '''
         response = function(*args, **kwargs)
-        # Notify listeners only after the event function has completed.
+
         for subscriber in wrapper.subscribers:
             subscriber()
         return response
 
-    # Keep the callbacks on the wrapper so subscribe() can register them.
     wrapper.subscribers = subscribers
     return wrapper
 
-def OnEvent(event):
-    """
-    Returns a decorator that registers a function for the given event.
-
-    The decorated function is returned unchanged, so registration does not
-    alter how that function can otherwise be used.
+def OnEvent(event: Callable[..., Any]) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
+    """Return a decorator that registers a function as an event subscriber.
 
     Args:
-        event (Callable[..., Any]): The event function wrapped by EventTrigger.
+        event: The event function wrapped by :func:`EventTrigger`.
 
     Returns:
-        Callable[[Callable[..., Any]], Callable[..., Any]]: A decorator that registers the function.
+        A decorator that appends a function to the event's subscriber list.
     """
-    def wrapper(function):
-        """
-        Appends the function to the event's subscriber list.
+
+    def wrapper(function: Callable[..., Any]) -> Callable[..., Any]:
+        """Register a function as a subscriber for the given event.
 
         Args:
-            function (Callable[..., Any]): The function to register as a subscriber.
+            function: The function to register as a subscriber.
 
         Returns:
-            Callable[..., Any]: The original function unchanged.
+            The original function unchanged.
         """
         event.subscribers.append(function)
         return function
