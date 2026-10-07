@@ -176,14 +176,9 @@ class EventTree(Tree):
                 # An aftershock must be smaller, later within W hours, and
                 # closer than R to the originating event.
                 if (
-                    seism.get_magnitude() > aftershock.get_magnitude()
-                    and 0
-                    < (aftershock.get_date() - seism.get_date()).days
-                    < self.get_W() / 24
-                    and (
-                        aftershock.get_epicenter() - seism.get_epicenter()
-                    ).get_length()
-                    < self.get_R()
+                    seism.get_magnitude() > aftershock.get_magnitude() and 
+                    0 < (aftershock.get_date() - seism.get_date()).days < self.get_W() / 24 and
+                    (aftershock.get_epicenter() - seism.get_epicenter()).get_length() < self.get_R()
                 ):
                     seism.get_aftershocks().append(aftershock)
 
